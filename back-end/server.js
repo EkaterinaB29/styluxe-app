@@ -5,15 +5,11 @@ require('dotenv').config()
 // Define the port
 const port = 8211;
 
-const connectDB = require('./config/dbConfig')
-
-connectDB()
-
 const app = express()
+const db = require('./config/db'); // Import the database connection
 
-app.use(express.json())
+/// App listening on port
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+});
 
-app.listen(port, (err) => {
-  if (err) console.log(err)
-  console.log(`Server started on port ${port}`)
-})
