@@ -5,7 +5,7 @@ const { authenticateToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.post('/register', registerUser);
-router.post('/login', loginUser);
+router.get('/login', loginUser);
 router.get('/profile', authenticateToken, getUserProfile);
 router.put('/profile', authenticateToken, updateUserProfile);
 router.delete('/profile', authenticateToken, deleteUserProfile);
