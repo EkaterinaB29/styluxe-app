@@ -148,32 +148,51 @@ const deleteUserProfile = (req, res) => {
 
 
 // Update Portfolio
-const updatePortfolio = (req, res) => {
+const updatePortfolio = async (req, res) => {
     const portfolioId = req.params.id;
     const { education_history } = req.body;
 
-    const portfolioData = {
-        file_name: req.file ? req.file.filename : null,
-        file_type: req.file ? req.file.mimetype : null,
-        file_size: req.file ? req.file.size : null,
-        file_path: req.file ? req.file.path : null,
-        education_history: education_history
-    };
+    try {
+        // Fetch the existing portfolio to retain old values if no new file is uploaded
+        const existingPortfolio = await Portfolio.findById(portfolioId);
+        if (!existingPortfolio) {
+            return res.status(404).send('Portfolio not found');
+        }
 
-    Portfolio.update(portfolioId, portfolioData, (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.send('Portfolio updated successfully');
-    });
+        const portfolioData = {
+            file_name: req.file ? req.file.originalname : existingPortfolio.file_name,
+            file_type: req.file ? req.file.mimetype : existingPortfolio.file_type,
+            file_size: req.file ? req.file.size : existingPortfolio.file_size,
+            file_path: req.file ? req.file.path : existingPortfolio.file_path,
+            education_history: education_history
+        };
+
+        Portfolio.update(portfolioId, portfolioData, (err, results) => {
+            if (err) return res.status(500).send(err);
+            res.send('Portfolio updated successfully');
+        });
+    } catch (err) {
+        console.error('Error in updatePortfolio:', err);
+        res.status(500).send('Failed to update portfolio');
+    }
 };
+
 
 // Delete Portfolio
 const deletePortfolio = (req, res) => {
+    console.log('deletePortfolio function called');
     const portfolioId = req.params.id;
 
-    Portfolio.delete(portfolioId, (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.send('Portfolio deleted successfully');
-    });
-};
+    console.log('Portfolio ID:', portfolioId);
 
+    Portfolio.delete(portfolioId)
+        .then((result) => {
+            console.log('Delete result:', result);
+            res.send('Portfolio deleted successfully');
+        })
+        .catch((err) => {
+            console.error('Error deleting portfolio:', err);
+            res.status(500).send('Failed to delete portfolio');
+        });
+};
 module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
