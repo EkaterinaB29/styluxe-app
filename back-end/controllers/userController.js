@@ -3,19 +3,31 @@ const Portfolio = require('../models/portfolioModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const path = require('path');
+
 
 // Setup multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        const uploadPath = path.join(__dirname, '..', 'uploads');
+        cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `${uniqueSuffix}-${file.originalname}`);
     }
 });
 
-const upload = multer({ storage: storage });
-const uploadMultiple = upload.array('portfolio', 10); // Allow up to 10 files
+const upload = multer({
+    storage: storage,
+    limits: { fileSize:1024 * 1024 * 1024 * 10 } 
+});
+
+const uploadMultiple = upload.array('portfolio', 10); 
+
+
+
+
 
 // Register user
 const registerUser = async (req, res) => {
@@ -97,16 +109,20 @@ const deleteUserProfile = (req, res) => {
 
 // Add Portfolio
 const addPortfolio = async (req, res) => {
-    console.log('Files:', req.files);
-    console.log('Body:', req.body);
+    console.log('addPortfolio function called');
+    
     const userId = req.user.id;
-    const { education_history } = req.body;
+    const education_history  = req.body;
 
+    /*console.log('User ID:', userId);
+    console.log('Education History:', education_history);
+    console.log('Files:', req.files);
+    console.log('Body:', req.body);*/
+
+   
     if (!req.files || req.files.length === 0) {
         return res.status(400).send('No files uploaded');
     }
-
-    
 
 
     const portfolioFiles = req.files.map(file => ({

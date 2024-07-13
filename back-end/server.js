@@ -10,9 +10,14 @@ const port = 8211;
 const app = express()
 const db = require('./config/db'); // Import the database connection
 // Serve static files from the uploads directory
+app.use(bodyParser.json());
+// Middleware to parse URL-encoded bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(bodyParser.json());
+
 app.use('/api/user', userRoutes);
 
 

@@ -16,7 +16,7 @@ router.delete('/profile', authenticateToken, deleteUserProfile);
 
 
 //Profile routes now it is  with pasw [token-authentication] change if needed
-router.post('/portfolio/:id',addPortfolio, uploadMultiple);
+router.post('/portfolio/', authenticateToken,uploadMultiple, addPortfolio );
 router.put('/portfolio/:id',authenticateToken, uploadMultiple, updatePortfolio);
 router.delete('/portfolio/:id',authenticateToken, deletePortfolio);
 
