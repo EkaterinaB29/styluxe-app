@@ -107,23 +107,21 @@ const deleteUserProfile = (req, res) => {
     });
 };
 
-// Add Portfolio
-const addPortfolio = async (req, res) => {
+ // Add Portfolio
+ const addPortfolio = async (req, res) => {
     console.log('addPortfolio function called');
     
     const userId = req.user.id;
-    const education_history  = req.body;
+    const { education_history } = req.body;
 
-    /*console.log('User ID:', userId);
+    console.log('User ID:', userId);
     console.log('Education History:', education_history);
     console.log('Files:', req.files);
-    console.log('Body:', req.body);*/
+    console.log('Body:', req.body);
 
-   
     if (!req.files || req.files.length === 0) {
         return res.status(400).send('No files uploaded');
     }
-
 
     const portfolioFiles = req.files.map(file => ({
         file_name: file.originalname,
@@ -135,8 +133,10 @@ const addPortfolio = async (req, res) => {
     }));
 
     try {
+        console.log('Portfolio Data:', portfolioFiles);
         for (const fileData of portfolioFiles) {
-            await Portfolio.create(fileData);
+            const createdPortfolio = await Portfolio.create(fileData);
+            console.log('Inserted Portfolio:', createdPortfolio);
         }
         res.status(201).send('Portfolio added successfully');
     } catch (err) {
@@ -144,6 +144,7 @@ const addPortfolio = async (req, res) => {
         res.status(500).send('Failed to add portfolio');
     }
 };
+
 
 
 // Update Portfolio
