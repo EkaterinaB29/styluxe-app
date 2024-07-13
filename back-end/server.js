@@ -1,15 +1,16 @@
 const express = require('express')
-//const path = require('path') 
+const path = require('path') 
 const dotenv = require('dotenv').config() // Import the dotenv module
 const bodyParser = require('body-parser'); // Import the body-parser
 const userRoutes = require('./routes/userRoutes'); // Import the routes
 
 
-//
 // Define the port
 const port = 8211;
 const app = express()
 const db = require('./config/db'); // Import the database connection
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(bodyParser.json());
 app.use('/api/user', userRoutes);

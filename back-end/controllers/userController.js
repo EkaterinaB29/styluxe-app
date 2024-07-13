@@ -1,7 +1,23 @@
 const User = require('../models/userModel');
+const Portfolio = require('../models/portfolioModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
+// Setup multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage: storage });
+const uploadMultiple = upload.array('portfolio', 10); // Allow up to 10 files
+
+// Register user
 const registerUser = async (req, res) => {
     console.log('Register User API called');
     const { firstName, lastName, location, birthday, email, password, role } = req.body;
@@ -20,7 +36,7 @@ const registerUser = async (req, res) => {
 
         User.create(userData, (err, results) => {
             if (err) return res.status(500).send(err);
-            res.status(201).send('User registered');
+            res.status(201).send('User registered successfully');
         });
     } catch (error) {
         console.log('Error in registerUser:', error);
@@ -28,6 +44,7 @@ const registerUser = async (req, res) => {
     }
 };
 
+// Login user
 const loginUser = (req, res) => {
     console.log('Login User API called');
     const { email, password } = req.body;
@@ -46,6 +63,7 @@ const loginUser = (req, res) => {
     });
 };
 
+// Get user profile
 const getUserProfile = (req, res) => {
     const userId = req.user.id;
 
@@ -56,6 +74,7 @@ const getUserProfile = (req, res) => {
     });
 };
 
+// Update user profile
 const updateUserProfile = (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, location, birthday, role } = req.body;
@@ -66,6 +85,7 @@ const updateUserProfile = (req, res) => {
     });
 };
 
+// Delete user profile
 const deleteUserProfile = (req, res) => {
     const userId = req.user.id;
 
@@ -75,4 +95,68 @@ const deleteUserProfile = (req, res) => {
     });
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile };
+// Add Portfolio
+const addPortfolio = async (req, res) => {
+    console.log('Files:', req.files);
+    console.log('Body:', req.body);
+    const userId = req.user.id;
+    const { education_history } = req.body;
+
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).send('No files uploaded');
+    }
+
+    
+
+
+    const portfolioFiles = req.files.map(file => ({
+        file_name: file.originalname,
+        file_type: file.mimetype,
+        file_size: file.size,
+        file_path: file.path,
+        education_history: education_history,
+        user_id: userId
+    }));
+
+    try {
+        for (const fileData of portfolioFiles) {
+            await Portfolio.create(fileData);
+        }
+        res.status(201).send('Portfolio added successfully');
+    } catch (err) {
+        console.error('Error adding portfolio:', err);
+        res.status(500).send('Failed to add portfolio');
+    }
+};
+
+
+// Update Portfolio
+const updatePortfolio = (req, res) => {
+    const portfolioId = req.params.id;
+    const { education_history } = req.body;
+
+    const portfolioData = {
+        file_name: req.file ? req.file.filename : null,
+        file_type: req.file ? req.file.mimetype : null,
+        file_size: req.file ? req.file.size : null,
+        file_path: req.file ? req.file.path : null,
+        education_history: education_history
+    };
+
+    Portfolio.update(portfolioId, portfolioData, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.send('Portfolio updated successfully');
+    });
+};
+
+// Delete Portfolio
+const deletePortfolio = (req, res) => {
+    const portfolioId = req.params.id;
+
+    Portfolio.delete(portfolioId, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.send('Portfolio deleted successfully');
+    });
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
