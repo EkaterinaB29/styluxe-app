@@ -3,7 +3,8 @@ const path = require('path')
 const dotenv = require('dotenv').config() // Import the dotenv module
 const bodyParser = require('body-parser'); // Import the body-parser
 const userRoutes = require('./routes/userRoutes'); // Import the routes
-
+const reviewRoutes = require('./routes/reviewRoutes'); // Import the routes
+const { errorHandler } = require('./middleware/errorMiddleware');
 
 // Define the port
 const port = 8211;
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/user', userRoutes);
-
+app.use('/api/review', reviewRoutes);
 
 
 // Add a root route
