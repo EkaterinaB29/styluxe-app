@@ -4,6 +4,8 @@ const dotenv = require('dotenv').config() // Import the dotenv module
 const bodyParser = require('body-parser'); // Import the body-parser
 const userRoutes = require('./routes/userRoutes'); // Import the routes
 const reviewRoutes = require('./routes/reviewRoutes'); // Import the routes
+const postRoutes = require('./routes/postRoutes');  // Import post routes
+const commentRoutes = require('./routes/commentRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
 
 // Define the port
@@ -20,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/user', userRoutes);
 app.use('/api/review', reviewRoutes);
+app.use('/api/post', postRoutes);  // Add post routes
+app.use('/api/comment', commentRoutes);  
 
 
 // Add a root route

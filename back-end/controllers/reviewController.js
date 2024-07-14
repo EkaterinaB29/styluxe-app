@@ -13,7 +13,7 @@ const addReview = asyncHandler(async (req, res) => {
     const reviewData = {
         rating,
         content,
-        publish_time: new Date(),  // Automatically set to current timestamp
+        publish_time: new Date(),  
         user_id,
         portfolio_id
     };
@@ -29,7 +29,7 @@ const updateReview = asyncHandler(async (req, res) => {
     const reviewData = {
         rating,
         content,
-        publish_time: new Date()  // Automatically set to current timestamp
+        publish_time: new Date()  
     };
 
     await Review.update(reviewId, reviewData);
