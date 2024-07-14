@@ -2,13 +2,14 @@ const db = require('../config/db');
 
 const Comment = {
     create: async (commentData) => {
-        const sql = `INSERT INTO Comment (content, user_id, post_id, publish_time) VALUES (?, ?, ?, ?)`;
+        const sql = `INSERT INTO Comment (content, user_id, post_id, publish_time, parent_id) VALUES (?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 commentData.content,
                 commentData.user_id,
                 commentData.post_id,
-                commentData.publish_time
+                commentData.publish_time,
+                commentData.parent_id || null
             ], (err, result) => {
                 if (err) {
                     return reject(err);
@@ -51,6 +52,34 @@ const Comment = {
                     return reject(err);
                 }
                 resolve(results);
+            });
+        });
+    },
+    like: async (commentId) => {
+        const sql = `UPDATE Comment SET likes = likes + 1 WHERE comment_id = ?`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [commentId], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+    },
+    reply: async (commentData) => {
+        const sql = `INSERT INTO Comment (content, user_id, post_id, publish_time, parent_id) VALUES (?, ?, ?, ?, ?)`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [
+                commentData.content,
+                commentData.user_id,
+                commentData.post_id,
+                commentData.publish_time,
+                commentData.parent_id
+            ], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
     }
