@@ -8,7 +8,10 @@ const postRoutes = require('./routes/postRoutes');  // Import post routes
 const commentRoutes = require('./routes/commentRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const creditCardRoutes = require('./routes/creditCardRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
+
 
 // Define the port
 const port = 8211;
@@ -25,6 +28,8 @@ app.use('/api/post', postRoutes);  // Add post routes
 app.use('/api/comment', commentRoutes);  
 app.use('/api/reports', reportRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/creditCard', creditCardRoutes);
+app.use('/api/transaction', transactionRoutes);
 
 app.use(errorHandler);
 // Add a root route
