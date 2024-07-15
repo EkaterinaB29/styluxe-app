@@ -95,7 +95,7 @@ const replyOnComment = asyncHandler(async (req, res) => {
         user_id,
         post_id,
         publish_time: new Date(),
-        parent_id
+        parent_id 
     };
 
     await Comment.reply(commentData);

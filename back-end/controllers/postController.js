@@ -55,5 +55,17 @@ const getAllPosts = asyncHandler(async (req, res) => {
     const posts = await Post.findAll();
     res.status(200).json(posts);
 });
+const getPostsByUser = asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
 
-module.exports = { addPost, updatePost, deletePost, getPost, getAllPosts };
+    const posts = await Post.findByUserId(userId);
+    res.status(200).json(posts);
+});
+
+const likePost = asyncHandler(async (req, res) => {
+    const postId = req.params.id;
+
+    await Post.like(postId);
+    res.status(200).send('Post liked successfully');
+});
+module.exports = { addPost, updatePost, deletePost, getPost, getAllPosts , getPostsByUser, likePost};

@@ -63,6 +63,28 @@ const Post = {
                 resolve(results);
             });
         });
+    },
+    like: async (postId) => {
+        const sql = `UPDATE Post SET likes = likes + 1 WHERE post_id = ?`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [postId], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+    },
+    findByUserId: async (userId) => {
+        const sql = `SELECT * FROM Post WHERE user_id = ?`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [userId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
     }
 };
 
