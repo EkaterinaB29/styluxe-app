@@ -11,7 +11,7 @@ const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/:card_id_from/:card_id_to', authenticateToken, createTransaction);
+router.post('/:user_id_from/:user_id_to', authenticateToken, createTransaction);
 router.get('/:id', authenticateToken, getTransaction);
 router.get('/status/:id', authenticateToken, getTransactionStatus);
 router.put('/status/:id', authenticateToken, updateTransactionStatus);

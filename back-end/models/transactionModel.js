@@ -2,14 +2,14 @@ const db = require('../config/db');
 
 const Transaction = {
     create: async (transactionData) => {
-        const sql = `INSERT INTO Transaction (publish_time, amount, status, card_id_from, card_id_to) VALUES (?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO Transaction (publish_time, amount, status, user_id_from, user_id_to) VALUES (?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 transactionData.publish_time,
                 transactionData.amount,
                 'PENDING',
-                transactionData.card_id_from,
-                transactionData.card_id_to
+                transactionData.user_id_from,
+                transactionData.user_id_to
             ], (err, result) => {
                 if (err) {
                     return reject(err);
