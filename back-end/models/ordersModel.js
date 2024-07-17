@@ -1,29 +1,28 @@
 import db from '../config/db.js';
 
 const Order = {
-    create: (orderData) => {
+    create: async (orderData) => {
+        const sql = `INSERT INTO Orders (timestamp, status, user_id_from, user_id_to, amount, currency) VALUES (?, ?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO Order (order_id, user_id_from, user_id_to, amount, status, timestamp, currency) VALUES (?, ?, ?, ?, ?, ?, ?)`;
             db.query(sql, [
-                orderData.order_id,
+                orderData.timestamp,
+                orderData.status,
                 orderData.user_id_from,
                 orderData.user_id_to,
                 orderData.amount,
-                orderData.status,
-                orderData.timestamp,
                 orderData.currency
             ], (err, result) => {
                 if (err) {
                     return reject(err);
                 }
-                resolve(result);
+                resolve(result.insertId);
             });
         });
     },
-    updateStatus: (orderId, status) => {
+    updatePayPalOrderId: async (id, paypal_order_id) => {
+        const sql = `UPDATE Orders SET paypal_order_id = ? WHERE order_id = ?`;
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE Order SET status = ? WHERE order_id = ?`;
-            db.query(sql, [status, orderId], (err, result) => {
+            db.query(sql, [paypal_order_id, id], (err, result) => {
                 if (err) {
                     return reject(err);
                 }
@@ -31,14 +30,14 @@ const Order = {
             });
         });
     },
-    getById: (orderId) => {
+    updateStatusByPayPalOrderId: async (paypal_order_id, status) => {
+        const sql = `UPDATE Orders SET status = ? WHERE paypal_order_id = ?`;
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM Order WHERE order_id = ?`;
-            db.query(sql, [orderId], (err, result) => {
+            db.query(sql, [status, paypal_order_id], (err, result) => {
                 if (err) {
                     return reject(err);
                 }
-                resolve(result[0]);
+                resolve(result);
             });
         });
     }

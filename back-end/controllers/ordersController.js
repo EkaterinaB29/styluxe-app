@@ -1,100 +1,76 @@
-import Order from '../models/ordersModel.js';
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-dotenv.config();
+import Order from '../models/ordersModel.js';
+import paypalConfig from '../config/paypalConfig.js';
 
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
-const base = "https://api-m.sandbox.paypal.com";
+export const createPayPalOrder = async (req, res) => {
+    const { amount, currency, user_id_from, user_id_to } = req.body;
 
-const generateAccessToken = async () => {
-    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64');
-    const response = await fetch(`${base}/v1/oauth2/token`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${auth}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials'
-    });
-    const data = await response.json();
-    return data.access_token;
-};
-
-const createOrder = async (cart) => {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders`;
-    const payload = {
-        intent: 'CAPTURE',
-        purchase_units: [{ 
-            amount: { 
-                currency_code: cart.currency,
-                value: cart.amount 
-            } 
-        }]
+    const orderData = {
+        status: 'PENDING',
+        timestamp: new Date(),
+        user_id_from,
+        user_id_to,
+        amount,
+        currency
     };
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-        },
-        body: JSON.stringify(payload)
-    });
-    const jsonResponse = await response.json();
-    return { jsonResponse, httpStatusCode: response.status };
-};
 
-const captureOrder = async (orderID) => {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders/${orderID}/capture`;
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-        }
-    });
-    const jsonResponse = await response.json();
-    return { jsonResponse, httpStatusCode: response.status };
-};
-
-const createPayPalOrder = async (req, res) => {
     try {
-        const { cart, user_id_from, user_id_to, amount } = req.body;
-        const { jsonResponse, httpStatusCode } = await createOrder(cart);
+        const orderId = await Order.create(orderData);
 
-        const orderData = {
-            order_id: jsonResponse.id,
-            user_id_from,
-            user_id_to,
-            amount,
-            status: 'PENDING',
-            timestamp: new Date(),
-            amount
-        };
+        const response = await fetch(`${paypalConfig.base}/v2/checkout/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${await paypalConfig.generateAccessToken()}`
+            },
+            body: JSON.stringify({
+                intent: 'CAPTURE',
+                purchase_units: [{
+                    amount: {
+                        currency_code: currency,
+                        value: amount
+                    }
+                }]
+            })
+        });
 
-        await Order.create(orderData);
-        res.status(httpStatusCode).json(jsonResponse);
+        const jsonResponse = await response.json();
+
+        if (response.ok) {
+            await Order.updatePayPalOrderId(orderId, jsonResponse.id);
+            res.status(201).json(jsonResponse);
+        } else {
+            res.status(500).json(jsonResponse);
+        }
     } catch (error) {
-        console.error("Failed to create order:", error);
-        res.status(500).json({ error: "Failed to create order." });
+        console.error('Error creating PayPal order:', error);
+        res.status(500).json({ error: 'Error creating PayPal order' });
     }
 };
 
-const capturePayPalOrder = async (req, res) => {
+export const capturePayPalOrder = async (req, res) => {
+    const { orderId } = req.params;
+
     try {
-        const { orderID } = req.params;
-        const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+        const response = await fetch(`${paypalConfig.base}/v2/checkout/orders/${orderId}/capture`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${await paypalConfig.generateAccessToken()}`
+            }
+        });
 
-        if (jsonResponse.status === 'COMPLETED') {
-            await Order.updateStatus(orderID, 'PAID');
+        const jsonResponse = await response.json();
+
+        if (response.ok) {
+            // Update the order status to 'COMPLETED' in the database
+            await Order.updateStatusByPayPalOrderId(orderId, { status: 'COMPLETED' });
+            res.status(200).json(jsonResponse);
+        } else {
+            res.status(500).json(jsonResponse);
         }
-
-        res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
-        console.error("Failed to capture order:", error);
-        res.status(500).json({ error: "Failed to capture order." });
+        console.error('Error capturing PayPal order:', error);
+        res.status(500).json({ error: 'Error capturing PayPal order' });
     }
 };
-
-export { createPayPalOrder, capturePayPalOrder };
