@@ -1,6 +1,11 @@
-const express = require('express');
-const { addReport, deleteReport, getReportsByReporter, getReportsByReported } = require('../controllers/reportController');
-const { authenticateToken } = require('../middleware/authMiddleware');
+import express from 'express';
+import { 
+    addReport, 
+    deleteReport, 
+    getReportsByReporter, 
+    getReportsByReported 
+} from '../controllers/reportController.js';
+import  authenticateToken  from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -9,4 +14,4 @@ router.delete('/:id', authenticateToken, deleteReport);
 router.get('/reporter/:reporterId', authenticateToken, getReportsByReporter);
 router.get('/reported/:reportedId', authenticateToken, getReportsByReported);
 
-module.exports = router;
+export default router;

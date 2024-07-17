@@ -1,10 +1,16 @@
-const User = require('../models/userModel');
-const Portfolio = require('../models/portfolioModel');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const path = require('path');
+import express from 'express';
+import User from '../models/userModel.js';
+import Portfolio from '../models/portfolioModel.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Setup multer for file uploads
 const storage = multer.diskStorage({
@@ -20,14 +26,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize:1024 * 1024 * 1024 * 10 } 
+    limits: { fileSize: 1024 * 1024 * 1024 * 10 } 
 });
 
-const uploadMultiple = upload.array('portfolio', 10); 
-
-
-
-
+const uploadMultiple = upload.array('portfolio', 10);
 
 // Register user
 const registerUser = async (req, res) => {
@@ -107,10 +109,10 @@ const deleteUserProfile = (req, res) => {
     });
 };
 
- // Add Portfolio
- const addPortfolio = async (req, res) => {
+// Add Portfolio
+const addPortfolio = async (req, res) => {
     console.log('addPortfolio function called');
-    
+
     const userId = req.user.id;
     const { education_history } = req.body;
 
@@ -145,8 +147,6 @@ const deleteUserProfile = (req, res) => {
     }
 };
 
-
-
 // Update Portfolio
 const updatePortfolio = async (req, res) => {
     const portfolioId = req.params.id;
@@ -177,7 +177,6 @@ const updatePortfolio = async (req, res) => {
     }
 };
 
-
 // Delete Portfolio
 const deletePortfolio = (req, res) => {
     console.log('deletePortfolio function called');
@@ -195,4 +194,5 @@ const deletePortfolio = (req, res) => {
             res.status(500).send('Failed to delete portfolio');
         });
 };
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
+
+export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };

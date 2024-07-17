@@ -1,5 +1,5 @@
-// models/reportModel.js
-const db = require('../config/db');
+import db from '../config/db.js';
+
 
 const Report = {
     create: async (reportData) => {
@@ -53,4 +53,4 @@ const Report = {
     }
 };
 
-module.exports = Report;
+export default Report;

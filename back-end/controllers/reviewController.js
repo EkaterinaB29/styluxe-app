@@ -1,6 +1,6 @@
-const asyncHandler = require('express-async-handler');
-const Review = require('../models/reviewModel');
-const Portfolio = require('../models/portfolioModel');
+import asyncHandler from 'express-async-handler';
+import Review from '../models/reviewModel.js';
+import Portfolio from '../models/portfolioModel.js';
 
 const addReview = asyncHandler(async (req, res) => {
     const { rating, content, user_id, portfolio_id } = req.body;
@@ -68,4 +68,4 @@ const getPortfolio = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { addReview, updateReview, deleteReview, getReviewsByPortfolio, getReviewsByUser, getPortfolio };
+export { addReview, updateReview, deleteReview, getReviewsByPortfolio, getReviewsByUser, getPortfolio };

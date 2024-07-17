@@ -1,12 +1,12 @@
-const asyncHandler = require('express-async-handler');
-const Report = require('../models/reportModel');
+import asyncHandler from 'express-async-handler';
+import Report from '../models/reportModel.js';
 
 const addReport = asyncHandler(async (req, res) => {
     const { content, reported_id } = req.body;
     const reporter_id = req.user.id;
 
-    if ( !content || !reported_id) {
-        return res.status(400).send('Content, and reported_id are required');
+    if (!content || !reported_id) {
+        return res.status(400).send('Content and reported_id are required');
     }
 
     const reportData = {
@@ -19,6 +19,7 @@ const addReport = asyncHandler(async (req, res) => {
     await Report.create(reportData);
     res.status(201).send('Report added successfully');
 });
+
 // Same as withdrawlReport()
 const deleteReport = asyncHandler(async (req, res) => {
     const reportId = req.params.id;
@@ -42,4 +43,4 @@ const getReportsByReported = asyncHandler(async (req, res) => {
     res.status(200).json(reports);
 });
 
-module.exports = { addReport, deleteReport, getReportsByReporter, getReportsByReported };
+export { addReport, deleteReport, getReportsByReporter, getReportsByReported };

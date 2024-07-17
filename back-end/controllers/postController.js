@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const Post = require('../models/postModel');
+import asyncHandler from 'express-async-handler';
+import Post from '../models/postModel.js';
 
 const addPost = asyncHandler(async (req, res) => {
     const { content } = req.body;
@@ -13,7 +13,7 @@ const addPost = asyncHandler(async (req, res) => {
     const postData = {
         content,
         user_id,
-        publish_time: new Date()  
+        publish_time: new Date()
     };
 
     await Post.create(postData);
@@ -26,7 +26,7 @@ const updatePost = asyncHandler(async (req, res) => {
 
     const postData = {
         content,
-        publish_time: new Date()  
+        publish_time: new Date()
     };
 
     await Post.update(postId, postData);
@@ -55,6 +55,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
     const posts = await Post.findAll();
     res.status(200).json(posts);
 });
+
 const getPostsByUser = asyncHandler(async (req, res) => {
     const userId = req.params.userId;
 
@@ -68,4 +69,5 @@ const likePost = asyncHandler(async (req, res) => {
     await Post.like(postId);
     res.status(200).send('Post liked successfully');
 });
-module.exports = { addPost, updatePost, deletePost, getPost, getAllPosts , getPostsByUser, likePost};
+
+export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost };

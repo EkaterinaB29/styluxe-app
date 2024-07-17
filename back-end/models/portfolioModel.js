@@ -1,4 +1,4 @@
-const db = require('../config/db');
+import db from '../config/db.js';
 
 const Portfolio = {
     create: (portfolioData) => {
@@ -71,4 +71,4 @@ const Portfolio = {
     }
 };
 
-module.exports = Portfolio;
+export default Portfolio;

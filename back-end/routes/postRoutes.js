@@ -1,6 +1,14 @@
-const express = require('express');
-const { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost } = require('../controllers/postController');
-const { authenticateToken } = require('../middleware/authMiddleware');
+import express from 'express';
+import { 
+    addPost, 
+    updatePost, 
+    deletePost, 
+    getPost, 
+    getAllPosts, 
+    getPostsByUser, 
+    likePost 
+} from '../controllers/postController.js';
+import  authenticateToken  from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -13,5 +21,4 @@ router.get('/', authenticateToken, getAllPosts);
 router.get('/user/:userId', authenticateToken, getPostsByUser);
 router.post('/:id/like', authenticateToken, likePost);
 
-
-module.exports = router;
+export default router;

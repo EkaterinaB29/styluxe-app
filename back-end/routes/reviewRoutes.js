@@ -1,6 +1,13 @@
-const express = require('express');
-const { addReview, updateReview, deleteReview, getReviewsByPortfolio, getReviewsByUser } = require('../controllers/reviewController');
-const { authenticateToken } = require('../middleware/authMiddleware');
+import express from 'express';
+import { 
+    addReview, 
+    updateReview, 
+    deleteReview, 
+    getReviewsByPortfolio, 
+    getReviewsByUser 
+} from '../controllers/reviewController.js';
+import  authenticateToken  from '../middleware/authMiddleware.js';
+
 const router = express.Router();
 
 // Review routes
@@ -10,4 +17,4 @@ router.delete('/:id', authenticateToken, deleteReview);
 router.get('/portfolio/:portfolioId', getReviewsByPortfolio);
 router.get('/user/:userId', getReviewsByUser);
 
-module.exports = router;
+export default router;

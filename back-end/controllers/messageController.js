@@ -1,7 +1,7 @@
-const asyncHandler = require('express-async-handler');
-const Message = require('../models/messageModel');
+import asyncHandler from 'express-async-handler';
+import Message from '../models/messageModel.js';
 
-//Send a message
+// Send a message
 const addMessage = asyncHandler(async (req, res) => {
     const { content, user_id_to, parent_id } = req.body;
     const user_id_from = req.user.id;
@@ -77,4 +77,4 @@ const markMessageAsSeen = asyncHandler(async (req, res) => {
     res.status(200).send('Message marked as seen');
 });
 
-module.exports = { addMessage, deleteMessage, getMessageById, getMessagesByUser, likeMessage, replyToMessage, markMessageAsSeen };
+export { addMessage, deleteMessage, getMessageById, getMessagesByUser, likeMessage, replyToMessage, markMessageAsSeen };

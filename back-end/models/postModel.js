@@ -1,4 +1,4 @@
-const db = require('../config/db');
+import db from '../config/db.js';
 
 const Post = {
     create: async (postData) => {
@@ -88,4 +88,4 @@ const Post = {
     }
 };
 
-module.exports = Post;
+export default Post;

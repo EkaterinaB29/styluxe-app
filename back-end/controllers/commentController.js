@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const Comment = require('../models/commentModel');
+import asyncHandler from 'express-async-handler';
+import Comment from '../models/commentModel.js';
 
 // Building the nested comment tree structure
 const buildCommentTree = (comments, parentId = null) => {
@@ -31,7 +31,6 @@ const getCommentsByPost = asyncHandler(async (req, res) => {
 const addComment = asyncHandler(async (req, res) => {
     const { content, post_id, parent_id } = req.body;
     const user_id = req.user.id;
-    //console.log(parent_id);
 
     if (!content || !post_id) {
         res.status(400).send('Content and post ID are required');
@@ -102,4 +101,4 @@ const replyOnComment = asyncHandler(async (req, res) => {
     res.status(201).send('Reply added successfully');
 });
 
-module.exports = { addComment, updateComment, deleteComment, getCommentsByPost, likeComment, replyOnComment };
+export { addComment, updateComment, deleteComment, getCommentsByPost, likeComment, replyOnComment };
