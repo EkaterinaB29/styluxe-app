@@ -4,13 +4,16 @@ import {
     loginUser, 
     getUserProfile, 
     updateUserProfile, 
-    deleteUserProfile, 
+    deleteUserProfile,
+    searchUsers, 
     addPortfolio, 
     updatePortfolio, 
     deletePortfolio, 
     uploadMultiple 
 } from '../controllers/userController.js';
-import  authenticateToken  from '../middleware/authMiddleware.js';
+import authMiddleware  from '../middleware/authMiddleware.js';
+// Destructure the middleware functions for separate use
+const { authenticateToken, verifyRole } = authMiddleware;
 
 const router = express.Router();
 
@@ -21,11 +24,13 @@ router.get('/login', loginUser);
 router.get('/profile', authenticateToken, getUserProfile);
 router.put('/profile', authenticateToken, updateUserProfile);
 router.delete('/profile', authenticateToken, deleteUserProfile);
+router.get('/search', authenticateToken, searchUsers);
 
-// Profile routes with token authentication
-router.post('/portfolio/', authenticateToken, uploadMultiple, addPortfolio);
-router.put('/portfolio/:id', authenticateToken, uploadMultiple, updatePortfolio);
-router.delete('/portfolio/:id', authenticateToken, deletePortfolio);
+// Portfolio routes accessible only by professionals
+router.post('/portfolio', authenticateToken, verifyRole(['Professional']), uploadMultiple, addPortfolio);
+router.put('/portfolio/:id', authenticateToken, verifyRole(['Professional']), uploadMultiple, updatePortfolio);
+router.delete('/portfolio/:id', authenticateToken, verifyRole(['Professional']), deletePortfolio);
+
 
 // Check later if needed
 // router.get('/portfolio/:id', authenticateToken, getPortfolio);

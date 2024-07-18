@@ -7,7 +7,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
+import asyncHandler from 'express-async-handler';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,35 +32,32 @@ const upload = multer({
 const uploadMultiple = upload.array('portfolio', 10);
 
 // Register user
-const registerUser = async (req, res) => {
-    console.log('Register User API called');
+const registerUser = asyncHandler(async (req, res) => {
     const { firstName, lastName, location, birthday, email, password, role } = req.body;
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const userData = {
-            firstName,
-            lastName,
-            location,
-            birthday,
-            email,
-            password: hashedPassword,
-            role
-        };
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = {
+        firstName,
+        lastName,
+        location,
+        birthday,
+        email,
+        password: hashedPassword,
+        role
+    };
 
-        User.create(userData, (err, results) => {
-            if (err) return res.status(500).send(err);
-            res.status(201).send('User registered successfully');
-        });
-    } catch (error) {
-        console.log('Error in registerUser:', error);
-        res.status(500).send(error);
-    }
-};
+    User.create(userData, (err, results) => {
+        if (err) return res.status(500).send(err);
+        if (role === 'Professional') {
+            res.status(201).send({ message: 'Professional registered successfully', userId: results.insertId });
+        } else {
+            res.status(201).send('Client registered successfully');
+        }
+    });
+});
 
 // Login user
-const loginUser = (req, res) => {
-    console.log('Login User API called');
+const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     User.findByEmail(email, async (err, results) => {
@@ -72,13 +69,12 @@ const loginUser = (req, res) => {
         if (!isPasswordValid) return res.status(400).send('Invalid password');
 
         const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log('User logged in successfully');
         res.json({ token });
     });
-};
+});
 
 // Get user profile
-const getUserProfile = (req, res) => {
+const getUserProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
 
     User.findById(userId, (err, results) => {
@@ -86,10 +82,10 @@ const getUserProfile = (req, res) => {
         if (results.length === 0) return res.status(404).send('User not found');
         res.json(results[0]);
     });
-};
+});
 
 // Update user profile
-const updateUserProfile = (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, location, birthday, role } = req.body;
 
@@ -97,32 +93,39 @@ const updateUserProfile = (req, res) => {
         if (err) return res.status(500).send(err);
         res.send('User profile updated');
     });
-};
+});
 
 // Delete user profile
-const deleteUserProfile = (req, res) => {
+const deleteUserProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
 
     User.delete(userId, (err, results) => {
         if (err) return res.status(500).send(err);
         res.send('User profile deleted');
     });
-};
+});
+
+// Search users
+const searchUsers = asyncHandler(async (req, res) => {
+    const query = req.query.query;
+    User.search(query, (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+        res.json(results);
+    });
+});
 
 // Add Portfolio
-const addPortfolio = async (req, res) => {
-    console.log('addPortfolio function called');
-
+const addPortfolio = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { education_history } = req.body;
 
-    console.log('User ID:', userId);
-    console.log('Education History:', education_history);
-    console.log('Files:', req.files);
-    console.log('Body:', req.body);
-
     if (!req.files || req.files.length === 0) {
         return res.status(400).send('No files uploaded');
+    }
+    if (req.user.role !== 'Professional') {
+        return res.status(403).json({ message: 'Forbidden: Only professionals can add portfolios' });
     }
 
     const portfolioFiles = req.files.map(file => ({
@@ -135,25 +138,21 @@ const addPortfolio = async (req, res) => {
     }));
 
     try {
-        console.log('Portfolio Data:', portfolioFiles);
         for (const fileData of portfolioFiles) {
             const createdPortfolio = await Portfolio.create(fileData);
-            console.log('Inserted Portfolio:', createdPortfolio);
         }
         res.status(201).send('Portfolio added successfully');
     } catch (err) {
-        console.error('Error adding portfolio:', err);
         res.status(500).send('Failed to add portfolio');
     }
-};
+});
 
 // Update Portfolio
-const updatePortfolio = async (req, res) => {
+const updatePortfolio = asyncHandler(async (req, res) => {
     const portfolioId = req.params.id;
     const { education_history } = req.body;
 
     try {
-        // Fetch the existing portfolio to retain old values if no new file is uploaded
         const existingPortfolio = await Portfolio.findById(portfolioId);
         if (!existingPortfolio) {
             return res.status(404).send('Portfolio not found');
@@ -172,27 +171,21 @@ const updatePortfolio = async (req, res) => {
             res.send('Portfolio updated successfully');
         });
     } catch (err) {
-        console.error('Error in updatePortfolio:', err);
         res.status(500).send('Failed to update portfolio');
     }
-};
+});
 
 // Delete Portfolio
-const deletePortfolio = (req, res) => {
-    console.log('deletePortfolio function called');
+const deletePortfolio = asyncHandler(async (req, res) => {
     const portfolioId = req.params.id;
-
-    console.log('Portfolio ID:', portfolioId);
 
     Portfolio.delete(portfolioId)
         .then((result) => {
-            console.log('Delete result:', result);
             res.send('Portfolio deleted successfully');
         })
         .catch((err) => {
-            console.error('Error deleting portfolio:', err);
             res.status(500).send('Failed to delete portfolio');
         });
-};
+});
 
-export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
+export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, searchUsers, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };

@@ -6,12 +6,14 @@ import {
     getReviewsByPortfolio, 
     getReviewsByUser 
 } from '../controllers/reviewController.js';
-import  authenticateToken  from '../middleware/authMiddleware.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
+const { authenticateToken, verifyRole } = authMiddleware;
 
 const router = express.Router();
 
 // Review routes
-router.post('/', authenticateToken, addReview);
+router.post('/', authenticateToken, verifyRole(['Client']), addReview);
 router.put('/:id', authenticateToken, updateReview);
 router.delete('/:id', authenticateToken, deleteReview);
 router.get('/portfolio/:portfolioId', getReviewsByPortfolio);

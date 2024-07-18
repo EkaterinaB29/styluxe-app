@@ -70,4 +70,19 @@ const likePost = asyncHandler(async (req, res) => {
     res.status(200).send('Post liked successfully');
 });
 
-export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost };
+
+const searchPosts = asyncHandler(async (req, res) => {
+    const query = req.query.query;
+    try {
+        const posts = await Post.search(query);
+        if (posts.length === 0) {
+            res.status(404).send('Post not found');
+        } else {
+            res.status(200).json(posts);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost, searchPosts };

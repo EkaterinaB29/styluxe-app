@@ -8,7 +8,9 @@ import {
     replyToMessage, 
     markMessageAsSeen 
 } from '../controllers/messageController.js';
-import  authenticateToken  from '../middleware/authMiddleware.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
+const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
 

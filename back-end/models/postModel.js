@@ -85,6 +85,17 @@ const Post = {
                 resolve(results);
             });
         });
+    },
+    search: async (query) => {
+        const sql = 'SELECT * FROM Post WHERE MATCH(content) AGAINST(? IN NATURAL LANGUAGE MODE)';
+        return new Promise((resolve, reject) => {
+            db.query(sql, [query], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
     }
 };
 

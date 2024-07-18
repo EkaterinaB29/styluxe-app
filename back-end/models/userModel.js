@@ -35,7 +35,12 @@ const User = {
     delete: (userId, callback) => {
         const query = 'DELETE FROM User WHERE user_id = ?';
         db.query(query, [userId], callback);
+    },
+    search: (query, callback) => {
+        const sql = 'SELECT * FROM User WHERE MATCH(first_name, last_name, location) AGAINST(? IN NATURAL LANGUAGE MODE)';
+        db.query(sql, [query], callback);
     }
+    
 };
 
 export default User;
