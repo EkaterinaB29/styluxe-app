@@ -12,6 +12,7 @@ import orderRoutes from './routes/ordersRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 import fetch from 'node-fetch';
 import db from './config/db.js'; // Import the database connection
+import cors from 'cors';
 dotenv.config(); // Configure dotenv
 // Define the port
 const port = 8211;
@@ -19,6 +20,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use('/api/user', userRoutes);
 app.use('/api/review', reviewRoutes);

@@ -5,7 +5,8 @@ import {
     getUserProfile, 
     updateUserProfile, 
     deleteUserProfile,
-    searchUsers, 
+    searchUsers,
+    changePassword, 
     addPortfolio, 
     updatePortfolio, 
     deletePortfolio, 
@@ -19,17 +20,19 @@ const router = express.Router();
 
 // User registration routes
 router.post('/register', uploadMultiple, registerUser);
-router.get('/login', loginUser);
+router.post('/login', loginUser);
 
 router.get('/profile', authenticateToken, getUserProfile);
 router.put('/profile', authenticateToken, updateUserProfile);
 router.delete('/profile', authenticateToken, deleteUserProfile);
 router.get('/search', authenticateToken, searchUsers);
+router.put('/change-password', authenticateToken, changePassword);
 
 // Portfolio routes accessible only by professionals
 router.post('/portfolio', authenticateToken, verifyRole(['Professional']), uploadMultiple, addPortfolio);
 router.put('/portfolio/:id', authenticateToken, verifyRole(['Professional']), uploadMultiple, updatePortfolio);
 router.delete('/portfolio/:id', authenticateToken, verifyRole(['Professional']), deletePortfolio);
+
 
 
 // Check later if needed

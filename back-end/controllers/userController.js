@@ -50,8 +50,10 @@ const registerUser = asyncHandler(async (req, res) => {
         if (err) return res.status(500).send(err);
         if (role === 'Professional') {
             res.status(201).send({ message: 'Professional registered successfully', userId: results.insertId });
-        } else {
+        } else if (role === 'Client') {
             res.status(201).send('Client registered successfully');
+        }else{
+            res.status(201).send('Administrator registered successfully');
         }
     });
 });
@@ -113,6 +115,30 @@ const searchUsers = asyncHandler(async (req, res) => {
             return res.status(500).json({ error: error.message });
         }
         res.json(results);
+    });
+});
+const changePassword = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+    const { oldPassword, newPassword } = req.body;
+
+    // Fetch user by ID
+    User.findById(userId, async (err, results) => {
+        if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(404).send('User not found');
+
+        const user = results[0];
+
+        // Check if old password is correct
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordValid) return res.status(400).send('Incorrect old password');
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update password in database
+        User.updatePassword(userId, hashedPassword, (err, result) => {
+            if (err) return res.status(500).send(err);
+            res.send('Password updated successfully');
+        });
     });
 });
 
@@ -188,4 +214,4 @@ const deletePortfolio = asyncHandler(async (req, res) => {
         });
 });
 
-export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, searchUsers, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
+export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, searchUsers, changePassword, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };

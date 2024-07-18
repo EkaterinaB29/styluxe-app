@@ -39,7 +39,11 @@ const User = {
     search: (query, callback) => {
         const sql = 'SELECT * FROM User WHERE MATCH(first_name, last_name, location) AGAINST(? IN NATURAL LANGUAGE MODE)';
         db.query(sql, [query], callback);
-    }
+    },
+    updatePassword: (userId, hashedPassword, callback) => {
+        const query = 'UPDATE User SET password = ? WHERE user_id = ?';
+        db.query(query, [hashedPassword, userId], callback);
+    },
     
 };
 
