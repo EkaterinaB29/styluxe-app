@@ -1,0 +1,90 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /*justify-content: center;
+  align-items: center;*/
+   overflow: hidden; /* Disable scrolling */
+  height: 100%; /* Ensure the body takes full height */
+}
+
+
+.Landing {
+  z-index: -999;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row; /* Stack header and buttons vertically */
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  z-index: -99;
+  width: 100%;
+  height: 100%;
+  background: #830341;
+}
+
+.pageheader {
+  text-align: center;
+  color: white;
+  text-transform: uppercase;
+}
+
+.pageheader h1 {
+  font-family: 'Cormorant Garamond';
+  font-size: 80px;
+  margin: 0;
+}
+
+.pageheader h2 {
+  font-family: 'Montserrat';
+  font-size: 22px;
+  font-weight: 300;
+  margin: 0;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ /* margin-top: 20px; /* Adjust margin to position buttons */
+  margin-bottom: 50%;
+}
+
+
+
+
+
+.button {
+  position: relative;
+  width: 150px;
+  height: 50px;
+  overflow: hidden;
+  border: 1px solid #000;
+  cursor: pointer;
+  margin: 0 10px; /* Space between buttons */
+}
+
+
+
+@media (max-width: 720px) {
+  .buttons-container {
+    flex-direction: column; /* Stack buttons vertically on small screens */
+  }
+
+  .button {
+    margin: 10px 0; /* Adjust margin for vertical stacking */
+  }
+}
