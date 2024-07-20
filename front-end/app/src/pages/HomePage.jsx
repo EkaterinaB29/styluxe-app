@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import '../css/HomePage.css';
+import logo from '../images/house-heart.svg';
+import Button from '../components/Button';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -122,40 +124,15 @@ class HomePage extends Component {
         <div className="Landing">
           <div className="pageheader">
             <h1>Styluxe App</h1>
-            <p></p>
+            
             <h2>Let us help you create comfort in your home.</h2>
-            <p></p>
-            <div className="buttons-container">
-              <div className="button">
-                <div class="top">
-                  <div class="text">
-                      <span>R</span>
-                      <span>E</span>
-                      <span>G</span>
-                      <span>I</span>
-                      <span>S</span>
-                      <span>T</span>
-                      <span>E</span>
-                      <span>R</span>
-                  </div>
-                </div>
-              </div>
+            <img src={logo} alt="Logo" className="logo" /> 
+            <p>Do you already have an account?</p>
+            <div className="button-container">
+            <Button text="BUTTON" />
         
-              <div className="button">
-              <div class="top">
-                  <div class="text">
-                      <span>L</span>
-                      <span>O</span>
-                      <span>G</span>
-                      <span> </span>
-                      <span>I</span>
-                      <span>N</span>
-                     
-                  </div>
-                </div>
-              
-              </div>
-              </div>
+            <Button text="BUTTON" />
+            </div>
           </div>
           
           

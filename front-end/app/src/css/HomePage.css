@@ -4,7 +4,7 @@ body {
   padding: 0;
   /*justify-content: center;
   align-items: center;*/
-   overflow: hidden; /* Disable scrolling */
+   /*overflow: hidden;  Disable scrolling */
   height: 100%; /* Ensure the body takes full height */
 }
 
@@ -33,19 +33,19 @@ body {
   z-index: -99;
   width: 100%;
   height: 100%;
-  background: #830341;
+  background: #67595E;
 }
 
 .pageheader {
   text-align: center;
-  color: white;
+  color: #EED6D3;
   text-transform: uppercase;
 }
 
 .pageheader h1 {
   font-family: 'Cormorant Garamond';
-  font-size: 80px;
-  margin: 0;
+  font-size: 5cem;
+  margin-top: 5%;
 }
 
 .pageheader h2 {
@@ -53,6 +53,7 @@ body {
   font-size: 22px;
   font-weight: 300;
   margin: 0;
+  margin-top: 3%;
 }
 
 .buttons-container {
@@ -60,7 +61,13 @@ body {
   justify-content: center;
   align-items: center;
  /* margin-top: 20px; /* Adjust margin to position buttons */
-  margin-bottom: 50%;
+  margin-top: 10%;
+}
+
+.logo {
+  margin-bottom: 5%;
+  margin-top: 5%;
+
 }
 
 
@@ -69,12 +76,12 @@ body {
 
 .button {
   position: relative;
-  width: 150px;
+  width: 13em;
   height: 50px;
   overflow: hidden;
-  border: 1px solid #000;
+  border: 1px solid #fdfdfd;
   cursor: pointer;
-  margin: 0 10px; /* Space between buttons */
+  margin: 0 2em; /* Space between buttons */
 }
 
 
