@@ -24,7 +24,7 @@ app.use(cors());
 
 app.use('/api/user', userRoutes);
 app.use('/api/review', reviewRoutes);
-app.use('/api/post', postRoutes);  // Add post routes
+app.use('/api/posts', postRoutes);  // Add post routes
 app.use('/api/comment', commentRoutes);  
 app.use('/api/reports', reportRoutes);
 app.use('/api/messages', messageRoutes);

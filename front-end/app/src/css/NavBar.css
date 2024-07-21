@@ -1,36 +1,60 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #EED6D3;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #E8B4B8;
+  padding: 10px 20px;
+  font-family: Arial, sans-serif;
+  width: 100%;
   
-  .navbar-brand a {
-    font-size: 24px;
-    font-weight: bold;
-    color: #67595E;
-    text-decoration: none;
-  }
-  
-  .navbar-links {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .navbar-links a {
-    font-size: 16px;
-    color: #67595E;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .navbar-links a:hover {
-    color: #A49393;
-  }
-  
-  .navbar-links .fa-search {
-    font-size: 18px;
-  }
-  
+}
+
+.navbar a {
+  color: #67595E;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.navbar .navbar-brand a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #67595E;
+}
+
+.navbar .navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .search-container {
+  position: relative;
+}
+
+.navbar .search-container i {
+  cursor: pointer;
+}
+
+.navbar .search-container img {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar .search-container input {
+  display: none;
+  position: absolute;
+  top: -8px;
+  right: 0;
+  padding: 5px;
+  border-radius: 15px;
+  border: 1px solid #67595E;
+  outline: none;
+}
+
+.navbar .search-container.active input {
+  display: block;
+}
+
+.search-icon.active + input {
+  display: block;
+}
