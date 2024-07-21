@@ -1,9 +1,22 @@
 import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
+import multer from 'multer';
+
+// Multer setup for handling file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+const upload = multer({ storage });
 
 const addPost = asyncHandler(async (req, res) => {
     const { content } = req.body;
     const user_id = req.user.id;
+    const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!content) {
         res.status(400).send('Content is required');
@@ -13,12 +26,14 @@ const addPost = asyncHandler(async (req, res) => {
     const postData = {
         content,
         user_id,
-        publish_time: new Date()
+        publish_time: new Date(),
+        image_url
     };
 
     await Post.create(postData);
     res.status(201).send('Post added successfully');
 });
+
 
 const updatePost = asyncHandler(async (req, res) => {
     const postId = req.params.id;
@@ -85,4 +100,4 @@ const searchPosts = asyncHandler(async (req, res) => {
     }
 });
 
-export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost, searchPosts };
+export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost, searchPosts, upload };

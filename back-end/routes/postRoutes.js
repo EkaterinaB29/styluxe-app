@@ -7,13 +7,15 @@ import {
     getAllPosts, 
     getPostsByUser, 
     likePost,
-    searchPosts 
+    searchPosts,
+    upload 
 } from '../controllers/postController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
+router.post('/add', upload.single('image'), addPost);
 
 // Post routes
 router.post('/', authenticateToken, addPost);

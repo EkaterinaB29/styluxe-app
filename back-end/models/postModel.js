@@ -2,12 +2,13 @@ import db from '../config/db.js';
 
 const Post = {
     create: async (postData) => {
-        const sql = `INSERT INTO Post (content, user_id, publish_time) VALUES (?, ?, ?)`;
+        const sql = `INSERT INTO Post (content, user_id, publish_time, image_url) VALUES (?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 postData.content,
                 postData.user_id,
-                postData.publish_time
+                postData.publish_time,
+                postData.image_url
             ], (err, result) => {
                 if (err) {
                     return reject(err);
