@@ -1,0 +1,50 @@
+.user-profile {
+    font-family: 'Abel', sans-serif;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.profile-details {
+    margin-left: 20px;
+}
+
+.profile-details h1 {
+    font-size: 24px;
+}
+
+.profile-details p {
+    font-size: 18px;
+    color: #777;
+}
+
+.message-button {
+    margin-left: auto;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.message-button:hover {
+    background-color: #555;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.post-card {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}

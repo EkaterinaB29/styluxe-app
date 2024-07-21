@@ -1,16 +1,53 @@
 import React, { useState } from 'react';
-import '../css//Login.css';
+import { useNavigate } from 'react-router-dom';
+import axios from '../axiosConfig';
+import '../css/Login.css';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [pwShown, setPwShown] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setPwShown(!pwShown);
   };
 
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/user/login', { email, password });
+      console.log(response.data);
+
+      // Store token in sessionStorage
+      sessionStorage.setItem('token', response.data.token);
+
+      // Redirect to profile page
+      navigate('/profile');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setError('User not found. Redirecting to registration...');
+        setTimeout(() => {
+          navigate('/register');
+        }, 3000); // Redirect after 3 seconds
+      } else {
+        setError('An error occurred. Please try again.');
+      }
+    }
+  };
+
   return (
     <div className="overlay">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="con">
           <header className="head-form">
             <h2>Log In</h2>
@@ -21,21 +58,39 @@ const Login = () => {
             <span className="input-item">
               <i className="fa fa-user-circle"></i>
             </span>
-            <input className="form-input" id="txt-input" type="text" placeholder="@UserName" required />
+            <input
+              className="form-input"
+              id="txt-input"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleChangeEmail}
+              required
+            />
             <br />
             <span className="input-item">
               <i className="fa fa-key"></i>
             </span>
-            <input className="form-input" type={pwShown ? "text" : "password"} placeholder="Password" id="pwd" name="password" required />
+            <input
+              className="form-input"
+              type={pwShown ? "text" : "password"}
+              placeholder="Password"
+              id="pwd"
+              name="password"
+              value={password}
+              onChange={handleChangePassword}
+              required
+            />
             <span onClick={togglePasswordVisibility}>
               <i className={`fa fa-eye${pwShown ? "" : "-slash"}`} aria-hidden="true" id="eye"></i>
             </span>
             <br />
-            <button className="log-in"> Log In </button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button className="log-in" type="submit"> Log In </button>
           </div>
           <div className="other">
             <button className="btn submits frgt-pass">Forgot Password</button>
-            <button className="btn submits sign-up">
+            <button className="btn submits sign-up" onClick={() => navigate('/register')}>
               Sign Up <i className="fa fa-user-plus" aria-hidden="true"></i>
             </button>
           </div>

@@ -145,6 +145,13 @@ button:hover {
 button:hover {
     animation: ani9 0.4s ease-in-out infinite alternate;
 }
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
 @keyframes ani9 {
     0% {
         transform: translateY(3px);

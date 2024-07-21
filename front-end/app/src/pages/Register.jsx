@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from '../axiosConfig';
-import '../css/Login.css'; // Use the same CSS for styling
+import '../css/Login.css';
 
 class Register extends Component {
     constructor(props) {
@@ -12,8 +12,9 @@ class Register extends Component {
             birthday: '',
             email: '',
             password: '',
-            role: 'Client', // Default role
-            showProfessionalFields: false
+            role: 'Client',
+            showProfessionalFields: false,
+            errorMessage: ''  // Add error message state
         };
     }
 
@@ -32,9 +33,13 @@ class Register extends Component {
             const { firstName, lastName, location, birthday, email, password, role } = this.state;
             const response = await axios.post('/user/register', { firstName, lastName, location, birthday, email, password, role });
             console.log(response.data);
-            // Handle successful registration, e.g., redirecting to login or home page
+            // Redirect to login or home page after successful registration
         } catch (error) {
-            console.error('Registration error:', error.response ? error.response.data : error.message);
+            if (error.response && error.response.data.code === 'ER_DUP_ENTRY') {
+                this.setState({ errorMessage: 'Email already registered. Please use a different email.' });
+            } else {
+                this.setState({ errorMessage: 'Registration failed. Please try again later.' });
+            }
         }
     };
 
@@ -49,42 +54,37 @@ class Register extends Component {
                         </header>
                         <br />
                         <div className="field-set">
+                            {this.state.errorMessage && <p className="error">{this.state.errorMessage}</p>}
                             <span className="input-item">
                                 <i className="fa fa-user-circle"></i>
                             </span>
                             <input className="form-input" type="text" name="firstName" placeholder="First Name" value={this.state.firstName} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-user-circle"></i>
                             </span>
                             <input className="form-input" type="text" name="lastName" placeholder="Last Name" value={this.state.lastName} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-map-marker"></i>
                             </span>
                             <input className="form-input" type="text" name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-calendar"></i>
                             </span>
                             <input className="form-input" type="date" name="birthday" placeholder="Birthday" value={this.state.birthday} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-envelope"></i>
                             </span>
                             <input className="form-input" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-key"></i>
                             </span>
                             <input className="form-input" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} required />
                             <br />
-
                             <span className="input-item">
                                 <i className="fa fa-user"></i>
                             </span>
@@ -93,10 +93,8 @@ class Register extends Component {
                                 <option value="Professional">Professional</option>
                             </select>
                             <br />
-
                             {this.state.showProfessionalFields && (
                                 <div>
-                                    {/* Additional fields for Professionals */}
                                     <span className="input-item">
                                         <i className="fa fa-university"></i>
                                     </span>
