@@ -1,38 +1,26 @@
-import React, { useContext } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/Post.css';
-import heartIcon from '../images/heart.svg'; 
-import { AuthContext } from '../components/AuthContext';
+import heartIcon from '../images/heart.svg';
 
-const Post = ({ post, onLike }) => {
-  const { token, user } = useContext(AuthContext);
+const Post = ({ post }) => {
+  const navigate = useNavigate();
 
-  const handleLike = async () => {
-    if (!user || !token) {
-      console.error('No user or token found');
-      return;
-    }
-
-    try {
-      await axios.post(`/like`, {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      onLike(post.id); 
-    } catch (error) {
-      console.error('Error liking the post:', error);
-    }
+  const handleClick = () => {
+    navigate(`/posts/${post.post_id}`);
   };
 
   return (
-    <div className="post">
+    <div className="post" onClick={handleClick}>
       {post.image_url && <img src={post.image_url} alt="Post" className="post-image" />}
       <div className="post-content">
         <p>{post.content}</p>
         <p>Likes: {post.likes}</p>
         <p>Posted by User {post.user_id} on {new Date(post.publish_time).toLocaleDateString()}</p>
-        <img src={heartIcon} alt="Like" className="heart-icon" onClick={handleLike} />
+        <div className="post-likes">
+          <img src={heartIcon} alt="Likes" className="likes-icon" />
+          <span className='likes'>{post.likes}</span>
+        </div>
       </div>
     </div>
   );

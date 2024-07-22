@@ -1,8 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
 import '../css/Login.css';
-import { AuthContext } from '../components/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,36 +9,23 @@ const Login = () => {
   const [pwShown, setPwShown] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setToken, setUser } = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
     setPwShown(!pwShown);
   };
 
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/user/login', { email, password });
-      console.log('Login: Received token and user:', response.data.token, response.data.user);
+      console.log(response.data);
 
-      // Store token and user in sessionStorage and update context
+      // Store token in sessionStorage
       sessionStorage.setItem('token', response.data.token);
-      sessionStorage.setItem('user', JSON.stringify(response.data.user));
-      setToken(response.data.token);
-      setUser(response.data.user);
 
-      // Redirect to posts page
-      navigate('/posts');
+      // Redirect to profile page
+      navigate('/posts/');
     } catch (error) {
-      console.error('Login failed:', error);
       if (error.response && error.response.status === 400) {
         setError('User not found. Redirecting to registration...');
         setTimeout(() => {
@@ -51,9 +37,17 @@ const Login = () => {
     }
   };
 
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <div className="overlay">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div className="con">
           <header className="head-form">
             <h2>Log In</h2>

@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../axiosConfig';
-import NavBar from '../components/NavBar';
-import '../css/BlogPage.css';
-import banner from '../images/image_2024-07-21_23-08-45.png'; 
-
+import NavBar from '../components/NavBar.jsx';
+import '../css/SinglePostPage.css';
+import banner1 from '../images/image_2024-07-21_23-08-45.png';
 import Post from '../components/Post.jsx';
 
-const BlogPage = ({ token }) => {
+const BlogPage = () => {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('/posts', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await axios.get('/posts/');
                 setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -24,31 +19,36 @@ const BlogPage = ({ token }) => {
         };
 
         fetchPosts();
-    }, [token]);
+    }, []);
 
     const updatePosts = async () => {
         try {
-            const response = await axios.get('/posts/', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get('/posts/');
             setPosts(response.data);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
     };
 
+    const latestPost = posts.length > 0 ? posts[0] : null;
+    const otherPosts = posts.length > 1 ? posts.slice(1) : [];
+
     return (
         <div className="main-content">
             <NavBar />
             <div className="banner">
-                <img src={banner} alt="Banner" />
+                <img src={banner1} alt="Banner" />
             </div>
             <h1>Articles & News</h1>
+            <div className="latest-post">
+                <h2>Latest post</h2>
+                {latestPost && (
+                    <Post post={latestPost} updatePosts={updatePosts} />
+                )}
+            </div>
             <div className="posts-grid">
-                {posts.map(post => (
-                    <Post key={post.id} post={post} token={token} updatePosts={updatePosts} />
+                {otherPosts.map(post => (
+                    <Post key={post.post_id} post={post} updatePosts={updatePosts} />
                 ))}
             </div>
         </div>

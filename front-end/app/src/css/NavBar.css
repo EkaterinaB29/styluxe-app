@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #E8B4B8;
+  background-color: #EED6D3;
   padding: 10px 20px;
   font-family: Arial, sans-serif;
   width: 100%;
@@ -13,12 +13,22 @@
   text-decoration: none;
   margin: 0 10px;
   font-weight: bold;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.navbar a:hover {
+  color: #B56576;
+  transform: scale(1.1);
 }
 
 .navbar .navbar-brand a {
   font-size: 24px;
   font-weight: bold;
   color: #67595E;
+}
+
+.navbar .navbar-brand a:hover {
+  color: #B56576;
 }
 
 .navbar .navbar-links {

@@ -1,0 +1,126 @@
+.sidebar {
+    background-color: #EED6D3;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #67595E;
+    border-radius: 4px;
+  }
+  
+  .sidebar .latest-news {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .latest-news h3 {
+    font-size: 20px;
+    color: #67595E;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar .latest-news .latest-post {
+    margin-bottom: 15px;
+  }
+  
+  .sidebar .latest-news .latest-post h4 {
+    font-size: 16px;
+    color: #67595E;
+    margin: 0 0 5px 0;
+  }
+  
+  .sidebar .latest-news .latest-post p {
+    font-size: 14px;
+    color: #67595E;
+    margin: 0;
+  }
+  
+  .sidebar .categories {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .categories h3 {
+    font-size: 20px;
+    color: #67595E;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar .categories ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar .categories ul li {
+    font-size: 14px;
+    color: #67595E;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .sidebar .categories ul li:hover {
+    background-color: #67595E;
+    color: #EED6D3;
+  }
+  
+  .sidebar .tags {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .tags h3 {
+    font-size: 20px;
+    color: #67595E;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar .tags .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .sidebar .tags .tag-list span {
+    background-color: #67595E;
+    color: #EED6D3;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 5px;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+  }
+  
+  .sidebar .tags .tag-list span:hover {
+    background-color: #EED6D3;
+    color: #67595E;
+    border: 1px solid #67595E;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      padding: 15px;
+    }
+  
+    .sidebar .search-bar input {
+      padding: 8px;
+    }
+  
+    .sidebar .latest-news h3,
+    .sidebar .categories h3,
+    .sidebar .tags h3 {
+      font-size: 18px;
+    }
+  
+    .sidebar .latest-news .latest-post h4,
+    .sidebar .categories ul li,
+    .sidebar .tags .tag-list span {
+      font-size: 14px;
+    }
+  }
+  

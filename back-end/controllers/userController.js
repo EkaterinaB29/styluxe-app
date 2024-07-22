@@ -69,7 +69,8 @@ const loginUser = asyncHandler(async (req, res) => {
         const user = results[0];
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return res.status(400).send('Invalid password');
-
+        console.log(user);
+        console.log(" user id :" + user.user_id);
         const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     });
