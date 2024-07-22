@@ -24,7 +24,7 @@ router.delete('/:id', authenticateToken, deletePost);
 //router.get('/:id', authenticateToken, getPost);
 router.get('/', getAllPosts);
 router.get('/user/:userId', authenticateToken, getPostsByUser);
-router.post('/:id/like', authenticateToken, likePost);
+router.post('/like', authenticateToken, likePost);
 
 
 

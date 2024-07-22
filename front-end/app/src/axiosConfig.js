@@ -1,17 +1,21 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+const instance = axios.create({
   baseURL: 'http://88.200.63.148:8211/api',
 });
 
-axiosInstance.interceptors.request.use(config => {
-  const token = sessionStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+instance.interceptors.request.use(
+  (config) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      const token = user.token;
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (err) => {
+    return err.message;
   }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+);
 
-export default axiosInstance;
+export default instance;

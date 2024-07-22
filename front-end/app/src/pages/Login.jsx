@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
 import '../css/Login.css';
+import { AuthContext } from '../components/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ const Login = () => {
   const [pwShown, setPwShown] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setToken, setUser } = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
     setPwShown(!pwShown);
@@ -26,14 +28,18 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('/user/login', { email, password });
-      console.log(response.data);
+      console.log('Login: Received token and user:', response.data.token, response.data.user);
 
-      // Store token in sessionStorage
+      // Store token and user in sessionStorage and update context
       sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('user', JSON.stringify(response.data.user));
+      setToken(response.data.token);
+      setUser(response.data.user);
 
-      // Redirect to profile page
-      navigate('/profile');
+      // Redirect to posts page
+      navigate('/posts');
     } catch (error) {
+      console.error('Login failed:', error);
       if (error.response && error.response.status === 400) {
         setError('User not found. Redirecting to registration...');
         setTimeout(() => {

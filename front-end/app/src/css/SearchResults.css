@@ -1,0 +1,42 @@
+.search-results-page {
+    padding: 20px;
+}
+
+.results-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.posts-results, .users-results {
+    width: 48%;
+}
+
+.post-card, .user-card {
+    background: #EED6D3;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.post-title, .user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #67595E;
+}
+
+.post-summary, .user-location {
+    font-size: 14px;
+    color: #A49393;
+}
+
+.post-date {
+    font-size: 12px;
+    color: #A49393;
+}
