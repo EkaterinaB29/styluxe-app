@@ -16,7 +16,12 @@ const SinglePostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`/posts/${id}`);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://88.200.63.148:8211/api/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setPost(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -25,8 +30,13 @@ const SinglePostPage = () => {
 
     const fetchLatestPosts = async () => {
       try {
-        const response = await axios.get('/posts');
-        setLatestPosts(response.data.slice(0, 4));
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/posts', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setLatestPosts(response.data);
       } catch (error) {
         console.error('Error fetching latest posts:', error);
       }
@@ -42,13 +52,10 @@ const SinglePostPage = () => {
       <div className="banner">
         <img src={banner} alt="Banner" />
       </div>
-      <h1 className="title">Let’s Get Solution for Building
-      Construction Work</h1>
+      <h1 className="title">We Create The Art Of Stylish Living Stylishly</h1>
       <div className="content">
         <SinglePostContent post={post} />
-        <div className="sidebar">
-          <Sidebar latestPosts={latestPosts} />
-        </div>
+        <Sidebar latestPosts={latestPosts} />
       </div>
       <Footer />
     </div>

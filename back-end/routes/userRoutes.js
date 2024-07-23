@@ -25,7 +25,7 @@ router.post('/login', loginUser);
 router.get('/profile', authenticateToken, getUserProfile);
 router.put('/profile', authenticateToken, updateUserProfile);
 router.delete('/profile', authenticateToken, deleteUserProfile);
-router.get('/search', authenticateToken, searchUsers);
+router.get('/search',  searchUsers);
 router.put('/change-password', authenticateToken, changePassword);
 
 // Portfolio routes accessible only by professionals

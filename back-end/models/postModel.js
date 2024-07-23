@@ -2,13 +2,14 @@ import db from '../config/db.js';
 
 const Post = {
     create: async (postData) => {
-        const sql = `INSERT INTO Post (content, user_id, publish_time, image_url) VALUES (?, ?, ?, ?)`;
+        const sql = `INSERT INTO Post (content, user_id, publish_time, image_url, tags) VALUES (?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 postData.content,
                 postData.user_id,
                 postData.publish_time,
-                postData.image_url
+                postData.image_url,
+                postData.tags
             ], (err, result) => {
                 if (err) {
                     return reject(err);
@@ -88,7 +89,7 @@ const Post = {
         });
     },
     search: async (query) => {
-        const sql = 'SELECT * FROM Post WHERE MATCH(content) AGAINST(? IN NATURAL LANGUAGE MODE)';
+        const sql = `SELECT * FROM Post WHERE MATCH(content) AGAINST(? IN NATURAL LANGUAGE MODE)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [query], (err, results) => {
                 if (err) {
@@ -97,7 +98,18 @@ const Post = {
                 resolve(results);
             });
         });
-    }
+    },
+    findByTag: async (tag) => {
+        const sql = `SELECT * FROM Post WHERE tags LIKE ?`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [`%${tag}%`], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+    },
 };
 
 export default Post;

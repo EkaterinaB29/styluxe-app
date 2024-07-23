@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserProfile from './pages/UserProfile';
 import BlogPage from './pages/BlogPage';
-
+import CreatePostPage from './pages/CreatePostPage';
 function App() {
   return (
     <Router>
@@ -17,6 +17,7 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/posts" element={<BlogPage />} />
         <Route path="/posts/:id" element={<SinglePostPage />} />
+        <Route path="/posts/create-post" element={<CreatePostPage />} />
       </Routes>
     </Router>
   );

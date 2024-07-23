@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const addPost = asyncHandler(async (req, res) => {
-    const { content } = req.body;
+    const { content, tags } = req.body;
     const user_id = req.user.id;
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -27,21 +27,21 @@ const addPost = asyncHandler(async (req, res) => {
         content,
         user_id,
         publish_time: new Date(),
-        image_url
+        image_url,
+        tags
     };
 
     await Post.create(postData);
     res.status(201).send('Post added successfully');
 });
-
-
 const updatePost = asyncHandler(async (req, res) => {
     const postId = req.params.id;
-    const { content } = req.body;
+    const { content, tags } = req.body;
 
     const postData = {
         content,
-        publish_time: new Date()
+        publish_time: new Date(),
+        tags
     };
 
     await Post.update(postId, postData);
@@ -87,17 +87,29 @@ const likePost = asyncHandler(async (req, res) => {
 
 
 const searchPosts = asyncHandler(async (req, res) => {
-    const query = req.query.query;
-    try {
-        const posts = await Post.search(query);
-        if (posts.length === 0) {
-            res.status(404).send('Post not found');
-        } else {
-            res.status(200).json(posts);
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const { query, type } = req.query;
+  
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
     }
-});
+  
+    try {
+      let posts;
+      if (type === 'tag') {
+        posts = await Post.findByTag(query);
+      } else {
+        posts = await Post.search(query);
+      }
+  
+      if (posts.length === 0) {
+        res.status(404).send('Post not found');
+      } else {
+        res.status(200).json(posts);
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
 
 export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost, searchPosts, upload };

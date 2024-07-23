@@ -15,23 +15,31 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
-//router.post('/', authenticateToken, upload.single('image'), addPost);
-// Post routes
 
-//router.post('/search', authenticateToken, searchPosts);
-router.put('/:id', authenticateToken, updatePost);
-//router.delete('/:id', authenticateToken, deletePost);
-//router.get('/:id', authenticateToken, getPost);
-//router.get('/', getAllPosts);
-//router.get('/user/:userId', authenticateToken, getPostsByUser);
-//router.put('/:id/like', authenticateToken, likePost);
 
-router.put('/:id/like', authenticateToken, likePost);
-//router.post('/', authenticateToken, upload.single('image'), addPost);
-//router.post('/search', authenticateToken, searchPosts);
+
+// Define search route first since it's specific
+router.get('/search', searchPosts);
+
+// Define the route to get posts by a specific user, it's specific and should be defined before other GET routes
+router.get('/user/:userId', authenticateToken, getPostsByUser);
+
+// Define the route to get a specific post by ID before the general get all posts route
+router.get('/:id', getPost);
+
+// Define the general get all posts route
 router.get('/', getAllPosts);
-router.get('/:id',getPost);
 
+// Define the route to like a post, which is specific and requires an ID
+router.put('/:id/like', authenticateToken, likePost);
 
+// Define the route to create a post
+router.post('/', upload.single('image'), authenticateToken, addPost);
+
+// Define the route to update a post
+router.put('/:id', authenticateToken, updatePost);
+
+// Define the route to delete a post
+router.delete('/:id', authenticateToken, deletePost);
 
 export default router;

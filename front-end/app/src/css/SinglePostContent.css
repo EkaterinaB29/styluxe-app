@@ -18,7 +18,7 @@
 .single-post-content h1 {
   font-size: 32px;
   color: #333;
-  margin-bottom: 20px;
+  padding-bottom: 5%;
   font-weight: bold;
 }
 
@@ -29,12 +29,6 @@
   margin-bottom: 20px;
 }
 
-.single-post-content img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
 
 .single-post-content .meta {
   font-size: 14px;
@@ -83,6 +77,29 @@
 .sidebar .categories .category-item .date {
   font-size: 12px;
   color: #888;
+}.single-post-content .post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.single-post-content .likes {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.single-post-content .heart-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0px;
+}
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
@@ -91,11 +108,20 @@
       align-items: center;
   }
 
-  .single-post-content {
-      margin-right: 0;
-  }
-
   .sidebar {
       max-width: 100%;
+  }
+  .single-post-content {
+    padding: 15px;
+    width: 90%;
+  }
+
+  .single-post-content h1 {
+    font-size: 20px;
+  }
+
+  .single-post-content p {
+    font-size: 14px;
+    margin-right: 0;
   }
 }

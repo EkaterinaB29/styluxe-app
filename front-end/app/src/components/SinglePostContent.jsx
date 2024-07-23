@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/SinglePostContent.css';
+import heart from '../images/heart.svg';
 
 const SinglePostContent = ({ post }) => {
   if (!post) {
@@ -9,10 +10,13 @@ const SinglePostContent = ({ post }) => {
   return (
     <div className="single-post-content">
       <h1>{post.title}</h1>
-      <img src={post.image_url} alt={post.title} />
+      <img src={post.image_url} alt={post.title} className="post-image" />
       <p>{post.content}</p>
-      <p>Likes: {post.likes}</p>
-      <p>Posted by User {post.user_id} on {new Date(post.publish_time).toLocaleDateString()}</p>
+      <div className="likes">
+       
+        <span>{post.likes}</span> <img src={heart} alt="heart" className="heart-icon" />
+      </div>
+      <p>Posted on {new Date(post.publish_time).toLocaleDateString()}</p>
     </div>
   );
 };
