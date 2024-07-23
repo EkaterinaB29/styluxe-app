@@ -13,11 +13,19 @@ import { errorHandler } from './middleware/errorMiddleware.js';
 import fetch from 'node-fetch';
 import db from './config/db.js'; // Import the database connection
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 dotenv.config(); // Configure dotenv
 // Define the port
 const port = 8211;
 const app = express();
-app.use(cors());
+
+app.use(cookieParser());
+app.use(cors({
+    origin: 'http://88.200.63.148:3333',
+    credentials: true, // Enable credentials (cookies)
+  }));
+  
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

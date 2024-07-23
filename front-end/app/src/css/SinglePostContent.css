@@ -100,8 +100,14 @@
   height: 24px;
   cursor: pointer;
   margin-bottom: 10px;
+  transition: transform 0.3s;
 }
 
+
+.heart-icon.liked {
+  transform: scale(1.2);
+  filter: hue-rotate(45deg); 
+}
 @media (max-width: 768px) {
   .single-post-page .content {
       flex-direction: column;

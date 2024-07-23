@@ -79,10 +79,15 @@ const getPostsByUser = asyncHandler(async (req, res) => {
 });
 
 const likePost = asyncHandler(async (req, res) => {
-    const postId = req.params.id;
+  const postId = req.params.id;
 
-    await Post.like(postId);
-    res.status(200).send('Post liked successfully');
+  const result = await Post.like(postId);
+  if (result.affectedRows === 0) {
+    res.status(404).send('Post not found');
+  } else {
+    const post = await Post.findById(postId);
+    res.status(200).json(post);
+  }
 });
 
 

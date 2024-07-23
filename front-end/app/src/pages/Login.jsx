@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
 import '../css/Login.css';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,8 +21,8 @@ const Login = () => {
       const response = await axios.post('/user/login', { email, password });
       console.log(response.data);
 
-      // Store token in sessionStorage
-      sessionStorage.setItem('token', response.data.token);
+      // Store token in a cookie
+      Cookies.set('token', response.data.token, { path: '/', secure: false, sameSite: 'strict' });
 
       // Redirect to profile page
       navigate('/posts/');

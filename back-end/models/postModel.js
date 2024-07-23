@@ -77,17 +77,18 @@ const Post = {
             });
         });
     },
-    findByUserId: async (userId) => {
-        const sql = `SELECT * FROM Post WHERE user_id = ?`;
+    
+      findById: async (postId) => {
+        const sql = `SELECT * FROM Post WHERE post_id = ?`;
         return new Promise((resolve, reject) => {
-            db.query(sql, [userId], (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            });
+          db.query(sql, [postId], (err, result) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(result[0]);
+          });
         });
-    },
+      },
     search: async (query) => {
         const sql = `SELECT * FROM Post WHERE MATCH(content) AGAINST(? IN NATURAL LANGUAGE MODE)`;
         return new Promise((resolve, reject) => {

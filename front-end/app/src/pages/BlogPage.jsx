@@ -11,7 +11,7 @@ const BlogPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('/posts/');
+                const response = await axios.get('http://88.200.63.148:8211/api/posts');
                 setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -23,7 +23,7 @@ const BlogPage = () => {
 
     const updatePosts = async () => {
         try {
-            const response = await axios.get('/posts/');
+            const response = await axios.get('http://88.200.63.148:8211/api/posts');
             setPosts(response.data);
         } catch (error) {
             console.error('Error fetching posts:', error);

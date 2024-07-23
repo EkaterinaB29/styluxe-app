@@ -7,6 +7,7 @@ import SinglePostContent from '../components/SinglePostContent.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
 import '../css/SinglePostPage.css';
+import Cookies from 'js-cookie';
 
 const SinglePostPage = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const SinglePostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('token'); // Get token from cookies
         const response = await axios.get(`http://88.200.63.148:8211/api/posts/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -30,8 +31,9 @@ const SinglePostPage = () => {
 
     const fetchLatestPosts = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('/posts', {
+        const token = Cookies.get('token'); // Get token from cookies
+        console.log('Token retrieved from cookies:', token); // Debug: check if the token is correctly retrieved
+        const response = await axios.get('http://88.200.63.148:8211/api/posts', {
           headers: {
             Authorization: `Bearer ${token}`
           }
