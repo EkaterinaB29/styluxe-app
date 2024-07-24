@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
+import Comment from '../models/commentModel.js';
 import multer from 'multer';
 
 // Multer setup for handling file uploads
@@ -13,6 +14,37 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Utility function to build a nested comment tree structure
+const buildCommentTree = (comments, parentId = null) => {
+    let commentTree = [];
+    comments.forEach(comment => {
+        if (comment.parent_id === parentId) {
+            let children = buildCommentTree(comments, comment.comment_id);
+            if (children.length) {
+                comment.replies = children;
+            } else {
+                comment.replies = [];
+            }
+            commentTree.push(comment);
+        }
+    });
+    return commentTree;
+};
+
+const getPostWithComments = asyncHandler(async (req, res) => {
+    const postId = req.params.postId;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+        res.status(405).send('Post not found');
+        return;
+    }
+
+    const comments = await Comment.findByPostId(postId);
+    const commentTree = buildCommentTree(comments);
+
+    res.status(200).json({ post, comments: commentTree });
+});
 const addPost = asyncHandler(async (req, res) => {
     const { content, tags } = req.body;
     const user_id = req.user.id;
@@ -34,6 +66,7 @@ const addPost = asyncHandler(async (req, res) => {
     await Post.create(postData);
     res.status(201).send('Post added successfully');
 });
+
 const updatePost = asyncHandler(async (req, res) => {
     const postId = req.params.id;
     const { content, tags } = req.body;
@@ -55,16 +88,7 @@ const deletePost = asyncHandler(async (req, res) => {
     res.status(200).send('Post deleted successfully');
 });
 
-const getPost = asyncHandler(async (req, res) => {
-    const postId = req.params.id;
 
-    const post = await Post.findById(postId);
-    if (!post) {
-        res.status(404).send('Post not found');
-    } else {
-        res.status(200).json(post);
-    }
-});
 
 const getAllPosts = asyncHandler(async (req, res) => {
     const posts = await Post.findAll();
@@ -79,42 +103,40 @@ const getPostsByUser = asyncHandler(async (req, res) => {
 });
 
 const likePost = asyncHandler(async (req, res) => {
-  const postId = req.params.id;
+    const postId = req.params.id;
 
-  const result = await Post.like(postId);
-  if (result.affectedRows === 0) {
-    res.status(404).send('Post not found');
-  } else {
-    const post = await Post.findById(postId);
-    res.status(200).json(post);
-  }
+    const result = await Post.like(postId);
+    if (result.affectedRows === 0) {
+        res.status(404).send('Post not found');
+    } else {
+        const post = await Post.findById(postId);
+        res.status(200).json(post);
+    }
 });
-
 
 const searchPosts = asyncHandler(async (req, res) => {
     const { query, type } = req.query;
-  
-    if (!query) {
-      return res.status(400).json({ error: 'Query parameter is required' });
-    }
-  
-    try {
-      let posts;
-      if (type === 'tag') {
-        posts = await Post.findByTag(query);
-      } else {
-        posts = await Post.search(query);
-      }
-  
-      if (posts.length === 0) {
-        res.status(404).send('Post not found');
-      } else {
-        res.status(200).json(posts);
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  
 
-export { addPost, updatePost, deletePost, getPost, getAllPosts, getPostsByUser, likePost, searchPosts, upload };
+    if (!query) {
+        return res.status(400).json({ error: 'Query parameter is required' });
+    }
+
+    try {
+        let posts;
+        if (type === 'tag') {
+            posts = await Post.findByTag(query);
+        } else {
+            posts = await Post.search(query);
+        }
+
+        if (posts.length === 0) {
+            res.status(404).send('Post not found');
+        } else {
+            res.status(200).json(posts);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+export { addPost, updatePost, deletePost, getPostWithComments, getAllPosts, getPostsByUser, likePost, searchPosts, upload };

@@ -1,34 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import Comment from '../models/commentModel.js';
 
-// Building the nested comment tree structure
-const buildCommentTree = (comments, parentId = null) => {
-    let commentTree = [];
-    comments.forEach(comment => {
-        if (comment.parent_id === parentId) {
-            let children = buildCommentTree(comments, comment.comment_id);
-            if (children.length) {
-                comment.replies = children;
-            } else {
-                comment.replies = [];
-            }
-            commentTree.push(comment);
-        }
-    });
-    return commentTree;
-};
-
-// Get comments by post ID to build the tree
-const getCommentsByPost = asyncHandler(async (req, res) => {
-    const postId = req.params.postId;
-
-    const comments = await Comment.findByPostId(postId);
-    const commentTree = buildCommentTree(comments);
-    res.status(200).json({ comments: commentTree });
-});
-
 // Add a comment
-const addComment = asyncHandler(async (req, res) => {
+/*const addComment = asyncHandler(async (req, res) => {
     const { content, post_id, parent_id } = req.body;
     const user_id = req.user.id;
 
@@ -43,6 +17,27 @@ const addComment = asyncHandler(async (req, res) => {
         post_id,
         publish_time: new Date(),
         parent_id: parent_id || null
+    };
+
+    await Comment.create(commentData);
+    res.status(201).send('Comment added successfully');
+});*/
+const addComment = asyncHandler(async (req, res) => {
+    const { text } = req.body;
+    const postId = req.params.postId;
+    const user_id = req.user.id;
+
+    if (!text || !postId) {
+        res.status(400).send('Content and post ID are required');
+        return;
+    }
+
+    const commentData = {
+        content: text,
+        user_id,
+        post_id: postId,
+        publish_time: new Date(),
+        parent_id: null
     };
 
     await Comment.create(commentData);
@@ -83,12 +78,15 @@ const likeComment = asyncHandler(async (req, res) => {
 const replyOnComment = asyncHandler(async (req, res) => {
     const { content, post_id, parent_id } = req.body;
     const user_id = req.user.id;
-
+    console.log(req.body);
+    console.log(post_id);
+    console.log(parent_id);
+    
     if (!content || !post_id || !parent_id) {
         res.status(400).send('Content, post ID, and parent ID are required');
         return;
     }
-
+    
     const commentData = {
         content,
         user_id,
@@ -101,4 +99,4 @@ const replyOnComment = asyncHandler(async (req, res) => {
     res.status(201).send('Reply added successfully');
 });
 
-export { addComment, updateComment, deleteComment, getCommentsByPost, likeComment, replyOnComment };
+export { addComment, updateComment, deleteComment, likeComment, replyOnComment };

@@ -44,17 +44,7 @@ const Post = {
             });
         });
     },
-    findById: async (postId) => {
-        const sql = `SELECT * FROM Post WHERE post_id = ?`;
-        return new Promise((resolve, reject) => {
-            db.query(sql, [postId], (err, result) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(result[0]);
-            });
-        });
-    },
+    
     findAll: async () => {
         const sql = `SELECT * FROM Post`;
         return new Promise((resolve, reject) => {

@@ -3,44 +3,41 @@ import {
     addPost, 
     updatePost, 
     deletePost, 
-    getPost, 
+    getPostWithComments, 
     getAllPosts, 
     getPostsByUser, 
     likePost,
     searchPosts,
     upload 
 } from '../controllers/postController.js';
+import { 
+    addComment,
+    updateComment, 
+    deleteComment, 
+    likeComment, 
+    replyOnComment 
+} from '../controllers/commentController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
+// Nested routes for comments under posts
 
 
-
-// Define search route first since it's specific
 router.get('/search', searchPosts);
-
-// Define the route to get posts by a specific user, it's specific and should be defined before other GET routes
 router.get('/user/:userId', authenticateToken, getPostsByUser);
-
-// Define the route to like a post, which is specific and requires an ID
-router.put('/:id/like',authenticateToken, likePost);
-// Define the route to get a specific post by ID before the general get all posts route
-router.get('/:id', getPost);
-
-// Define the general get all posts route
+router.put('/:postId/like', authenticateToken, likePost);
+router.get('/:postId', getPostWithComments);
 router.get('/', getAllPosts);
-
-
-
-// Define the route to create a post
 router.post('/', upload.single('image'), authenticateToken, addPost);
+router.put('/:postId', authenticateToken, updatePost);
+router.delete('/:postId', authenticateToken, deletePost);
 
-// Define the route to update a post
-//router.put('/:id', authenticateToken, updatePost);
-
-// Define the route to delete a post
-router.delete('/:id', authenticateToken, deletePost);
+router.post('/:postId/comments', authenticateToken, addComment);
+router.put('/:postId/comments/:commentId', authenticateToken, updateComment);
+router.delete('/:postId/comments/:commentId', authenticateToken, deleteComment);
+router.post('/:postId/comments/:commentId/like', authenticateToken, likeComment);
+router.post('/:postId/comments/:commentId/reply', authenticateToken, replyOnComment);
 
 export default router;

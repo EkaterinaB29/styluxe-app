@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'; // Import body-parser
 import userRoutes from './routes/userRoutes.js'; // Import the routes
 import reviewRoutes from './routes/reviewRoutes.js'; // Import the routes
 import postRoutes from './routes/postRoutes.js';  // Import post routes
-import commentRoutes from './routes/commentRoutes.js';
+
 import reportRoutes from './routes/reportRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import orderRoutes from './routes/ordersRoutes.js';
@@ -22,6 +22,8 @@ const app = express();
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://88.200.63.148:3333',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
     credentials: true, // Enable credentials (cookies)
   }));
   
@@ -32,8 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/user', userRoutes);
 app.use('/api/review', reviewRoutes);
-app.use('/api/posts', postRoutes);  // Add post routes
-app.use('/api/comment', commentRoutes);  
+app.use('/api/posts', postRoutes);  
 app.use('/api/reports', reportRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/orders', orderRoutes);

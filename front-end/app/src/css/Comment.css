@@ -1,0 +1,83 @@
+.comments-section {
+  margin: 150px;
+}
+
+.new-comment,
+.reply-section {
+  margin-bottom: 20px;
+}
+
+.new-comment textarea,
+.reply-section textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #A49393;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.new-comment button,
+.reply-section button {
+  background-color: #67595E;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.comment {
+  padding: 15px;
+  border: 1px solid #A49393;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #EED6D3;
+}
+
+.comment .comment-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  color: #67595E;
+}
+
+.comment .comment-text {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #67595E;
+}
+
+.comment .comment-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 30px;
+  ;
+}
+
+.comment .comment-actions button {
+  background-color: #67595E;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment .comment-actions img {
+  cursor: pointer;
+}
+
+.reply {
+  margin-left: 40px;
+  border-left: 2px solid #A49393;
+  padding-left: 10px;
+}
+
+.comment .comment-actions button:hover,
+.new-comment button:hover,
+.reply-section button:hover {
+  background-color: #A49393;
+}

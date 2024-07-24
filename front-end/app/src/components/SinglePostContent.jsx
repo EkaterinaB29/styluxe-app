@@ -6,7 +6,7 @@ import heart from '../images/heart.svg';
 import Cookies from 'js-cookie';
 
 const SinglePostContent = ({ post }) => {
-  const { id } = useParams();
+  const { postId } = useParams();
   const [likes, setLikes] = useState(post ? post.likes : 0);
   const [isLiked, setIsLiked] = useState(false);
   
@@ -19,7 +19,7 @@ const SinglePostContent = ({ post }) => {
     if (isLiked) return; // Prevent multiple likes
     try {
       const token = Cookies.get('token'); // Get token from cookies
-      const response = await axios.put(`/posts/${id}/like`, {}, {
+      const response = await axios.put(`/posts/${postId}/like`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

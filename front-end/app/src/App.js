@@ -16,7 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/posts" element={<BlogPage />} />
-        <Route path="/posts/:id" element={<SinglePostPage />} />
+        <Route path="/posts/:postId" element={<SinglePostPage />} />
         <Route path="/posts/create-post" element={<CreatePostPage />} />
       </Routes>
     </Router>

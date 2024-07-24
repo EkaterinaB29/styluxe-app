@@ -6,11 +6,12 @@ import banner from '../images/bedroom.png';
 import SinglePostContent from '../components/SinglePostContent.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
+import Comment from '../components/Comment.jsx'; // Import the Comment component
 import '../css/SinglePostPage.css';
 import Cookies from 'js-cookie';
 
 const SinglePostPage = () => {
-  const { id } = useParams();
+  const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [latestPosts, setLatestPosts] = useState([]);
 
@@ -18,12 +19,12 @@ const SinglePostPage = () => {
     const fetchPost = async () => {
       try {
         const token = Cookies.get('token'); // Get token from cookies
-        const response = await axios.get(`http://88.200.63.148:8211/api/posts/${id}`, {
+        const response = await axios.get(`http://88.200.63.148:8211/api/posts/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setPost(response.data);
+        setPost(response.data.post);
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -46,7 +47,7 @@ const SinglePostPage = () => {
 
     fetchPost();
     fetchLatestPosts();
-  }, [id]);
+  }, [postId]);
 
   return (
     <div className="single-post-page">
@@ -59,6 +60,7 @@ const SinglePostPage = () => {
         <SinglePostContent post={post} />
         <Sidebar latestPosts={latestPosts} />
       </div>
+      {post && <Comment postId={postId} />} {/* Include the Comment component and pass postId */}
       <Footer />
     </div>
   );
