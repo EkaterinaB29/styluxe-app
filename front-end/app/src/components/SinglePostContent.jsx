@@ -9,17 +9,17 @@ const SinglePostContent = ({ post }) => {
   const { postId } = useParams();
   const [likes, setLikes] = useState(post ? post.likes : 0);
   const [isLiked, setIsLiked] = useState(false);
-  
+
   useEffect(() => {
-    // Check if token is accessible from cookies
     const token = Cookies.get('token');
     console.log('Token retrieved from cookies:', token);
   }, []);
+
   const handleLike = async () => {
     if (isLiked) return; // Prevent multiple likes
     try {
       const token = Cookies.get('token'); // Get token from cookies
-      const response = await axios.put(`/posts/${postId}/like`, {}, {
+      const response = await axios.put(`http://88.200.63.148:8211/api/posts/${postId}/like`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -43,7 +43,7 @@ const SinglePostContent = ({ post }) => {
   return (
     <div className="single-post-content">
       <h1>{post.title}</h1>
-      <img src={post.image_url} alt={post.title} className="post-image" />
+      <img src={`http://88.200.63.148:8211${post.image_url}`} alt={post.title} className="post-image" />
       <p>{post.content}</p>
       <div className="likes" onClick={handleLike} style={{ cursor: 'pointer' }}>
         <span>{likes}</span>

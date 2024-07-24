@@ -103,7 +103,7 @@ const getPostsByUser = asyncHandler(async (req, res) => {
 });
 
 const likePost = asyncHandler(async (req, res) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
 
     const result = await Post.like(postId);
     if (result.affectedRows === 0) {

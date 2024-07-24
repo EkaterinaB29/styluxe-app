@@ -4,17 +4,17 @@ import Comment from '../models/commentModel.js';
 // Add a comment
 
 const addComment = asyncHandler(async (req, res) => {
-    const { text } = req.body;
+    const { content } = req.body;
     const postId = req.params.postId;
     const user_id = req.user.id;
 
-    if (!text || !postId) {
+    if (!content || !postId) {
         res.status(400).send('Content and post ID are required');
         return;
     }
 
     const commentData = {
-        content: text,
+        content: content,
         user_id,
         post_id: postId,
         publish_time: new Date(),
@@ -43,7 +43,6 @@ const updateComment = asyncHandler(async (req, res) => {
 const deleteComment = asyncHandler(async (req, res) => {
     const { postId, commentId } = req.params;
       
-
     await Comment.delete(commentId);
     res.status(200).send('Comment deleted successfully');
 });
@@ -60,9 +59,6 @@ const likeComment = asyncHandler(async (req, res) => {
 const replyOnComment = asyncHandler(async (req, res) => {
     const { content, post_id, parent_id } = req.body;
     const user_id = req.user.id;
-    console.log(req.body);
-    console.log(post_id);
-    console.log(parent_id);
     
     if (!content || !post_id || !parent_id) {
         res.status(400).send('Content, post ID, and parent ID are required');

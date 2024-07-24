@@ -3,7 +3,6 @@ import axios from '../axiosConfig';
 import NavBar from '../components/NavBar.jsx';
 import banner from '../images/bedroom.png';
 import Footer from '../components/Footer.jsx';
-//import Cookies from 'js-cookie';
 import '../css/CreatePostPage.css';
 
 const CreatePostPage = () => {

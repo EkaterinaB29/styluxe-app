@@ -6,7 +6,7 @@ import banner from '../images/bedroom.png';
 import SinglePostContent from '../components/SinglePostContent.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
-import Comment from '../components/Comment.jsx'; // Import the Comment component
+import Comment from '../components/Comment.jsx';
 import '../css/SinglePostPage.css';
 import Cookies from 'js-cookie';
 
@@ -24,7 +24,7 @@ const SinglePostPage = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setPost(response.data.post);
+        setPost(response.data); 
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -33,7 +33,6 @@ const SinglePostPage = () => {
     const fetchLatestPosts = async () => {
       try {
         const token = Cookies.get('token'); // Get token from cookies
-        console.log('Token retrieved from cookies:', token); // Debug: check if the token is correctly retrieved
         const response = await axios.get('http://88.200.63.148:8211/api/posts', {
           headers: {
             Authorization: `Bearer ${token}`
@@ -57,10 +56,10 @@ const SinglePostPage = () => {
       </div>
       <h1 className="title">We Create The Art Of Stylish Living Stylishly</h1>
       <div className="content">
-        <SinglePostContent post={post} />
+        {post && <SinglePostContent post={post.post} />}
         <Sidebar latestPosts={latestPosts} />
       </div>
-      {post && <Comment postId={postId} />} {/* Include the Comment component and pass postId */}
+      {post && <Comment postId={postId} />}
       <Footer />
     </div>
   );

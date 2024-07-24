@@ -22,7 +22,7 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
-// Nested routes for comments under posts
+
 
 
 router.get('/search', searchPosts);

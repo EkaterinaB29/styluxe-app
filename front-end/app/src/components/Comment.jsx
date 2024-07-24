@@ -11,15 +11,18 @@ const Comment = ({ postId }) => {
   const [newReply, setNewReply] = useState('');
   const [newComment, setNewComment] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
+  const [likedComments, setLikedComments] = useState([]); 
 
   const fetchComments = useCallback(async () => {
     try {
       const response = await axios.get(`http://88.200.63.148:8211/api/posts/${postId}`);
       console.log('Fetched comments:', response.data);
       setComments(response.data.comments || []);
+      setLikedComments(response.data.likedComments || []);
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      //console.error('Error fetching comments:', error);
       setComments([]);
+      
     }
   }, [postId]);
 
@@ -145,7 +148,12 @@ const Comment = ({ postId }) => {
             <p className="comment-text">{comment.content || 'No content'}</p>
           )}
           <div className="comment-actions">
-            <img src={heart} alt="Like" onClick={() => handleLike(comment.comment_id)} />
+            <img 
+              src={heart} 
+              alt="Like" 
+              onClick={() => handleLike(comment.comment_id)} 
+              className={likedComments.includes(comment.comment_id) ? 'liked' : ''} 
+            /><span>{comment.likes}</span>
             <button onClick={() => setIsEditing(comment.comment_id)}>Edit</button>
             <button onClick={() => handleDelete(comment.comment_id)}>Delete</button>
             <button onClick={() => setReplyingTo(comment.comment_id)}>Reply</button>
