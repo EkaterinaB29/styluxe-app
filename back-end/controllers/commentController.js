@@ -2,26 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Comment from '../models/commentModel.js';
 
 // Add a comment
-/*const addComment = asyncHandler(async (req, res) => {
-    const { content, post_id, parent_id } = req.body;
-    const user_id = req.user.id;
 
-    if (!content || !post_id) {
-        res.status(400).send('Content and post ID are required');
-        return;
-    }
-
-    const commentData = {
-        content,
-        user_id,
-        post_id,
-        publish_time: new Date(),
-        parent_id: parent_id || null
-    };
-
-    await Comment.create(commentData);
-    res.status(201).send('Comment added successfully');
-});*/
 const addComment = asyncHandler(async (req, res) => {
     const { text } = req.body;
     const postId = req.params.postId;
@@ -46,9 +27,9 @@ const addComment = asyncHandler(async (req, res) => {
 
 // Update a comment
 const updateComment = asyncHandler(async (req, res) => {
-    const commentId = req.params.id;
+    const { postId, commentId } = req.params;
     const { content } = req.body;
-
+   
     const commentData = {
         content,
         publish_time: new Date()
@@ -60,7 +41,8 @@ const updateComment = asyncHandler(async (req, res) => {
 
 // Delete a comment
 const deleteComment = asyncHandler(async (req, res) => {
-    const commentId = req.params.id;
+    const { postId, commentId } = req.params;
+      
 
     await Comment.delete(commentId);
     res.status(200).send('Comment deleted successfully');
@@ -68,7 +50,7 @@ const deleteComment = asyncHandler(async (req, res) => {
 
 // Like a comment
 const likeComment = asyncHandler(async (req, res) => {
-    const commentId = req.params.id;
+    const { postId, commentId } = req.params;
 
     await Comment.like(commentId);
     res.status(200).send('Comment liked successfully');
