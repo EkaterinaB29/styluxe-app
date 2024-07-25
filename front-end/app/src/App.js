@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import UserProfile from './pages/UserProfile';
 import BlogPage from './pages/BlogPage';
 import CreatePostPage from './pages/CreatePostPage';
+import ServicesPage from './pages/ServicesPage';
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/posts" element={<BlogPage />} />
         <Route path="/posts/:postId" element={<SinglePostPage />} />
         <Route path="/posts/create-post" element={<CreatePostPage />} />
+        <Route path="/services" element={<ServicesPage />} />
       </Routes>
     </Router>
   );
