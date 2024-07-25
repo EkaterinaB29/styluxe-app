@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
 import Comment from '../models/commentModel.js';
+import PostLike from '../models/postLikeModel.js'; 
 import multer from 'multer';
 
 // Multer setup for handling file uploads
@@ -42,6 +43,8 @@ const getPostWithComments = asyncHandler(async (req, res) => {
 
     const comments = await Comment.findByPostId(postId);
     const commentTree = buildCommentTree(comments);
+    
+
 
     res.status(200).json({ post, comments: commentTree });
 });
@@ -68,7 +71,7 @@ const addPost = asyncHandler(async (req, res) => {
 });
 
 const updatePost = asyncHandler(async (req, res) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
     const { content, tags } = req.body;
 
     const postData = {
@@ -82,7 +85,7 @@ const updatePost = asyncHandler(async (req, res) => {
 });
 
 const deletePost = asyncHandler(async (req, res) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
 
     await Post.delete(postId);
     res.status(200).send('Post deleted successfully');
@@ -103,15 +106,20 @@ const getPostsByUser = asyncHandler(async (req, res) => {
 });
 
 const likePost = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
     const postId = req.params.postId;
 
-    const result = await Post.like(postId);
-    if (result.affectedRows === 0) {
-        res.status(404).send('Post not found');
-    } else {
-        const post = await Post.findById(postId);
-        res.status(200).json(post);
+    const existingLike = await PostLike.findByUserAndPost(userId, postId);
+    if (existingLike) {
+        res.status(400).send('You have already liked this post');
+        return;
     }
+
+    await PostLike.create({ user_id: userId, post_id: postId });
+    await Post.like(postId);
+    
+    const post = await Post.findById(postId);
+    res.status(200).json(post);
 });
 
 const searchPosts = asyncHandler(async (req, res) => {
