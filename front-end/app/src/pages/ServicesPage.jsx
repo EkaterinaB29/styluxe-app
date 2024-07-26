@@ -1,25 +1,35 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import NavBar from '../components/NavBar.jsx';
 import '../css/ServicesPage.css';
 import banner from '../images/hands.jpg'; 
-
+import Footer from '../components/Footer.jsx';
 import icon1 from '../images/icon1.png'; 
 import icon2 from '../images/icon2.png'; 
 import icon3 from '../images/icon3.png'; 
 import icon4 from '../images/icon4.png'; 
 
 const ServicesPage = () => {
+  const navigate = useNavigate();
+
+  const handleGetStartedClick = () => {
+    navigate('https://www.example.com/pay'); // Replace with your actual payment page URL
+  };
+
+  const handleMeetProfessionalsClick = () => {
+    navigate('/meet-professionals'); // Replace with your actual route
+  };
+
   return (
     <div>
       <NavBar />
       <div className="banner">
         <img src={banner} alt="Banner" />
-        <div>
-          <h1>Pricing & Plan</h1>
-          <p>Home / Pricing</p>
-        </div>
       </div>
-
+     
+      <p>"Our interior design services are tailored to meet your unique needs and budget.</p>
+      <p> Choose from our range of services to get started on your dream space today."</p>
+      
       <section className="services">
         <div className="container">
           <h2>Services</h2>
@@ -45,6 +55,7 @@ const ServicesPage = () => {
               <p>From selecting color schemes to sourcing unique decor pieces, we bring your vision to life with our interior and decoration services.</p>
             </div>
           </div>
+          <button className="meet-professionals" onClick={handleMeetProfessionalsClick}>Meet Our Professionals</button>
         </div>
       </section>
 
@@ -54,7 +65,7 @@ const ServicesPage = () => {
           <div className="pricing-items">
             <div className="pricing-item">
               <h3>Design advices</h3>
-              <p className="price">$29/month</p>
+              <p className="price">€29/month</p>
               <ul>
                 <li>General living space advices</li>
                 <li>Renovation advices</li>
@@ -62,11 +73,11 @@ const ServicesPage = () => {
                 <li>Furniture reorganization</li>
                 <li>Up to 5 hours meetings</li>
               </ul>
-              <button className="get-started">Get Started</button>
+              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
             </div>
             <div className="pricing-item popular">
               <h3>Complete interior</h3>
-              <p className="price">$39/month</p>
+              <p className="price">€39/month</p>
               <ul>
                 <li>Complete home redesign</li>
                 <li>Interior and exterior works</li>
@@ -74,11 +85,11 @@ const ServicesPage = () => {
                 <li>Kitchen design</li>
                 <li>Garages organization</li>
               </ul>
-              <button className="get-started">Get Started</button>
+              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
             </div>
             <div className="pricing-item">
               <h3>Furniture design</h3>
-              <p className="price">$59/month</p>
+              <p className="price">€59/month</p>
               <ul>
                 <li>Furniture for living room</li>
                 <li>Furniture refurbishment</li>
@@ -86,11 +97,12 @@ const ServicesPage = () => {
                 <li>Tables and chairs</li>
                 <li>Kitchens</li>
               </ul>
-              <button className="get-started">Get Started</button>
+              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
             </div>
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

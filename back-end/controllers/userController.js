@@ -1,39 +1,15 @@
-import express from 'express';
-import User from '../models/userModel.js';
-import Portfolio from '../models/portfolioModel.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+import Portfolio from '../models/portfolioModel.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-// Setup multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '..', 'uploads');
-        cb(null, uploadPath);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `${uniqueSuffix}-${file.originalname}`);
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 1024 * 10 } 
-});
-
-const uploadMultiple = upload.array('portfolio', 10);
 
 // Register user
 const registerUser = asyncHandler(async (req, res) => {
     const { firstName, lastName, location, birthday, email, password, role } = req.body;
+    const profile_picture = req.file ? req.file.path : null;
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userData = {
@@ -43,18 +19,13 @@ const registerUser = asyncHandler(async (req, res) => {
         birthday,
         email,
         password: hashedPassword,
-        role
+        role,
+        profile_picture
     };
 
     User.create(userData, (err, results) => {
         if (err) return res.status(500).send(err);
-        if (role === 'Professional') {
-            res.status(201).send({ message: 'Professional registered successfully', userId: results.insertId });
-        } else if (role === 'Client') {
-            res.status(201).send('Client registered successfully');
-        }else{
-            res.status(201).send('Administrator registered successfully');
-        }
+        res.status(201).send('User registered successfully');
     });
 });
 
@@ -69,15 +40,42 @@ const loginUser = asyncHandler(async (req, res) => {
         const user = results[0];
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return res.status(400).send('Invalid password');
-        console.log(user);
-        console.log(" user id :" + user.user_id);
+
         const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     });
 });
 
-// Get user profile
-const getUserProfile = asyncHandler(async (req, res) => {
+// Get professional profile
+const getProfessionalProfile = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+
+    User.findById(userId, (err, results) => {
+        if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(404).send('User not found');
+
+        Portfolio.findByUserId(userId, (portfolioErr, portfolioResults) => {
+            if (portfolioErr) return res.status(500).send(portfolioErr);
+            const userProfile = { ...results[0], portfolio: portfolioResults };
+            res.json(userProfile);
+        });
+    });
+});
+
+// Update professional profile
+const updateProfessionalProfile = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+    const { firstName, lastName, location, birthday, role } = req.body;
+    const profile_picture = req.file ? req.file.path : null;
+
+    User.update(userId, { firstName, lastName, location, birthday, role, profile_picture }, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.send('Professional profile updated');
+    });
+});
+
+// Get client profile
+const getClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
 
     User.findById(userId, (err, results) => {
@@ -87,25 +85,23 @@ const getUserProfile = asyncHandler(async (req, res) => {
     });
 });
 
-
-// Update user profile
-const updateUserProfile = asyncHandler(async (req, res) => {
+// Update client profile
+const updateClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, location, birthday, role } = req.body;
+    const profile_picture = req.file ? req.file.path : null;
 
-    User.update(userId, { firstName, lastName, location, birthday, role }, (err, results) => {
+    User.update(userId, { firstName, lastName, location, birthday, role, profile_picture }, (err, results) => {
         if (err) return res.status(500).send(err);
-        res.send('User profile updated');
+        res.send('Client profile updated');
     });
 });
 
-// Delete user profile
-const deleteUserProfile = asyncHandler(async (req, res) => {
-    const userId = req.user.id;
-
-    User.delete(userId, (err, results) => {
+// Get all professionals (public route)
+const getAllProfessionals = asyncHandler(async (req, res) => {
+    User.findByRole('Professional', (err, results) => {
         if (err) return res.status(500).send(err);
-        res.send('User profile deleted');
+        res.json(results);
     });
 });
 
@@ -119,24 +115,21 @@ const searchUsers = asyncHandler(async (req, res) => {
         res.json(results);
     });
 });
+
+// Change password
 const changePassword = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { oldPassword, newPassword } = req.body;
 
-    // Fetch user by ID
     User.findById(userId, async (err, results) => {
         if (err) return res.status(500).send(err);
         if (results.length === 0) return res.status(404).send('User not found');
 
         const user = results[0];
-
-        // Check if old password is correct
         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
         if (!isPasswordValid) return res.status(400).send('Incorrect old password');
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        // Update password in database
         User.updatePassword(userId, hashedPassword, (err, result) => {
             if (err) return res.status(500).send(err);
             res.send('Password updated successfully');
@@ -144,76 +137,4 @@ const changePassword = asyncHandler(async (req, res) => {
     });
 });
 
-// Add Portfolio
-const addPortfolio = asyncHandler(async (req, res) => {
-    const userId = req.user.id;
-    const { education_history } = req.body;
-
-    if (!req.files || req.files.length === 0) {
-        return res.status(400).send('No files uploaded');
-    }
-    if (req.user.role !== 'Professional') {
-        return res.status(403).json({ message: 'Forbidden: Only professionals can add portfolios' });
-    }
-
-    const portfolioFiles = req.files.map(file => ({
-        file_name: file.originalname,
-        file_type: file.mimetype,
-        file_size: file.size,
-        file_path: file.path,
-        education_history: education_history,
-        user_id: userId
-    }));
-
-    try {
-        for (const fileData of portfolioFiles) {
-            const createdPortfolio = await Portfolio.create(fileData);
-        }
-        res.status(201).send('Portfolio added successfully');
-    } catch (err) {
-        res.status(500).send('Failed to add portfolio');
-    }
-});
-
-// Update Portfolio
-const updatePortfolio = asyncHandler(async (req, res) => {
-    const portfolioId = req.params.id;
-    const { education_history } = req.body;
-
-    try {
-        const existingPortfolio = await Portfolio.findById(portfolioId);
-        if (!existingPortfolio) {
-            return res.status(404).send('Portfolio not found');
-        }
-
-        const portfolioData = {
-            file_name: req.file ? req.file.originalname : existingPortfolio.file_name,
-            file_type: req.file ? req.file.mimetype : existingPortfolio.file_type,
-            file_size: req.file ? req.file.size : existingPortfolio.file_size,
-            file_path: req.file ? req.file.path : existingPortfolio.file_path,
-            education_history: education_history
-        };
-
-        Portfolio.update(portfolioId, portfolioData, (err, results) => {
-            if (err) return res.status(500).send(err);
-            res.send('Portfolio updated successfully');
-        });
-    } catch (err) {
-        res.status(500).send('Failed to update portfolio');
-    }
-});
-
-// Delete Portfolio
-const deletePortfolio = asyncHandler(async (req, res) => {
-    const portfolioId = req.params.id;
-
-    Portfolio.delete(portfolioId)
-        .then((result) => {
-            res.send('Portfolio deleted successfully');
-        })
-        .catch((err) => {
-            res.status(500).send('Failed to delete portfolio');
-        });
-});
-
-export { registerUser, loginUser, getUserProfile, updateUserProfile, deleteUserProfile, searchUsers, changePassword, addPortfolio, updatePortfolio, deletePortfolio, uploadMultiple };
+export { registerUser, loginUser, getProfessionalProfile, updateProfessionalProfile, getClientProfile, updateClientProfile, getAllProfessionals, searchUsers, changePassword };

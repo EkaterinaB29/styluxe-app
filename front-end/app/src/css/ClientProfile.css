@@ -1,0 +1,58 @@
+.container {
+    padding: 2rem;
+  }
+  
+  .profile-banner img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  
+  .profile-header img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #E8B4B8;
+  }
+  
+  .profile-info {
+    text-align: center;
+  }
+  
+  .profile-info h2 {
+    font-size: 2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .profile-info p {
+    font-size: 1.2rem;
+    color: #777;
+  }
+  
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  button {
+    background-color: #E8B4B8;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #A49393;
+  }
+  

@@ -1,8 +1,8 @@
-import db from '../config/db.js';
+import db from '../config/db.js'; // Your database connection
 
 const User = {
     create: (userData, callback) => {
-        const query = 'INSERT INTO User (first_name, last_name, location, birthday, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO User (first_name, last_name, location, birthday, email, password, role, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         db.query(query, [
             userData.firstName,
             userData.lastName,
@@ -10,7 +10,8 @@ const User = {
             userData.birthday,
             userData.email,
             userData.password,
-            userData.role
+            userData.role,
+            userData.profile_picture
         ], callback);
     },
     findByEmail: (email, callback) => {
@@ -22,13 +23,14 @@ const User = {
         db.query(query, [id], callback);
     },
     update: (userId, userData, callback) => {
-        const query = 'UPDATE User SET first_name = ?, last_name = ?, location = ?, birthday = ?, role = ? WHERE user_id = ?';
+        const query = 'UPDATE User SET first_name = ?, last_name = ?, location = ?, birthday = ?, role = ?, profile_picture = ? WHERE user_id = ?';
         db.query(query, [
             userData.firstName,
             userData.lastName,
             userData.location,
             userData.birthday,
             userData.role,
+            userData.profile_picture,
             userId
         ], callback);
     },
@@ -44,7 +46,6 @@ const User = {
         const query = 'UPDATE User SET password = ? WHERE user_id = ?';
         db.query(query, [hashedPassword, userId], callback);
     },
-    
 };
 
 export default User;

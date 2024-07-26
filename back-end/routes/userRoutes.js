@@ -1,42 +1,41 @@
 import express from 'express';
-import { 
-    registerUser, 
-    loginUser, 
-    getUserProfile, 
-    updateUserProfile, 
-    deleteUserProfile,
+import {
+    registerUser,
+    loginUser,
+    getProfessionalProfile,
+    updateProfessionalProfile,
+    getClientProfile,
+    updateClientProfile,
+    getAllProfessionals,
     searchUsers,
-    changePassword, 
-    addPortfolio, 
-    updatePortfolio, 
-    deletePortfolio, 
-    uploadMultiple 
+    changePassword
 } from '../controllers/userController.js';
-import authMiddleware  from '../middleware/authMiddleware.js';
-// Destructure the middleware functions for separate use
+import authMiddleware from '../middleware/authMiddleware.js';
+import { uploadSingle } from '../middleware/uploadMiddleware.js'; 
+
 const { authenticateToken, verifyRole } = authMiddleware;
 
 const router = express.Router();
 
-// User registration routes
-router.post('/register', uploadMultiple, registerUser);
+
+router.post('/register', uploadSingle, registerUser);
 router.post('/login', loginUser);
 
-router.get('/profile', authenticateToken, getUserProfile);
-router.put('/profile', authenticateToken, updateUserProfile);
-router.delete('/profile', authenticateToken, deleteUserProfile);
-router.get('/search',  searchUsers);
+
+router.get('/profile/professional', authenticateToken, verifyRole(['Professional']), getProfessionalProfile);
+router.put('/profile/professional', authenticateToken, verifyRole(['Professional']), uploadSingle, updateProfessionalProfile);
+
+
+router.get('/profile/client', authenticateToken, verifyRole(['Client']), getClientProfile);
+router.put('/profile/client', authenticateToken, verifyRole(['Client']), uploadSingle, updateClientProfile);
+
+
+router.get('/professionals', getAllProfessionals);
+
+
+router.get('/search', searchUsers);
+
+
 router.put('/change-password', authenticateToken, changePassword);
-
-// Portfolio routes accessible only by professionals
-router.post('/portfolio', authenticateToken, verifyRole(['Professional']), uploadMultiple, addPortfolio);
-router.put('/portfolio/:id', authenticateToken, verifyRole(['Professional']), uploadMultiple, updatePortfolio);
-router.delete('/portfolio/:id', authenticateToken, verifyRole(['Professional']), deletePortfolio);
-
-
-
-// Check later if needed
-// router.get('/portfolio/:id', authenticateToken, getPortfolio);
-// router.get('/portfolio/', authenticateToken, getPortfolios);
 
 export default router;
