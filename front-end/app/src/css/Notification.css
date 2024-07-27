@@ -1,0 +1,39 @@
+.notification-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #EED6D3;
+    color: #67595E;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5em;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #A49393;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification-text {
+    margin-bottom: 20px;
+  }
+  
+  .notification-prompts {
+    text-align: center;
+    font-size: 1em;
+    color: #67595E; 
+    margin-bottom: 20px;
+  }
+  
+  .notification-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .notification-prompt {
+    margin: 5px 0;
+    color: #67595E; 
+  }
+  
