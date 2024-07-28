@@ -41,29 +41,29 @@ const registerUser = asyncHandler(async (req, res) => {
 // In your login controller
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-
     User.findByEmail(email, async (err, results) => {
-        if (err) return res.status(500).send(err);
-        if (results.length === 0) return res.status(400).send('User not found');
-
-        const user = results[0];
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) return res.status(400).send('Invalid password');
-
-        const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        
-        // Set the token as an HTTP-only cookie
-        res.cookie('token', token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: 3600000, // 1 hour
-          sameSite: 'Strict',
-        });
-
-        res.json({ message: 'Login successful', role: user.role });  // Include role in the response
+      if (err) return res.status(500).send(err);
+      if (results.length === 0) return res.status(400).send('User not found');
+  
+      const user = results[0];
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) return res.status(400).send('Invalid password');
+  
+      const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+      console.log('Generated token:', token); // Log the token
+  
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600000, // 1 hour
+        sameSite: 'Lax' // or 'Lax' based on your requirement
+      });
+  
+      res.json({ message: 'Login successful', token, role: user.role }); // Include the token and role in the response
     });
-});
-
+  });
+  
 
 // Get professional profile
 const getProfessionalProfile = asyncHandler(async (req, res) => {
@@ -96,6 +96,7 @@ const updateProfessionalProfile = asyncHandler(async (req, res) => {
 // Get client profile
 const getClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
+    console.log(userId);
 
     User.findById(userId, (err, results) => {
         if (err) return res.status(500).send(err);
@@ -107,14 +108,25 @@ const getClientProfile = asyncHandler(async (req, res) => {
 // Update client profile
 const updateClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
-    const { firstName, lastName, location, birthday, role } = req.body;
+    const { firstName, lastName, location, birthday } = req.body; 
     const profile_picture = req.file ? req.file.path : null;
 
-    User.update(userId, { firstName, lastName, location, birthday, role, profile_picture }, (err, results) => {
+    
+    const updateData = {
+        firstName,
+        lastName,
+        location,
+        birthday,
+        profile_picture
+    };
+    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
+
+    User.update(userId, updateData, (err, results) => {
         if (err) return res.status(500).send(err);
         res.send('Client profile updated');
     });
 });
+
 
 // Get all professionals (public route)
 const getAllProfessionals = asyncHandler(async (req, res) => {

@@ -1,4 +1,4 @@
-import db from '../config/db.js'; // Your database connection
+import db from '../config/db.js'; 
 
 const User = {
     create: (userData, callback) => {

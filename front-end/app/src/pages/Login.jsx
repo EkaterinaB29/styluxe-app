@@ -8,18 +8,10 @@ import '../css/Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [pwShown, setPwShown] = useState(false);
   const [error, setError] = useState('');
+  const [pwShown, setPwShown] = useState(false); // State for password visibility
   const { setUser, setRole } = useContext(UserContext);
   const navigate = useNavigate();
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
 
   const togglePasswordVisibility = () => {
     setPwShown(!pwShown);
@@ -35,6 +27,10 @@ const Login = () => {
 
       const { token, role } = response.data;
       console.log('Login response:', response.data);
+      console.log('Token:', token);
+      if (!token) {
+        throw new Error('Token is undefined');
+      }
       Cookies.set('token', token, { sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
       setRole(role);
 
@@ -82,7 +78,7 @@ const Login = () => {
               type="email"
               placeholder="Email"
               value={email}
-              onChange={handleChangeEmail}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <br />
@@ -96,7 +92,7 @@ const Login = () => {
               id="pwd"
               name="password"
               value={password}
-              onChange={handleChangePassword}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <span onClick={togglePasswordVisibility}>
@@ -117,4 +113,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
