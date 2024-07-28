@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../context/UserContext';
-import ProfessionalProfile from './ProfessionalProfile';
-import ClientProfile from './ClientProfile';
-import Notification from '../components/Notification';
+import { UserContext } from '../context/UserContext.jsx';
+import ProfessionalProfile from './ProfessionalProfile.jsx';
+import ClientProfile from './ClientProfile.jsx';
+import Notification from '../components/Notification.jsx';
 
 function UserProfile() {
   const { user, loading } = useContext(UserContext);

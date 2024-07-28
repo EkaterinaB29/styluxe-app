@@ -1,58 +1,68 @@
 .container {
-    padding: 2rem;
-  }
-  
-  .profile-banner img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .profile-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    position: relative;
-  }
-  
-  .profile-header img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 3px solid #E8B4B8;
-  }
-  
-  .profile-info {
-    text-align: center;
-  }
-  
-  .profile-info h2 {
-    font-size: 2rem;
-    margin: 0.5rem 0;
-  }
-  
-  .profile-info p {
-    font-size: 1.2rem;
-    color: #777;
-  }
-  
-  textarea, input[type="text"] {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #E8B4B8;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #A49393;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #67595E;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-info p {
+  font-size: 16px;
+  color: #333;
+}
+
+.edit-form {
+  text-align: left;
+}
+
+.edit-form label {
+  display: block;
+  margin-top: 10px;
+  color: #67595E;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background: #E8B4B8;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #67595E;
+}

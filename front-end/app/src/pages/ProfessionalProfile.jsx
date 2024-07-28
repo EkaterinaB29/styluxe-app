@@ -3,6 +3,7 @@ import axios from 'axios';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import '../css/ProfessionalProfile.css';
+import Cookies from 'js-cookie';
 
 const ProfessionalProfile = () => {
   const [profile, setProfile] = useState({});
@@ -17,7 +18,13 @@ const ProfessionalProfile = () => {
   });
 
   useEffect(() => {
-    axios.get('http://88.200.63.148:8211/api/user/profile/professional')
+    const token = Cookies.get('token');
+    if (token) {
+      axios.get('http://88.200.63.148:8211/api/user/profile/professional', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
       .then(response => {
         setProfile(response.data);
         setPortfolio(response.data.portfolio);
@@ -32,6 +39,7 @@ const ProfessionalProfile = () => {
       .catch(error => {
         console.error('Error fetching profile', error);
       });
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -52,10 +60,10 @@ const ProfessionalProfile = () => {
     if (formData.profileImage) {
       formDataToSend.append('profileImage', formData.profileImage);
     }
-
+    const token = Cookies.get('token');
     axios.put('http://88.200.63.148:8211/api/user/profile/professional', formDataToSend, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(response => {
@@ -70,7 +78,6 @@ const ProfessionalProfile = () => {
   return (
     <div>
       <NavBar />
-     
       <div className="container">
         <div className="profile-header">
           <img src={profile.profileImage} alt="Profile" />

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NavBar from '../components/NavBar';
-import Footer from '../components/Footer';
-import Button from '../components/Button';
+import NavBar from '../components/NavBar.jsx';
+import Footer from '../components/Footer.jsx';
+import Button from '../components/Button.jsx';
 import '../css/HomePage.css';
 
 const HomePage = () => {

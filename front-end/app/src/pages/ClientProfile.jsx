@@ -12,13 +12,13 @@ const ClientProfile = () => {
     firstName: '',
     lastName: '',
     location: '',
-    profileImage: null, // Added for profile image
+    profileImage: null,
   });
 
   useEffect(() => {
-
     const token = Cookies.get('token');
-    axios.get('http://88.200.63.148:8211/api/user/profile/client', {
+    if (token) {
+      axios.get('http://88.200.63.148:8211/api/user/profile/client', {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -29,12 +29,13 @@ const ClientProfile = () => {
           firstName: response.data.firstName,
           lastName: response.data.lastName,
           location: response.data.location,
-          profileImage: response.data.profileImage, // Added for profile image
+          profileImage: response.data.profileImage,
         });
       })
       .catch(error => {
         console.error('Error fetching profile', error);
       });
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -58,7 +59,6 @@ const ClientProfile = () => {
     axios.put('http://88.200.63.148:8211/api/user/profile/client', formDataToSend, {
       headers: {
         Authorization: `Bearer ${token}`,
-        
       },
     })
       .then(response => {
@@ -73,7 +73,6 @@ const ClientProfile = () => {
   return (
     <div>
       <NavBar />
-      
       <div className="container">
         <div className="profile-header">
           <img src={profile.profileImage} alt="Profile" />

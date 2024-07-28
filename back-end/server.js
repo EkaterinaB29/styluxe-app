@@ -24,7 +24,7 @@ app.use(cors({
     origin: 'http://88.200.63.148:3333',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
-    credentials: true, // Enable credentials (cookies)
+    credentials: true, 
   }));
   
 

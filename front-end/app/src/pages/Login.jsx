@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
-import '../css/Login.css';
 import Cookies from 'js-cookie';
+import { UserContext } from '../context/UserContext';
+import '../css/Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [pwShown, setPwShown] = useState(false);
   const [error, setError] = useState('');
+  const { setUser, setRole } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
 
   const togglePasswordVisibility = () => {
     setPwShown(!pwShown);
@@ -18,32 +28,39 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/user/login', { email, password });
-      console.log(response.data);
+      const response = await axios.post('http://88.200.63.148:8211/api/user/login', {
+        email,
+        password,
+      }, { withCredentials: true }); // Ensure credentials are sent
 
-      // Store token in a cookie
-      Cookies.set('token', response.data.token, { path: '/', secure: false, sameSite: 'strict' });
+      const { token, role } = response.data;
+      console.log('Login response:', response.data);
+      Cookies.set('token', token, { sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
+      setRole(role);
 
-      // Redirect to profile page
-      navigate('/posts/');
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setError('User not found. Redirecting to registration...');
-        setTimeout(() => {
-          navigate('/register');
-        }, 3000); // Redirect after 3 seconds
+      const config = {
+        headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+        withCredentials: true, // Ensure credentials are sent
+      };
+
+      if (role === 'Professional') {
+        const professionalResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/professional', config);
+        console.log('Professional response:', professionalResponse.data);
+        setUser(professionalResponse.data);
+        navigate('/profile/professional');
+      } else if (role === 'Client') {
+        const clientResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/client', config);
+        console.log('Client response:', clientResponse.data);
+        setUser(clientResponse.data);
+        navigate('/profile/client');
       } else {
-        setError('An error occurred. Please try again.');
+        console.log('Unknown role:', role);
+        navigate('/');
       }
+    } catch (err) {
+      setError('Invalid login credentials');
+      console.error('Error during login:', err.response ? err.response.data : err.message);
     }
-  };
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
   };
 
   return (
@@ -100,5 +117,4 @@ const Login = () => {
     </div>
   );
 };
-
 export default Login;
