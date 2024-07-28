@@ -1,97 +1,82 @@
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
-  /*justify-content: center;
-  align-items: center;*/
-   /*overflow: hidden;  Disable scrolling */
-  height: 100%; /* Ensure the body takes full height */
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
 }
 
-
-.Landing {
-  z-index: -999;
-  width: 100%;
-  height: 100vh;
+.homepage-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-section {
+  display: flex;
   justify-content: center;
-  flex-direction: row; /* Stack header and buttons vertically */
+  align-items: center;
+  padding: 60px;
+  background-image: url('../images/house.jpg'); 
+  background-size: cover;
+  background-position: center;
+  height: 80vh; 
+  position: relative;
 }
 
-#particles-js {
-  position: fixed;
-  top: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.background {
-  position: fixed;
-  top: 0;
-  z-index: -99;
-  width: 100%;
-  height: 100%;
-  background: #67595E;
-}
-
-.pageheader {
+.main-text {
+  max-width: 60%;
+  color: #FFFFFF;
   text-align: center;
-  color: #EED6D3;
-  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.6); 
+  padding: 40px 20px; 
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
-.pageheader h1 {
-  font-family: 'Cormorant Garamond';
-  font-size: 5cem;
-  margin-top: 5%;
+.main-text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #FFFFFF; 
 }
 
-.pageheader h2 {
-  font-family: 'Montserrat';
-  font-size: 22px;
-  font-weight: 300;
-  margin: 0;
-  margin-top: 3%;
+.main-text p {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  color: #FFFFFF; 
 }
 
-.buttons-container {
+.main-text span {
+  font-size: 1.2em;
+  color: #FFFFFF;
+}
+
+.button-container {
   display: flex;
   justify-content: center;
-  align-items: center;
- /* margin-top: 20px; /* Adjust margin to position buttons */
-  margin-top: 10%;
+  margin-top: 20px;
 }
-
-.logo {
-  margin-bottom: 5%;
-  margin-top: 5%;
-
-}
-
-
-
-
 
 .button {
-  position: relative;
-  width: 13em;
-  height: 50px;
-  overflow: hidden;
-  border: 1px solid #fdfdfd;
-  cursor: pointer;
-  margin: 0 2em; /* Space between buttons */
+  margin: 0 10px;
 }
 
 
 
-@media (max-width: 720px) {
-  .buttons-container {
-    flex-direction: column; /* Stack buttons vertically on small screens */
+.footer {
+  margin-top: auto;
+}
+
+
+@media (max-width: 768px) {
+  .main-section {
+    flex-direction: column;
+    text-align: center;
   }
 
-  .button {
-    margin: 10px 0; /* Adjust margin for vertical stacking */
+  .main-text {
+    max-width: 90%;
   }
+
+  
 }
