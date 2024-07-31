@@ -9,8 +9,9 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [pwShown, setPwShown] = useState(false); // State for password visibility
-  const { setUser, setRole } = useContext(UserContext);
+  const [pwShown, setPwShown] = useState(false); 
+  const { setUser, setRole, setIsAuthenticated } = useContext(UserContext);
+  
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -33,7 +34,7 @@ const Login = () => {
       }
       Cookies.set('token', token, { sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
       setRole(role);
-
+      setIsAuthenticated(true);
       const config = {
         headers: { Authorization: `Bearer ${Cookies.get('token')}` },
         withCredentials: true, // Ensure credentials are sent

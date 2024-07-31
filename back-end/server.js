@@ -14,9 +14,11 @@ import fetch from 'node-fetch';
 import db from './config/db.js'; // Import the database connection
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+//import { fileURLToPath } from 'url';
 dotenv.config(); // Configure dotenv
 // Define the port
 const port = 8211;
+
 const app = express();
 
 app.use(cookieParser());
@@ -26,11 +28,16 @@ app.use(cors({
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true, 
   }));
+
+
+
   
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
+
+
 
 app.use('/api/user', userRoutes);
 app.use('/api/portfolios', portfolioRoutes);

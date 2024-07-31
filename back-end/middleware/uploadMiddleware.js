@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 10 } 
+    limits: { fileSize: 1024 * 1024 * 1024 * 10 } 
 });
 
 const uploadMultiple = upload.array('portfolio', 10);

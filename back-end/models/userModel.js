@@ -23,16 +23,21 @@ const User = {
         db.query(query, [id], callback);
     },
     update: (userId, userData, callback) => {
-        const query = 'UPDATE User SET first_name = ?, last_name = ?, location = ?, birthday = ?, role = ?, profile_picture = ? WHERE user_id = ?';
-        db.query(query, [
-            userData.firstName,
-            userData.lastName,
-            userData.location,
-            userData.birthday,
-            userData.role,
-            userData.profile_picture,
-            userId
-        ], callback);
+        let query = 'UPDATE User SET';
+        let params = [];
+        
+        Object.keys(userData).forEach((key, index) => {
+            query += ` ${key} = ?`;
+            if (index < Object.keys(userData).length - 1) {
+                query += ',';
+            }
+            params.push(userData[key]);
+        });
+        
+        query += ' WHERE user_id = ?';
+        params.push(userId);
+    
+        db.query(query, params, callback);
     },
     delete: (userId, callback) => {
         const query = 'DELETE FROM User WHERE user_id = ?';

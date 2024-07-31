@@ -71,12 +71,8 @@ const Register = () => {
 
             console.log('Registration response:', response.data);
             Cookies.set('token', response.data.token);
-
-            if (role === 'Professional') {
-                navigate('/profile/professional');
-            } else {
-                navigate('/profile/client');
-            }
+            navigate('/login');
+            
         } catch (error) {
             if (error.response && error.response.data.code === 'ER_DUP_ENTRY') {
                 setErrorMessage('Email already registered. Please use a different email.');

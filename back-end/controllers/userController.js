@@ -37,8 +37,6 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Login user
-// In your login controller
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     User.findByEmail(email, async (err, results) => {
@@ -57,7 +55,7 @@ const loginUser = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600000, // 1 hour
-        sameSite: 'Lax' // or 'Lax' based on your requirement
+        sameSite: 'Lax' 
       });
   
       res.json({ message: 'Login successful', token, role: user.role }); // Include the token and role in the response
@@ -85,7 +83,7 @@ const getProfessionalProfile = asyncHandler(async (req, res) => {
 const updateProfessionalProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, location, birthday, role } = req.body;
-    const profile_picture = req.file ? req.file.path : null;
+    const profile_picture = req.file ? `/uploads/${req.file.filename}` : null;
 
     User.update(userId, { firstName, lastName, location, birthday, role, profile_picture }, (err, results) => {
         if (err) return res.status(500).send(err);
@@ -93,37 +91,41 @@ const updateProfessionalProfile = asyncHandler(async (req, res) => {
     });
 });
 
-// Get client profile
+// Get user profile
 const getClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
-    console.log(userId);
-
     User.findById(userId, (err, results) => {
         if (err) return res.status(500).send(err);
-        if (results.length === 0) return res.status(404).send('User not found');
         res.json(results[0]);
     });
 });
 
-// Update client profile
+// Update user profile
 const updateClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
-    const { firstName, lastName, location, birthday } = req.body; 
-    const profile_picture = req.file ? req.file.path : null;
+    const { firstName, lastName, location, email } = req.body;
+    const profile_picture = req.file ? '/uploads/${req.file.filename}' : null;
 
     
-    const updateData = {
-        firstName,
-        lastName,
-        location,
-        birthday,
-        profile_picture
-    };
-    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
-
-    User.update(userId, updateData, (err, results) => {
+    User.findById(userId, (err, currentUserData) => {
         if (err) return res.status(500).send(err);
-        res.send('Client profile updated');
+
+        const updatedData = {
+            firstName: firstName || currentUserData.first_name,
+            lastName: lastName || currentUserData.last_name,
+            location: location || currentUserData.location,
+            email: email || currentUserData.email,
+            profile_picture: profile_picture || currentUserData.profile_picture,
+        };
+
+        User.update(userId, updatedData, (err, results) => {
+            if (err) return res.status(500).send(err);
+            User.findById(userId, (err, updatedUser) => {
+                if (err) return res.status(500).send(err);
+                updatedUser.profile_picture = updatedUser.profile_picture ? `/uploads/${updatedUser.profile_picture}` : null;
+                res.json(updatedUser);
+            });
+        });
     });
 });
 
