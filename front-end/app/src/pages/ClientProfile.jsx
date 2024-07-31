@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import '../css/ClientProfile.css';
 import { UserContext } from '../context/UserContext';
 import Notification from '../components/Notification';
-import defaultProfileImg from '../images/profile.png'; // Default profile image
+import defaultProfileImg from '../images/profile.png';
 
 const ClientProfile = () => {
   const { user, setUser, isAuthenticated } = useContext(UserContext);

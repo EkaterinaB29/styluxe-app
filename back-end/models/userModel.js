@@ -27,7 +27,8 @@ const User = {
         let params = [];
         
         Object.keys(userData).forEach((key, index) => {
-            query += ` ${key} = ?`;
+            const columnName = key.replace(/([A-Z])/g, "_$1").toLowerCase();
+            query += ` ${columnName} = ?`;
             if (index < Object.keys(userData).length - 1) {
                 query += ',';
             }
@@ -39,6 +40,7 @@ const User = {
     
         db.query(query, params, callback);
     },
+    
     delete: (userId, callback) => {
         const query = 'DELETE FROM User WHERE user_id = ?';
         db.query(query, [userId], callback);
