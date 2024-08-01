@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Portfolio from '../models/portfolioModel.js';
-
-
-
+import fs from 'fs';
 // Register user
 const registerUser = asyncHandler(async (req, res) => {
     try {
@@ -40,28 +38,27 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     User.findByEmail(email, async (err, results) => {
-      if (err) return res.status(500).send(err);
-      if (results.length === 0) return res.status(400).send('User not found');
-  
-      const user = results[0];
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) return res.status(400).send('Invalid password');
-  
-      const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  
-      console.log('Generated token:', token); // Log the token
-  
-      res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 3600000, // 1 hour
-        sameSite: 'Lax' 
-      });
-  
-      res.json({ message: 'Login successful', token, role: user.role }); // Include the token and role in the response
+        if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(400).send('User not found');
+
+        const user = results[0];
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) return res.status(400).send('Invalid password');
+
+        const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        console.log('Generated token:', token); // Log the token
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000, // 1 hour
+            sameSite: 'Lax'
+        });
+
+        res.json({ message: 'Login successful', token, role: user.role }); // Include the token and role in the response
     });
-  });
-  
+});
 
 // Get professional profile
 const getProfessionalProfile = asyncHandler(async (req, res) => {
@@ -100,22 +97,28 @@ const getClientProfile = asyncHandler(async (req, res) => {
     });
 });
 
-// Update user profile
+// Update user profile 
 const updateClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, location, email } = req.body;
-    const profile_picture = req.file ? '/uploads/${req.file.filename}' : null;
+    const profile_picture = req.file ? `/uploads/${req.file.filename}` : null;
 
-    
     User.findById(userId, (err, currentUserData) => {
         if (err) return res.status(500).send(err);
+
+        /*if (profile_picture && currentUserData.profile_picture) {
+            const filePath = `.${currentUserData.profile_picture}`;
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('Failed to delete old profile picture:', err);
+            });
+        }*/
 
         const updatedData = {
             firstName: firstName || currentUserData.first_name,
             lastName: lastName || currentUserData.last_name,
             location: location || currentUserData.location,
             email: email || currentUserData.email,
-            profile_picture: profile_picture || currentUserData.profile_picture,
+            profile_picture: profile_picture !== null ? profile_picture : currentUserData.profile_picture,
         };
 
         User.update(userId, updatedData, (err, results) => {
