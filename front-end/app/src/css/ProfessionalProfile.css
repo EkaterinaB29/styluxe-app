@@ -1,79 +1,140 @@
-.container {
-    padding: 2rem;
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #FAF3F3;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.profile-header img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid #B56576;
+  object-fit: cover;
+}
+
+.profile-info {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.profile-info h2 {
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.profile-info p {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0.3rem 0;
+}
+
+.edit-form {
+  margin-top: 20px;
+}
+
+.edit-form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #B56576;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="email"],
+.edit-form input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 2px solid #EED6D3;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.edit-form input[type="text"]:focus,
+.edit-form input[type="email"]:focus,
+.edit-form input[type="file"]:focus {
+  border-color: #B56576;
+}
+
+button {
+  background-color: #B56576;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #A15068;
+}
+
+.edit-button {
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #B56576;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #A15068;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 15px;
   }
-  
-  .profile-banner img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .profile-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    position: relative;
-  }
-  
-  .profile-header img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 3px solid #E8B4B8;
-  }
-  
-  .profile-info {
-    text-align: center;
-  }
-  
+
   .profile-info h2 {
-    font-size: 2rem;
-    margin: 0.5rem 0;
+    font-size: 1.8rem;
   }
-  
+
   .profile-info p {
-    font-size: 1.2rem;
-    color: #777;
+    font-size: 1rem;
   }
-  
-  .portfolio-section {
-    margin-top: 3rem;
+
+  .edit-form label {
+    margin-top: 10px;
   }
-  
-  .portfolio-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+
+  .edit-form input[type="text"],
+  .edit-form input[type="email"],
+  .edit-form input[type="file"] {
+    padding: 8px;
+    margin-bottom: 15px;
   }
-  
-  .portfolio-item {
-    width: 30%;
-    margin-bottom: 2rem;
+
+  button,
+  .edit-button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
   }
-  
-  .portfolio-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  textarea, input[type="text"] {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #E8B4B8;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #A49393;
-  }
-  
+}

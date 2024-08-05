@@ -17,6 +17,7 @@ const ClientProfile = () => {
     location: '',
     email: '',
     profileImage: null,
+    existingProfileImage: '', // Track existing image
   });
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const ClientProfile = () => {
         location: user.location || '',
         email: user.email || '',
         profileImage: user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : defaultProfileImg,
-        existingProfileImage: user.profile_picture || '',
+        existingProfileImage: user.profile_picture || '', // Set existing image
       });
     }
   }, [user]);
@@ -87,7 +88,7 @@ const ClientProfile = () => {
   return (
     <div>
       <NavBar />
-      <div className="profile-container">
+      <div className="container">
         <div className="profile-header">
           <img src={typeof formData.profileImage === 'string' ? formData.profileImage : defaultProfileImg} alt="Profile" />
           <div className="profile-info">

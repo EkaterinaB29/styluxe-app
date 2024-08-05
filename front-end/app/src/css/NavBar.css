@@ -1,3 +1,5 @@
+/* NavBar.css */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -34,6 +36,31 @@
 .navbar .navbar-links {
   display: flex;
   align-items: center;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+}
+
+.user-actions .user-greeting {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #67595E;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: #67595E;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.logout-button:hover {
+  color: #B56576;
+  transform: scale(1.1);
 }
 
 .navbar .search-container {
