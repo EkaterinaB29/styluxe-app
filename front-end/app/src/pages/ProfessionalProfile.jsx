@@ -1,46 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
-import '../css/ProfessionalProfile.css';
 import Cookies from 'js-cookie';
+import '../css/ProfessionalProfile.css';
+import { UserContext } from '../context/UserContext';
+import Notification from '../components/Notification';
+import defaultProfileImg from '../images/profile.png';
 
 const ProfessionalProfile = () => {
-  const [profile, setProfile] = useState({});
-  const [portfolio, setPortfolio] = useState([]);
+  const { user, setUser, isAuthenticated } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     location: '',
-    bio: '',
-    profileImage: null, 
+    email: '',
+    profileImage: null,
+    education_history: '',
+    existingProfileImage: '', // Track existing image
   });
+  const [portfolio, setPortfolio] = useState(null);
 
   useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      axios.get('http://88.200.63.148:8211/api/user/profile/professional', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      })
-      .then(response => {
-        setProfile(response.data);
-        setPortfolio(response.data.portfolio);
-        setFormData({
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          location: response.data.location,
-          bio: response.data.bio,
-          profileImage: response.data.profileImage, 
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching profile', error);
+    if (user) {
+      setFormData({
+        firstName: user.first_name || '',
+        lastName: user.last_name || '',
+        location: user.location || '',
+        email: user.email || '',
+        profileImage: user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : defaultProfileImg,
+        education_history: user.education_history || '',
+        existingProfileImage: user.profile_picture || '', // Set existing image
       });
+      setPortfolio(user.portfolio || null);
     }
-  }, []);
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,69 +46,98 @@ const ProfessionalProfile = () => {
     setFormData({ ...formData, profileImage: e.target.files[0] });
   };
 
+  const handlePortfolioChange = (e) => {
+    setPortfolio(e.target.files[0]);
+  };
+
   const handleSave = () => {
     const formDataToSend = new FormData();
     formDataToSend.append('firstName', formData.firstName);
     formDataToSend.append('lastName', formData.lastName);
     formDataToSend.append('location', formData.location);
-    formDataToSend.append('bio', formData.bio);
-    if (formData.profileImage) {
-      formDataToSend.append('profileImage', formData.profileImage);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('education_history', formData.education_history);
+    if (formData.profileImage && typeof formData.profileImage === 'object') {
+      formDataToSend.append('profile_picture', formData.profileImage);
+    } else {
+      formDataToSend.append('profile_picture', formData.existingProfileImage); // Send existing image path if no new image
     }
+    if (portfolio) {
+      formDataToSend.append('portfolio', portfolio);
+    }
+
     const token = Cookies.get('token');
     axios.put('http://88.200.63.148:8211/api/user/profile/professional', formDataToSend, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     })
-      .then(response => {
-        setProfile(response.data);
+    .then(response => {
+      axios.get('http://88.200.63.148:8211/api/user/profile/professional', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
+      .then(getResponse => {
+        setUser(getResponse.data);
         setIsEditing(false);
       })
-      .catch(error => {
-        console.error('Error updating profile', error);
+      .catch(getError => {
+        console.error('Error fetching updated user data', getError.response ? getError.response.data : getError.message);
       });
+    })
+    .catch(error => {
+      console.error('Error updating profile', error.response ? error.response.data : error.message);
+    });
   };
+
+  if (!isAuthenticated) {
+    return <Notification text="Please log in to view your profile." />;
+  }
 
   return (
     <div>
       <NavBar />
-      <div className="container">
+      <div className="profile-container">
         <div className="profile-header">
-          <img src={profile.profileImage} alt="Profile" />
-          {isEditing ? (
-            <textarea name="bio" value={formData.bio} onChange={handleInputChange} />
-          ) : (
-            <p>{profile.bio}</p>
-          )}
-        </div>
-        <div className="profile-info">
-          <h2>{profile.firstName} {profile.lastName}</h2>
-          <p>{profile.location}</p>
-          {isEditing ? (
-            <div>
-              <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} />
-              <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} />
-              <input type="text" name="location" value={formData.location} onChange={handleInputChange} />
-              <input type="file" name="profileImage" onChange={handleImageChange} />
-              <button onClick={handleSave}>Save</button>
-            </div>
-          ) : (
-            <button onClick={() => setIsEditing(true)}>Edit Profile</button>
-          )}
-        </div>
-        <div className="portfolio-section">
-          <h2>Portfolio</h2>
-          <div className="portfolio-items">
-            {portfolio.map(item => (
-              <div key={item.id} className="portfolio-item">
-                <img src={item.image} alt={item.title} />
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
-            ))}
+          <img src={typeof formData.profileImage === 'string' ? formData.profileImage : defaultProfileImg} alt="Profile" />
+          <div className="profile-info">
+            <h2>{formData.firstName} {formData.lastName}</h2>
+            <p>{formData.email}</p>
+            <p>{formData.location}</p>
           </div>
         </div>
+
+        {isEditing ? (
+          <div className="edit-form">
+            <label htmlFor="firstName">First Name</label>
+            <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} />
+
+            <label htmlFor="lastName">Last Name</label>
+            <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} />
+
+            <label htmlFor="location">Location</label>
+            <input type="text" name="location" value={formData.location} onChange={handleInputChange} />
+
+            <label htmlFor="email">Email</label>
+            <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
+
+            <label htmlFor="education_history">Education History</label>
+            <input type="text" name="education_history" value={formData.education_history} onChange={handleInputChange} />
+
+            <label htmlFor="profileImage">Profile Image</label>
+            <input type="file" name="profileImage" onChange={handleImageChange} />
+
+            <label htmlFor="portfolio">Portfolio</label>
+            <input type="file" name="portfolio" onChange={handlePortfolioChange} />
+
+            <button onClick={handleSave}>Save</button>
+          </div>
+        ) : (
+          <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Profile</button>
+        )}
       </div>
       <Footer />
     </div>

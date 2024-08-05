@@ -3,38 +3,100 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Portfolio from '../models/portfolioModel.js';
-import fs from 'fs';
-// Register user
-const registerUser = asyncHandler(async (req, res) => {
+
+// Register client
+const registerClient = asyncHandler(async (req, res) => {
     try {
-        const { firstName, lastName, location, birthday, email, password, role } = req.body;
-        const profilePicture = req.file ? req.file.path : null;
+        const { first_name, last_name, location, birthday, email, password } = req.body;
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const userData = {
-            firstName,
-            lastName,
+            first_name,
+            last_name,
             location,
             birthday,
             email,
             password: hashedPassword,
-            role,
-            profile_picture: profilePicture
+            role: 'Client'
         };
 
         User.create(userData, (err, results) => {
             if (err) {
-                console.error('Error creating user:', err); // Log the error
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(400).json({ message: 'Email already registered', code: 'ER_DUP_ENTRY' });
+                }
+                console.error('Error creating user:', err);
                 return res.status(500).json({ error: 'Failed to create user', details: err });
             }
-            res.status(201).send('User registered successfully');
+            const userId = results.insertId;
+
+            const token = jwt.sign({ id: userId, email: userData.email, role: userData.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            res.status(201).json({ message: 'Client registered successfully', token, userId });
         });
     } catch (error) {
-        console.error('Error in registerUser:', error); // Log the error
+        console.error('Error in registerClient:', error);
         res.status(500).json({ error: 'Internal server error', details: error.message });
     }
 });
 
+// Register professional
+const registerProfessional = asyncHandler(async (req, res) => {
+    try {
+        const { first_name, last_name, location, birthday, email, password, education } = req.body;
+        const portfolioFile = req.file;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const userData = {
+            first_name,
+            last_name,
+            location,
+            birthday,
+            email,
+            password: hashedPassword,
+            role: 'Professional'
+        };
+
+        User.create(userData, async (err, results) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(400).json({ message: 'Email already registered', code: 'ER_DUP_ENTRY' });
+                }
+                console.error('Error creating user:', err);
+                return res.status(500).json({ error: 'Failed to create user', details: err });
+            }
+            const userId = results.insertId;
+
+            const token = jwt.sign({ id: userId, email: userData.email, role: userData.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            if (portfolioFile) {
+                const portfolioData = {
+                    file_name: portfolioFile.originalname,
+                    file_type: portfolioFile.mimetype,
+                    file_size: portfolioFile.size,
+                    file_path: `/uploads/${portfolioFile.filename}`,
+                    education_history: education,
+                    user_id: userId
+                };
+
+                try {
+                    await Portfolio.create(portfolioData);
+                    res.status(201).json({ message: 'Professional registered successfully', token, userId });
+                } catch (portfolioErr) {
+                    console.error('Error creating portfolio:', portfolioErr);
+                    return res.status(500).json({ error: 'Failed to create portfolio', details: portfolioErr });
+                }
+            } else {
+                res.status(201).json({ message: 'Professional registered successfully', token, userId });
+            }
+        });
+    } catch (error) {
+        console.error('Error in registerProfessional:', error);
+        res.status(500).json({ error: 'Internal server error', details: error.message });
+    }
+});
+
+// Login user
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     User.findByEmail(email, async (err, results) => {
@@ -47,22 +109,21 @@ const loginUser = asyncHandler(async (req, res) => {
 
         const token = jwt.sign({ id: user.user_id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        console.log('Generated token:', token); // Log the token
-
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 3600000, // 1 hour
-            sameSite: 'Lax'
+            sameSite: 'Lax',
         });
 
-        res.json({ message: 'Login successful', token, role: user.role }); // Include the token and role in the response
+        res.json({ message: 'Login successful', role: user.role });
     });
 });
 
 // Get professional profile
 const getProfessionalProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
+    console.log(`Fetching professional profile for userId: ${userId}`);
 
     User.findById(userId, (err, results) => {
         if (err) return res.status(500).send(err);
@@ -76,62 +137,107 @@ const getProfessionalProfile = asyncHandler(async (req, res) => {
     });
 });
 
-// Update professional profile
-const updateProfessionalProfile = asyncHandler(async (req, res) => {
-    const userId = req.user.id;
-    const { firstName, lastName, location, birthday, role } = req.body;
-    const profile_picture = req.file ? `/uploads/${req.file.filename}` : null;
-
-    User.update(userId, { firstName, lastName, location, birthday, role, profile_picture }, (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.send('Professional profile updated');
-    });
-});
-
-// Get user profile
+// Get client profile
 const getClientProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
+    console.log(`Fetching client profile for userId: ${userId}`);
+
     User.findById(userId, (err, results) => {
         if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(404).send('User not found');
         res.json(results[0]);
     });
 });
 
-// Update user profile 
-const updateClientProfile = asyncHandler(async (req, res) => {
+// Utility function to clean update fields
+const cleanUpdateFields = (fields) => {
+    return Object.fromEntries(Object.entries(fields).filter(([_, v]) => v !== undefined));
+};
+
+// Update professional profile
+const updateProfessionalProfile = asyncHandler(async (req, res) => {
     const userId = req.user.id;
-    const { firstName, lastName, location, email } = req.body;
-    const profile_picture = req.file ? `/uploads/${req.file.filename}` : null;
+    console.log(`Updating professional profile for userId: ${userId}`);
+    const { firstName, lastName, location, email, education_history } = req.body;
+    const profile_picture = req.files && req.files['profile_picture'] ? `/uploads/${req.files['profile_picture'][0].filename}` : undefined;
+    const portfolio_file = req.files && req.files['portfolio'] ? `/uploads/${req.files['portfolio'][0].filename}` : undefined;
 
-    User.findById(userId, (err, currentUserData) => {
-        if (err) return res.status(500).send(err);
+    console.log('Request body:', req.body);
+    console.log('Request files:', req.files);
 
-        /*if (profile_picture && currentUserData.profile_picture) {
-            const filePath = `.${currentUserData.profile_picture}`;
-            fs.unlink(filePath, (err) => {
-                if (err) console.error('Failed to delete old profile picture:', err);
-            });
-        }*/
+    User.findById(userId, (err, results) => {
+        if (err) {
+            console.log('Error finding user:', err);
+            return res.status(500).send(err);
+        }
+        if (results.length === 0) {
+            console.log('User not found');
+            return res.status(404).send('User not found');
+        }
 
-        const updatedData = {
-            firstName: firstName || currentUserData.first_name,
-            lastName: lastName || currentUserData.last_name,
-            location: location || currentUserData.location,
-            email: email || currentUserData.email,
-            profile_picture: profile_picture !== null ? profile_picture : currentUserData.profile_picture,
-        };
+        console.log('User found:', results[0]);
 
-        User.update(userId, updatedData, (err, results) => {
-            if (err) return res.status(500).send(err);
-            User.findById(userId, (err, updatedUser) => {
-                if (err) return res.status(500).send(err);
-                updatedUser.profile_picture = updatedUser.profile_picture ? `/uploads/${updatedUser.profile_picture}` : null;
-                res.json(updatedUser);
-            });
+        const updateFields = cleanUpdateFields({
+            first_name: firstName,
+            last_name: lastName,
+            location,
+            email,
+            profile_picture: profile_picture || results[0].profile_picture,
+        });
+
+        console.log('Update fields:', updateFields);
+
+        User.update(userId, updateFields, (updateErr, updateResults) => {
+            if (updateErr) {
+                console.log('Error updating user:', updateErr);
+                return res.status(500).send(updateErr);
+            }
+
+            console.log('User update results:', updateResults);
+
+            if (portfolio_file || education_history) {
+                const portfolioData = cleanUpdateFields({ file_path: portfolio_file, education_history });
+                console.log('Portfolio data:', portfolioData);
+
+                Portfolio.updateByUserId(userId, portfolioData, (portfolioErr, portfolioResults) => {
+                    if (portfolioErr) {
+                        console.log('Error updating portfolio:', portfolioErr);
+                        return res.status(500).send(portfolioErr);
+                    }
+                    console.log('Portfolio update results:', portfolioResults);
+                    res.send('Professional profile updated with portfolio');
+                });
+            } else {
+                res.send('Professional profile updated');
+            }
         });
     });
 });
 
+// Update client profile
+const updateClientProfile = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+    console.log(`Updating client profile for userId: ${userId}`);
+    const { firstName, lastName, location, email } = req.body;
+    const profile_picture = req.file ? `/uploads/${req.file.filename}` : req.body.existingProfileImage;
+
+    console.log('Request body:', req.body);
+    console.log('Request file:', req.file);
+
+    const user = await User.findById(userId);
+    const updateFields = cleanUpdateFields({
+        first_name: firstName,
+        last_name: lastName,
+        location,
+        email,
+        profile_picture: profile_picture || user[0].profile_picture,
+    });
+
+    User.update(userId, updateFields, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.send('Client profile updated');
+    });
+});
 
 // Get all professionals (public route)
 const getAllProfessionals = asyncHandler(async (req, res) => {
@@ -173,4 +279,4 @@ const changePassword = asyncHandler(async (req, res) => {
     });
 });
 
-export { registerUser, loginUser, getProfessionalProfile, updateProfessionalProfile, getClientProfile, updateClientProfile, getAllProfessionals, searchUsers, changePassword };
+export { registerClient, registerProfessional, loginUser, getProfessionalProfile, updateProfessionalProfile, getClientProfile, updateClientProfile, getAllProfessionals, searchUsers, changePassword };

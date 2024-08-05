@@ -9,9 +9,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [pwShown, setPwShown] = useState(false); 
-  const { setUser, setRole, setIsAuthenticated } = useContext(UserContext);
-  
+  const [pwShown, setPwShown] = useState(false);
+  const { setUser, setRole, setIsAuthenticated, setLoading } = useContext(UserContext);
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -20,40 +19,38 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      const response = await axios.post('http://88.200.63.148:8211/api/user/login', {
-        email,
-        password,
-      }, { withCredentials: true }); // Ensure credentials are sent
+      const response = await axios.post('http://88.200.63.148:8211/api/user/login', { email, password }, { withCredentials: true });
 
-      const { token, role } = response.data;
-      console.log('Login response:', response.data);
-      console.log('Token:', token);
-      if (!token) {
-        throw new Error('Token is undefined');
-      }
+      const { role, token } = response.data;
       Cookies.set('token', token, { sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
       setRole(role);
       setIsAuthenticated(true);
-      const config = {
-        headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-        withCredentials: true, // Ensure credentials are sent
+      setLoading(true);
+
+      const fetchProfile = async () => {
+        try {
+          const config = {
+            headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+            withCredentials: true,
+          };
+
+          const profileResponse = role === 'Professional' ?
+            await axios.get('http://88.200.63.148:8211/api/user/profile/professional', config) :
+            await axios.get('http://88.200.63.148:8211/api/user/profile/client', config);
+
+          setUser(profileResponse.data);
+          navigate(role === 'Professional' ? '/profile/professional' : '/profile/client');
+        } catch (profileError) {
+          console.error('Error fetching profile:', profileError);
+          setError('Failed to fetch profile');
+        } finally {
+          setLoading(false);
+        }
       };
 
-      if (role === 'Professional') {
-        const professionalResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/professional', config);
-        console.log('Professional response:', professionalResponse.data);
-        setUser(professionalResponse.data);
-        navigate('/profile/professional');
-      } else if (role === 'Client') {
-        const clientResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/client', config);
-        console.log('Client response:', clientResponse.data);
-        setUser(clientResponse.data);
-        navigate('/profile/client');
-      } else {
-        console.log('Unknown role:', role);
-        navigate('/');
-      }
+      fetchProfile();
     } catch (err) {
       setError('Invalid login credentials');
       console.error('Error during login:', err.response ? err.response.data : err.message);

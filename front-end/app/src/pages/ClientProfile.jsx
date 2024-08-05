@@ -26,7 +26,8 @@ const ClientProfile = () => {
         lastName: user.last_name || '',
         location: user.location || '',
         email: user.email || '',
-        profileImage: user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : null,
+        profileImage: user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : defaultProfileImg,
+        existingProfileImage: user.profile_picture || '',
       });
     }
   }, [user]);
@@ -46,8 +47,10 @@ const ClientProfile = () => {
     formDataToSend.append('lastName', formData.lastName);
     formDataToSend.append('location', formData.location);
     formDataToSend.append('email', formData.email);
-    if (formData.profileImage) {
+    if (formData.profileImage instanceof File) {
       formDataToSend.append('profile_picture', formData.profileImage);
+    } else {
+      formDataToSend.append('existingProfileImage', formData.existingProfileImage);
     }
 
     const token = Cookies.get('token');
@@ -58,8 +61,19 @@ const ClientProfile = () => {
       withCredentials: true,
     })
     .then(response => {
-      setUser(response.data);
-      setIsEditing(false);
+      axios.get('http://88.200.63.148:8211/api/user/profile/client', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
+      .then(getResponse => {
+        setUser(getResponse.data);
+        setIsEditing(false);
+      })
+      .catch(getError => {
+        console.error('Error fetching updated user data', getError.response ? getError.response.data : getError.message);
+      });
     })
     .catch(error => {
       console.error('Error updating profile', error.response ? error.response.data : error.message);
@@ -75,7 +89,7 @@ const ClientProfile = () => {
       <NavBar />
       <div className="profile-container">
         <div className="profile-header">
-          <img src={formData.profileImage || defaultProfileImg} alt="Profile" />
+          <img src={typeof formData.profileImage === 'string' ? formData.profileImage : defaultProfileImg} alt="Profile" />
           <div className="profile-info">
             <h2>{formData.firstName} {formData.lastName}</h2>
             <p>{formData.email}</p>

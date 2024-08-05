@@ -2,6 +2,10 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
 import reviewRoutes from './routes/reviewRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -10,11 +14,7 @@ import reportRoutes from './routes/reportRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import orderRoutes from './routes/ordersRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
-import fetch from 'node-fetch';
 import db from './config/db.js';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import { fileURLToPath } from 'url';
 
 dotenv.config();
 const port = 8211;
@@ -34,6 +34,14 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Logging middleware to capture request details
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    console.log('Request body:', req.body);
+    console.log('Request files:', req.files);
+    next();
+});
 
 app.use('/api/user', userRoutes);
 app.use('/api/portfolios', portfolioRoutes);

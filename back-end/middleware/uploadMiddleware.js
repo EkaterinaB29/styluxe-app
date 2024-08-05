@@ -19,10 +19,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 1024 * 10 } 
+    limits: { fileSize: 1024 * 1024 * 10 }  // Limiting file size to 10MB
 });
 
-const uploadMultiple = upload.array('portfolio', 10);
-const uploadSingle = upload.single('profile_picture'); // Middleware for single file upload
+const uploadClient = upload.none(); // No files expected for clients during registration
+const uploadProfessional = upload.single('portfolio'); // Only one portfolio file expected for professionals during registration
+const uploadClientProfile = upload.single('profile_picture'); // Profile image for client profile update
+const uploadProfessionalProfile = upload.fields([{ name: 'profile_picture', maxCount: 1 }, { name: 'portfolio', maxCount: 1 }]); // Profile image and portfolio file for professional profile update
 
-export { uploadMultiple, uploadSingle };
+export { uploadClient, uploadProfessional, uploadClientProfile, uploadProfessionalProfile };

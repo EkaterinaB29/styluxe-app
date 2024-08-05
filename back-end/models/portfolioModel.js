@@ -4,8 +4,6 @@ const Portfolio = {
     create: (portfolioData) => {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO Portfolio (file_name, file_type, file_size, file_path, education_history, user_id) VALUES (?, ?, ?, ?, ?, ?)`;
-            console.log('SQL Query:', sql);
-            console.log('Portfolio Data:', portfolioData);
             db.query(sql, [
                 portfolioData.file_name,
                 portfolioData.file_type,
@@ -15,7 +13,6 @@ const Portfolio = {
                 portfolioData.user_id
             ], (err, result) => {
                 if (err) {
-                    console.error('Error in create method:', err);
                     return reject(err);
                 }
                 resolve(result);
@@ -33,12 +30,18 @@ const Portfolio = {
             });
         });
     },
+    findByUserId: (userId, callback) => {
+        const sql = `SELECT * FROM Portfolio WHERE user_id = ?`;
+        db.query(sql, [userId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    },
     update: (portfolioId, portfolioData) => {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE Portfolio SET file_name = ?, file_type = ?, file_size = ?, file_path = ?, education_history = ? WHERE portfolio_id = ?`;
-            console.log('SQL Query:', sql);
-            console.log('Portfolio ID:', portfolioId);
-            console.log('Portfolio Data:', portfolioData);
             db.query(sql, [
                 portfolioData.file_name,
                 portfolioData.file_type,
@@ -48,21 +51,26 @@ const Portfolio = {
                 portfolioId
             ], (err, result) => {
                 if (err) {
-                    console.error('Error in update method:', err);
                     return reject(err);
                 }
                 resolve(result);
             });
         });
     },
+    updateByUserId: (userId, portfolioData, callback) => {
+        const sql = `UPDATE Portfolio SET ? WHERE user_id = ?`;
+        db.query(sql, [portfolioData, userId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    },
     delete: (portfolioId) => {
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM Portfolio WHERE portfolio_id = ?`;
-            console.log('SQL Query:', sql);
-            console.log('Portfolio ID:', portfolioId);
             db.query(sql, [portfolioId], (err, result) => {
                 if (err) {
-                    console.error('Error in delete method:', err);
                     return reject(err);
                 }
                 resolve(result);
