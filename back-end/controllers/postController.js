@@ -101,7 +101,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
 const getPostsByUser = asyncHandler(async (req, res) => {
     const userId = req.params.userId;
 
-    const posts = await Post.findByUserId(userId);
+    const posts = await Post.findById(userId);
     res.status(200).json(posts);
 });
 

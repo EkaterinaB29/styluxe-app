@@ -17,7 +17,7 @@ const ClientProfile = () => {
     location: '',
     email: '',
     profileImage: null,
-    existingProfileImage: '', // Track existing image
+    existingProfileImage: '',
   });
 
   useEffect(() => {

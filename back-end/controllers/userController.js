@@ -257,6 +257,23 @@ const searchUsers = asyncHandler(async (req, res) => {
         res.json(results);
     });
 });
+const getUserProfileById = asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    User.findById(userId, (err, results) => {
+        if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(404).send('User not found');
+
+        if (results[0].role === 'Professional') {
+            Portfolio.findByUserId(userId, (portfolioErr, portfolioResults) => {
+                if (portfolioErr) return res.status(500).send(portfolioErr);
+                const userProfile = { ...results[0], portfolio: portfolioResults };
+                res.json(userProfile);
+            });
+        } else {
+            res.json(results[0]);
+        }
+    });
+});
 
 // Change password
 const changePassword = asyncHandler(async (req, res) => {
@@ -279,4 +296,4 @@ const changePassword = asyncHandler(async (req, res) => {
     });
 });
 
-export { registerClient, registerProfessional, loginUser, getProfessionalProfile, updateProfessionalProfile, getClientProfile, updateClientProfile, getAllProfessionals, searchUsers, changePassword };
+export { registerClient, registerProfessional, loginUser, getProfessionalProfile, updateProfessionalProfile, getClientProfile, updateClientProfile, getAllProfessionals, searchUsers, getUserProfileById, changePassword };

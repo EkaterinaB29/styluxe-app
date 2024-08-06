@@ -1,5 +1,3 @@
-/* NavBar.css */
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -8,6 +6,7 @@
   padding: 10px 20px;
   font-family: Arial, sans-serif;
   width: 100%;
+  height: 60px; /* Adjust the navbar height */
 }
 
 .navbar a {
@@ -41,6 +40,7 @@
 .user-actions {
   display: flex;
   align-items: center;
+  height: 100%; /* Ensure consistent height */
 }
 
 .user-actions .user-greeting {
@@ -64,33 +64,78 @@
 }
 
 .navbar .search-container {
+  display: flex;
+  align-items: center;
   position: relative;
-}
-
-.navbar .search-container i {
-  cursor: pointer;
+  height: 100%; /* Ensure the search container is the full height of the navbar */
 }
 
 .navbar .search-container img {
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
-.navbar .search-container input {
-  display: none;
-  position: absolute;
-  top: -8px;
-  right: 0;
-  padding: 5px;
-  border-radius: 15px;
+.navbar .search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
   border: 1px solid #67595E;
+  border-radius: 15px;
+  padding: 2px 5px;
+  margin-right: 10px;
+  height: 30px; /* Adjust the search bar height */
+}
+
+.navbar .search-container .search-select {
+  border: none;
   outline: none;
+  padding: 2px 5px;
+  background-color: #EED6D3;
+  border-radius: 15px;
+  margin-right: 5px;
 }
 
-.navbar .search-container.active input {
-  display: block;
+.navbar .search-container .search-input {
+  padding: 2px 5px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  margin-left: 5px;
+  margin-top: 17px;
+  width: 200px;
 }
 
-.search-icon.active + input {
-  display: block;
+.navbar .search-container .search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 20px;
+}
+
+.navbar .search-container .search-results {
+  position: absolute;
+  top: 40px; /* Position the results dropdown below the search bar */
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  border-radius: 0 0 15px 15px;
+}
+
+.navbar .search-container .search-results > div {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.navbar .search-container .search-results > div:hover {
+  background-color: #f0f0f0;
+}
+
+.no-results {
+  padding: 8px 16px;
+  color: red;
 }

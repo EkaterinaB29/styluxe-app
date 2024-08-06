@@ -68,7 +68,7 @@ const Post = {
         });
     },
     
-      findById: async (postId) => {
+    findById: async (postId) => {
         const sql = `SELECT * FROM Post WHERE post_id = ?`;
         return new Promise((resolve, reject) => {
           db.query(sql, [postId], (err, result) => {

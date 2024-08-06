@@ -26,7 +26,7 @@ const router = express.Router();
 
 
 router.get('/search', searchPosts);
-router.get('/user/:userId', authenticateToken, getPostsByUser);
+router.get('/user/:userId', getPostsByUser);
 router.put('/:postId/like', authenticateToken, likePost);
 router.get('/:postId', getPostWithComments);
 router.get('/', getAllPosts);

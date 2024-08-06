@@ -60,7 +60,7 @@ const ProfessionalProfile = () => {
     if (formData.profileImage && typeof formData.profileImage === 'object') {
       formDataToSend.append('profile_picture', formData.profileImage);
     } else {
-      formDataToSend.append('profile_picture', formData.existingProfileImage); // Send existing image path if no new image
+      formDataToSend.append('profile_picture', formData.existingProfileImage); 
     }
     if (portfolio) {
       formDataToSend.append('portfolio', portfolio);

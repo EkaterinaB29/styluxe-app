@@ -1,0 +1,72 @@
+.user-view {
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+  }
+  
+  .details {
+    flex: 1;
+  }
+  
+  .details h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .details p {
+    margin: 5px 0;
+  }
+  
+  .action-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .action-buttons button {
+    background-color: #EED6D3;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .action-buttons button:hover {
+    background-color: #B56576;
+    color: white;
+  }
+  
+  .reviews-summary {
+    display: flex;
+    align-items: center;
+  }
+  
+  .reviews-summary span {
+    margin-right: 10px;
+  }
+  
+  .posts, .reviews {
+    margin-bottom: 20px;
+  }
+  
+  .post, .review {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .post h3, .review h3 {
+    margin: 0 0 5px;
+  }
+  
