@@ -3,16 +3,18 @@ import Review from '../models/reviewModel.js';
 import Portfolio from '../models/portfolioModel.js';
 
 const addReview = asyncHandler(async (req, res) => {
-    const { rating, content, user_id, portfolio_id } = req.body;
+    const { quality_of_work, timeliness, reliability, satisfaction, user_id, portfolio_id } = req.body;
 
-    if (!rating || !content || !user_id || !portfolio_id) {
+    if (!quality_of_work || !timeliness || !reliability || !satisfaction  || !user_id || !portfolio_id) {
         res.status(400).send('All fields are required');
         return;
     }
 
     const reviewData = {
-        rating,
-        content,
+        quality_of_work,
+        timeliness,
+        reliability,
+        satisfaction,
         publish_time: new Date(),  
         user_id,
         portfolio_id
@@ -24,11 +26,13 @@ const addReview = asyncHandler(async (req, res) => {
 
 const updateReview = asyncHandler(async (req, res) => {
     const reviewId = req.params.id;
-    const { rating, content } = req.body;
+    const { quality_of_work, timeliness, reliability, satisfaction } = req.body;
 
     const reviewData = {
-        rating,
-        content,
+        quality_of_work,
+        timeliness,
+        reliability,
+        satisfaction,
         publish_time: new Date()  
     };
 

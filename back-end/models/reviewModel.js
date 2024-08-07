@@ -3,10 +3,12 @@ import db from '../config/db.js';
 const Review = {
     create: (reviewData) => {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO Review (rating, content, publish_time, user_id, portfolio_id) VALUES (?, ?, ?, ?, ?)`;
+            const sql = `INSERT INTO Review (quality_of_work, timeliness, reliability, satisfaction, publish_time, user_id, portfolio_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
             db.query(sql, [
-                reviewData.rating,
-                reviewData.content,
+                reviewData.quality_of_work,
+                reviewData.timeliness,
+                reviewData.reliability,
+                reviewData.satisfaction,
                 reviewData.publish_time,
                 reviewData.user_id,
                 reviewData.portfolio_id
@@ -20,10 +22,12 @@ const Review = {
     },
     update: (reviewId, reviewData) => {
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE Review SET rating = ?, content = ?, publish_time = ? WHERE review_id = ?`;
+            const sql = `UPDATE Review SET quality_of_work = ?, timeliness = ?, reliability = ?, satisfaction = ?, publish_time = ? WHERE review_id = ?`;
             db.query(sql, [
-                reviewData.rating,
-                reviewData.content,
+                reviewData.quality_of_work,
+                reviewData.timeliness,
+                reviewData.reliability,
+                reviewData.satisfaction,
                 reviewData.publish_time,
                 reviewId
             ], (err, result) => {

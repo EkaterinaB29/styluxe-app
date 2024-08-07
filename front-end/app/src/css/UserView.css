@@ -1,72 +1,191 @@
 .user-view {
-    padding: 20px;
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .header img {
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    margin-right: 20px;
-  }
-  
-  .details {
-    flex: 1;
-  }
-  
-  .details h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  .details p {
-    margin: 5px 0;
-  }
-  
-  .action-buttons {
-    margin-bottom: 20px;
-  }
-  
-  .action-buttons button {
-    background-color: #EED6D3;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .action-buttons button:hover {
-    background-color: #B56576;
-    color: white;
-  }
-  
-  .reviews-summary {
-    display: flex;
-    align-items: center;
-  }
-  
-  .reviews-summary span {
-    margin-right: 10px;
-  }
-  
-  .posts, .reviews {
-    margin-bottom: 20px;
-  }
-  
-  .post, .review {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .post h3, .review h3 {
-    margin: 0 0 5px;
-  }
-  
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.header img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+}
+
+.details {
+  flex: 1;
+}
+
+.details h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.details p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-item img {
+  width: 20px;
+  height: 20px;
+}
+
+.social-media {
+  margin-top: 20px;
+  width: 100%;
+  height: 20px;
+}
+
+.bio {
+  margin-bottom: 20px;
+}
+
+.bio h2 {
+  color: #333;
+}
+
+.bio p {
+  font-size: 16px;
+  color: #666;
+}
+
+.portfolio button {
+  background-color: #EED6D3;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.portfolio button:hover {
+  background-color: #B56576;
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.action-buttons button, .get-started-button {
+  background-color: #EED6D3;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.action-buttons button:hover, .get-started-button:hover {
+  background-color: #B56576;
+  color: white;
+}
+
+.get-started-button {
+  text-decoration: none;
+  color: inherit;
+}
+
+.get-started-button span {
+  margin-left: 5px;
+}
+
+.posts, .reviews {
+  margin-bottom: 20px;
+}
+
+.posts h2, .reviews h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.post-grid, .review-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.post, .review {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  flex: 1 1 calc(50% - 10px);
+  box-sizing: border-box;
+}
+
+.post h3, .review h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  color: #555;
+}
+
+.post p, .review p {
+  font-size: 14px;
+  color: #666;
+}
+
+.review img {
+  margin-top: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #EED6D3;
+  border: none;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.pagination button:hover {
+  background-color: #B56576;
+  color: white;
+}
+
+.brands-image {
+  width: 100%;
+  margin-top: 20px;
+}

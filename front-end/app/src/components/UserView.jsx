@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import Notification from '../components/Notification';
 import NavBar from '../components/NavBar';
-import defaultProfileImg from '../images/profile.png';
+import Footer from '../components/Footer';
+import Notification from '../components/Notification';
+import mailIcon from '../images/mail.png';
+import callIcon from '../images/call.png';
+import worldIcon from '../images/world.png';
+import starIcon from '../images/star.png';
+import socialMediaIcon from '../images/socialMedia.png';
+import brandsImage from '../images/brands.png';
 import '../css/UserView.css';
 
 function UserView() {
@@ -25,7 +31,10 @@ function UserView() {
         const postsResponse = await axios.get(`http://88.200.63.148:8211/api/posts/user/${userId}`);
         setPosts(postsResponse.data);
 
-      
+        /*if (userResponse.data.role === 'Professional') {
+          const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews?professional_id=${userId}`);
+          setReviews(reviewsResponse.data);
+        }*/
       } catch (error) {
         console.error('Error fetching profile:', error);
         setError('Failed to fetch profile');
@@ -54,47 +63,72 @@ function UserView() {
       <NavBar />
       <div className="user-view">
         <div className="header">
-          <img src={user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : defaultProfileImg} alt={`${user.first_name} ${user.last_name}`} />
+          <img src={user.profile_picture || 'default-profile.png'} alt={`${user.first_name} ${user.last_name}`} />
           <div className="details">
             <h1>{user.first_name} {user.last_name}</h1>
-            <p>Location: {user.location}</p>
-            <p>Email: {user.email}</p>
-            <p>Role: {user.role}</p>
+            <p>Architect</p>
+            <div className="contact-info">
+              <div className="contact-item">
+                <img src={mailIcon} alt="Mail" />
+                <p>{user.email}</p>
+              </div>
+             
+              <div className="contact-item">
+                <img src={worldIcon} alt="World" />
+                <p>{user.location || 'N/A'}</p>
+              </div>
+            </div>
+       
+          
+           
           </div>
         </div>
+        <div className="bio">
+          <h2>Bio</h2>
+          <p>{user.education_history}</p>
+        </div>
         <div className="action-buttons">
-          <button>Send Message</button>
-          {user.role === 'Professional' && (
-            <>
-              <button>Add Review</button>
-              <div className="reviews-summary">
-                <span>{reviews.length} Reviews</span>
-                {/* Add star rating display here */}
-              </div>
-            </>
-          )}
+          <button onClick={() => window.location.href = '/report'}>Report</button>
+          <button onClick={() => window.location.href = '/message'}>Send Message</button>
+          {user.role === 'Professional' && <button onClick={() => window.location.href = '/add-review'}>Add Review</button>}
+          <Link to="/services" className="get-started-button">Get Started <span>→</span></Link>
         </div>
         <div className="posts">
           <h2>Posts by {user.first_name}</h2>
-          {posts.length > 0 ? posts.map(post => (
-            <div className="post" key={post.post_id}>
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-            </div>
-          )) : <Notification text="No posts found" />}
+          <div className="post-grid">
+            {posts.length > 0 ? posts.map(post => (
+              <div className="post" key={post.post_id}>
+                <h3>{post.title}</h3>
+                <p>{post.content}</p>
+              </div>
+            )) : <Notification text="No posts found" />}
+          </div>
+          <div className="pagination">
+            <button></button>
+            <button></button>
+          </div>
         </div>
         {user.role === 'Professional' && (
           <div className="reviews">
             <h2>Reviews</h2>
-            {reviews.length > 0 ? reviews.map(review => (
-              <div className="review" key={review.review_id}>
-                <h3>{review.author_name}</h3>
-                <p>{review.content}</p>
-              </div>
-            )) : <Notification text="No reviews found" />}
+            <div className="review-grid">
+              {reviews.length > 0 ? reviews.map(review => (
+                <div className="review" key={review.review_id}>
+                  <h3>{review.author_name}</h3>
+                  <p>{review.content}</p>
+                  <img src={starIcon} alt="Star" />
+                </div>
+              )) : <Notification text="No reviews found" />}
+            </div>
+            <div className="pagination">
+              <button></button>
+              <button></button>
+            </div>
           </div>
         )}
+        <img src={brandsImage} alt="Brands" className="brands-image" />
       </div>
+      <Footer />
     </div>
   );
 }
