@@ -1,8 +1,11 @@
 .user-view {
+  background-color: #fff;
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 .header {
@@ -20,9 +23,7 @@
   margin-right: 20px;
 }
 
-.details {
-  flex: 1;
-}
+
 
 .details h1 {
   margin: 0;
@@ -30,7 +31,7 @@
   color: #333;
 }
 
-.details p {
+.details h3 {
   margin: 5px 0;
   font-size: 16px;
 }
@@ -52,10 +53,34 @@
   height: 20px;
 }
 
-.social-media {
-  margin-top: 20px;
-  width: 100%;
+.social-media-buttons {
+  display: flex;
+  margin-top: 10px;
+}
+
+.social-media-buttons .icon-button {
+  background-color:#67595E;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  
+  
+  width: 40px;
+  height: 40px;
+}
+
+.social-media-buttons .icon-button img {
+  width: 20px;
   height: 20px;
+  object-fit: contain;
+  border-radius: 5px; /* Make the images inside square */
+  margin-left:20px;
+}
+
+.social-media-buttons .icon-button:hover {
+  background-color: #EED6D3;
 }
 
 .bio {
@@ -63,7 +88,7 @@
 }
 
 .bio h2 {
-  color: #333;
+  color: #67595E;
 }
 
 .bio p {
@@ -87,35 +112,67 @@
 
 .action-buttons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: center;
+  flex-direction: row;
+  
+  
+  align-items: flex-end;
 }
 
-.action-buttons button, .get-started-button {
-  background-color: #EED6D3;
+.action-buttons .icon-button {
+  background-color: #B56576;
   border: none;
-  padding: 10px 20px;
+  border-radius: 50%;
+  padding: 5px; 
   cursor: pointer;
-  border-radius: 5px;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  font-weight: bold;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
-.action-buttons button:hover, .get-started-button:hover {
-  background-color: #B56576;
-  color: white;
+.action-buttons .icon-button img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 4px; 
+}
+
+.action-buttons .icon-button:hover {
+  background-color: #EED6D3;
 }
 
 .get-started-button {
+  display: flex;
+  align-items: center;
+  background-color: #B56576;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
   text-decoration: none;
-  color: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.get-started-button span {
-  margin-left: 5px;
+.get-started-button:hover {
+  background-color: #EED6D3;
+  color: #333;
+}
+
+.get-started-button .house-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.review-count {
+  margin-left: 10px;
+  align-self: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
 }
 
 .posts, .reviews {
@@ -167,17 +224,13 @@
 
 .pagination button {
   background-color: #EED6D3;
-  border: none;
+  border-radius: 50%;
   padding: 5px 10px;
   margin: 0 5px;
   cursor: pointer;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
+  width:40px;
+  height:40px;
+  
 }
 
 .pagination button:hover {
@@ -188,4 +241,35 @@
 .brands-image {
   width: 100%;
   margin-top: 20px;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
 }
