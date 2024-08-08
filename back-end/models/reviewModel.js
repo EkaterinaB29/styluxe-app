@@ -3,7 +3,7 @@ import db from '../config/db.js';
 const Review = {
     create: (reviewData) => {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO Review (quality_of_work, timeliness, reliability, satisfaction, publish_time, user_id, portfolio_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            const sql = `INSERT INTO Review (quality_of_work, timeliness, reliability, satisfaction, publish_time, user_id, portfolio_id, professional_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
             db.query(sql, [
                 reviewData.quality_of_work,
                 reviewData.timeliness,
@@ -11,7 +11,8 @@ const Review = {
                 reviewData.satisfaction,
                 reviewData.publish_time,
                 reviewData.user_id,
-                reviewData.portfolio_id
+                reviewData.portfolio_id,
+                reviewData.professional_id
             ], (err, result) => {
                 if (err) {
                     return reject(err);
@@ -70,7 +71,19 @@ const Review = {
                 resolve(results);
             });
         });
+    },
+    findByProfessionalId: (professionalId) => {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM Review WHERE professional_id = ?`;
+            db.query(sql, [professionalId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
     }
+    
 };
 
 export default Review;

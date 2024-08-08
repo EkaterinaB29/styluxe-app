@@ -12,6 +12,7 @@ import Professionals from './pages/ProfessionalsPage';
 import ProfessionalProfile from './pages/ProfessionalProfile';
 import ClientProfile from './pages/ClientProfile';
 import UserView from './components/UserView'; 
+import PayPalPaymentPage from './pages/PayPalPaymentPage.jsx';
 
 
 const App = () => {
@@ -30,7 +31,8 @@ const App = () => {
           <Route path="/posts/:postId" element={<SinglePostPage />} />
           <Route path="/posts/create-post" element={<CreatePostPage />} />
           <Route path="/services" element={<ServicesPage />} />
-          <Route path="/professionals" element={<Professionals />} />        
+          <Route path="/professionals" element={<Professionals />} /> 
+          <Route path="/paypal-payment/:serviceId" element={<PayPalPaymentPage />} />       
         </Routes>
       </Router>
     </UserProvider>

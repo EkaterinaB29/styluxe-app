@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import '../css/Review.css';
 
-const Review = ({ userId, portfolioId, onReviewAdded }) => {
+const Review = ({ professionalId, onReviewAdded }) => {
     const [qualityOfWork, setQualityOfWork] = useState(1);
     const [timeliness, setTimeliness] = useState(1);
     const [reliability, setReliability] = useState(1);
     const [satisfaction, setSatisfaction] = useState(1);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,13 +17,14 @@ const Review = ({ userId, portfolioId, onReviewAdded }) => {
             timeliness,
             reliability,
             satisfaction,
-            
-            user_id: userId,
-            portfolio_id: portfolioId
+            professional_id: professionalId
         };
 
         try {
-            await axios.post('http://88.200.63.148:8211/api/review', reviewData);
+            const token = Cookies.get('token');
+            await axios.post(`http://88.200.63.148:8211/api/reviews/${professionalId}`, reviewData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('Review added successfully');
             onReviewAdded();
         } catch (error) {
@@ -49,7 +50,6 @@ const Review = ({ userId, portfolioId, onReviewAdded }) => {
                 Satisfaction:
                 <input type="range" min="1" max="5" value={satisfaction} onChange={(e) => setSatisfaction(e.target.value)} />
             </label>
-            
             <button type="submit">Add Review</button>
         </form>
     );

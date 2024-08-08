@@ -1,0 +1,51 @@
+/* PayPalPaymentPage.css */
+
+.paypal-payment-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .paypal-payment-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .paypal-payment-page p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  #card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .card-field {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .pay-button {
+    padding: 1rem;
+    background-color: #0070ba;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pay-button:hover {
+    background-color: #005b9e;
+  }
+  

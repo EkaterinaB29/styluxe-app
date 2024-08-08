@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Notification from '../components/Notification';
@@ -21,7 +22,7 @@ import { UserContext } from '../context/UserContext';
 
 const UserView = () => {
   const { userId } = useParams();
-  const { isAuthenticated } = useContext(UserContext);
+  const { isAuthenticated, setIsAuthenticated } = useContext(UserContext);
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -29,20 +30,25 @@ const UserView = () => {
   const [error, setError] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [notificationText, setNotificationText] = useState(null);
 
   useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+
     const fetchUserProfile = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const userResponse = await axios.get(`http://88.200.63.148:8211/api/user/profile/${userId}`);
         setUser(userResponse.data);
-
         const postsResponse = await axios.get(`http://88.200.63.148:8211/api/posts/user/${userId}`);
         setPosts(postsResponse.data);
-
-        //const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/user/${userId}`);
-        //setReviews(reviewsResponse.data);
+        const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/professional/${userId}`);
+        setReviews(reviewsResponse.data);
       } catch (error) {
         console.error('Error fetching profile:', error);
         setError('Failed to fetch profile');
@@ -52,7 +58,7 @@ const UserView = () => {
     };
 
     fetchUserProfile();
-  }, [userId]);
+  }, [userId, setIsAuthenticated]);
 
   if (loading) {
     return <Notification text="Loading..." />;
@@ -68,15 +74,24 @@ const UserView = () => {
 
   const handleReviewAdded = () => {
     setShowReviewModal(false);
-    axios.get(`http://88.200.63.148:8211/api/reviews/user/${userId}`).then((response) => {
+    const token = Cookies.get('token');
+    axios.get(`http://88.200.63.148:8211/api/reviews/professional/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((response) => {
       setReviews(response.data);
     });
   };
 
   const handleAddReviewClick = () => {
-    
+    if (isAuthenticated) {
       setShowReviewModal(true);
-   
+    } else {
+      setNotificationText('You must be logged in to leave a review');
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 6000);
+    }
   };
 
   return (
@@ -176,11 +191,15 @@ const UserView = () => {
         <div className="modal">
           <div className="modal-content">
             <span className="close" onClick={() => setShowReviewModal(false)}>&times;</span>
-            <Review userId={userId} portfolioId={user.portfolio_id} onReviewAdded={handleReviewAdded} />
+            <Review professionalId={userId} onReviewAdded={handleReviewAdded} />
           </div>
         </div>
       )}
-      {showNotification && <Notification text="You must be logged in to leave a review" />}
+      {showNotification && (
+        <div className="notification-wrapper">
+          <Notification text={notificationText} />
+        </div>
+      )}
     </div>
   );
 }

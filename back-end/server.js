@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/portfolios', portfolioRoutes);
-app.use('/api/review', reviewRoutes);
+app.use('/api/reviews', reviewRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/messages', messageRoutes);

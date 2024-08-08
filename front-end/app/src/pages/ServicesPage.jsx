@@ -8,13 +8,10 @@ import icon1 from '../images/icon1.png';
 import icon2 from '../images/icon2.png'; 
 import icon3 from '../images/icon3.png'; 
 import icon4 from '../images/icon4.png'; 
+import ServiceCard from '../components/ServiceCard';
 
 const ServicesPage = () => {
   const navigate = useNavigate();
-
-  const handleGetStartedClick = () => {
-    navigate('https://www.example.com/pay'); // Replace with your actual payment page URL
-  };
 
   const handleMeetProfessionalsClick = () => {
     navigate('/meet-professionals'); // Replace with your actual route
@@ -63,42 +60,42 @@ const ServicesPage = () => {
         <div className="container">
           <h2>Pricing & Plan</h2>
           <div className="pricing-items">
-            <div className="pricing-item">
-              <h3>Design advices</h3>
-              <p className="price">€29/month</p>
-              <ul>
-                <li>General living space advices</li>
-                <li>Renovation advices</li>
-                <li>Interior design advices</li>
-                <li>Furniture reorganization</li>
-                <li>Up to 5 hours meetings</li>
-              </ul>
-              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
-            </div>
-            <div className="pricing-item popular">
-              <h3>Complete interior</h3>
-              <p className="price">€39/month</p>
-              <ul>
-                <li>Complete home redesign</li>
-                <li>Interior and exterior works</li>
-                <li>Modular interior planning</li>
-                <li>Kitchen design</li>
-                <li>Garages organization</li>
-              </ul>
-              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
-            </div>
-            <div className="pricing-item">
-              <h3>Furniture design</h3>
-              <p className="price">€59/month</p>
-              <ul>
-                <li>Furniture for living room</li>
-                <li>Furniture refurbishment</li>
-                <li>Sofas and armchairs</li>
-                <li>Tables and chairs</li>
-                <li>Kitchens</li>
-              </ul>
-              <button className="get-started" onClick={handleGetStartedClick}>Get Started</button>
-            </div>
+            <ServiceCard
+              serviceId={1}
+              title="Design advices"
+              price="€29/month"
+              features={[
+                'General living space advices',
+                'Renovation advices',
+                'Interior design advices',
+                'Furniture reorganization',
+                'Up to 5 hours meetings'
+              ]}
+            />
+            <ServiceCard
+              serviceId={2}
+              title="Complete interior"
+              price="€39/month"
+              features={[
+                'Complete home redesign',
+                'Interior and exterior works',
+                'Modular interior planning',
+                'Kitchen design',
+                'Garages organization'
+              ]}
+            />
+            <ServiceCard
+              serviceId={3}
+              title="Furniture design"
+              price="€59/month"
+              features={[
+                'Furniture for living room',
+                'Furniture refurbishment',
+                'Sofas and armchairs',
+                'Tables and chairs',
+                'Kitchens'
+              ]}
+            />
           </div>
         </div>
       </section>
