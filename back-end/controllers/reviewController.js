@@ -5,7 +5,8 @@ import Portfolio from '../models/portfolioModel.js';
 // Add a review
 const addReview = asyncHandler(async (req, res) => {
     const professional_id = req.params.professionalId;
-    const user_id = req.user.id; // Assuming `req.user.id` contains the authenticated user's ID
+    const user_id = req.user.id; 
+    console.log('Useer:'+user_id);
     const { quality_of_work, timeliness, reliability, satisfaction } = req.body;
 
     if (!quality_of_work || !timeliness || !reliability || !satisfaction) {
@@ -14,13 +15,13 @@ const addReview = asyncHandler(async (req, res) => {
     }
 
     // Fetch the portfolio ID for the given professional ID
-    const portfolio = await Portfolio.findByProfessionalId(professional_id);
+    const portfolio = await Portfolio.findByUserId(professional_id);
     if (!portfolio) {
         res.status(404).send('Portfolio not found for the given professional ID');
         return;
     }
 
-    const portfolio_id = portfolio.id;
+    const portfolio_id = portfolio[0].portfolio_id;
 
     const reviewData = {
         quality_of_work,

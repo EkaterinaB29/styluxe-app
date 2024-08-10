@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
           };
 
           try {
-            const professionalResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/professional', config);
+            const professionalResponse = await axios.get('http://88.200.63.148:8211/api/user/profile/professional',{ withCredentials: true });
             setUser(professionalResponse.data);
             setRole('Professional');
             setIsAuthenticated(true);

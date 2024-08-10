@@ -34,20 +34,32 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const formDataToSend = new FormData();
-            Object.keys(formData).forEach(key => {
-                formDataToSend.append(key, formData[key]);
-            });
-            if (file) {
-                formDataToSend.append('portfolio', file);
-            }
-
+            let response;
             const endpoint = activeTab === 'client' ? '/api/user/register/client' : '/api/user/register/professional';
-            const response = await axios.post(`http://88.200.63.148:8211${endpoint}`, formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            
+            if (activeTab === 'client') {
+                // Sending JSON data for client registration
+                response = await axios.post(`http://88.200.63.148:8211${endpoint}`, formData, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } else {
+                // Sending FormData for professional registration
+                const formDataToSend = new FormData();
+                Object.keys(formData).forEach(key => {
+                    formDataToSend.append(key, formData[key]);
+                });
+                if (file) {
+                    formDataToSend.append('portfolio', file);
                 }
-            });
+
+                response = await axios.post(`http://88.200.63.148:8211${endpoint}`, formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+            }
 
             const { token } = response.data;
             Cookies.set('token', token);

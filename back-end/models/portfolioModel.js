@@ -30,15 +30,23 @@ const Portfolio = {
             });
         });
     },
-    findByUserId: (userId, callback) => {
-        const sql = `SELECT * FROM Portfolio WHERE user_id = ?`;
-        db.query(sql, [userId], (err, results) => {
-            if (err) {
-                return callback(err, null);
-            }
-            callback(null, results);
+    findByUserId: (userId) => {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM Portfolio WHERE user_id = ?`;
+            db.query(sql, [userId], (err, results) => {
+                if (err) {
+                    console.error('Error executing query:', err);
+                    return reject(err);
+                }
+                if (results.length === 0) {
+                    console.log('No portfolio found for user ID:', userId);
+                    return resolve([]); // Return an empty array if no portfolio is found
+                }
+                resolve(results);
+            });
         });
     },
+    
     update: (portfolioId, portfolioData) => {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE Portfolio SET file_name = ?, file_type = ?, file_size = ?, file_path = ?, education_history = ? WHERE portfolio_id = ?`;
@@ -57,13 +65,15 @@ const Portfolio = {
             });
         });
     },
-    updateByUserId: (userId, portfolioData, callback) => {
-        const sql = `UPDATE Portfolio SET ? WHERE user_id = ?`;
-        db.query(sql, [portfolioData, userId], (err, results) => {
-            if (err) {
-                return callback(err, null);
-            }
-            callback(null, results);
+    updateByUserId: (userId, portfolioData) => {
+        return new Promise((resolve, reject) => {
+            const sql = `UPDATE Portfolio SET ? WHERE user_id = ?`;
+            db.query(sql, [portfolioData, userId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
         });
     },
     delete: (portfolioId) => {

@@ -278,5 +278,77 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000; /* Ensure it appears above other content */
+  z-index: 1000; 
 }
+.review-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.bar-chart {
+  margin-top: 10px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bar span {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.bar-fill {
+  flex: 3;
+  height: 20px;
+  background-color: #6c816d;
+  border-radius: 4px;
+  
+}
+.star-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.rating-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bar span {
+  flex: 1;
+}
+
+.bar-fill {
+  height: 8px;
+  background-color: #4caf50;
+  flex: 2;
+  margin-left: 10px;
+  border-radius: 4px;
+}
+
+

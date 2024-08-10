@@ -16,7 +16,7 @@ function UserProfile() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`http://88.200.63.148:8211/api/user/profile/${userId}`);
+        const response = await axios.get(`http://88.200.63.148:8211/api/user/profile/${userId}`,{withCredentials: true});
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching profile:', error);

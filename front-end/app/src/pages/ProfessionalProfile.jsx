@@ -66,18 +66,18 @@ const ProfessionalProfile = () => {
       formDataToSend.append('portfolio', portfolio);
     }
 
-    const token = Cookies.get('token');
+    //const token = Cookies.get('token');
     axios.put('http://88.200.63.148:8211/api/user/profile/professional', formDataToSend, {
-      headers: {
+     /* headers: {
         Authorization: `Bearer ${token}`,
-      },
+      },*/
       withCredentials: true,
     })
     .then(response => {
       axios.get('http://88.200.63.148:8211/api/user/profile/professional', {
-        headers: {
+       /* headers: {
           Authorization: `Bearer ${token}`,
-        },
+        },*/
         withCredentials: true,
       })
       .then(getResponse => {

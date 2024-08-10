@@ -54,18 +54,19 @@ const ClientProfile = () => {
       formDataToSend.append('existingProfileImage', formData.existingProfileImage);
     }
 
-    const token = Cookies.get('token');
+    //const token = Cookies.get('token');
+    //console.log('Token:', token);
     axios.put('http://88.200.63.148:8211/api/user/profile/client', formDataToSend, {
-      headers: {
+      /*headers: {
         Authorization: `Bearer ${token}`,
-      },
+      },*/
       withCredentials: true,
     })
     .then(response => {
       axios.get('http://88.200.63.148:8211/api/user/profile/client', {
-        headers: {
+        /*headers: {
           Authorization: `Bearer ${token}`,
-        },
+        },*/
         withCredentials: true,
       })
       .then(getResponse => {

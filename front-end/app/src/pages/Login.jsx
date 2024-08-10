@@ -24,7 +24,7 @@ const Login = () => {
       const response = await axios.post('http://88.200.63.148:8211/api/user/login', { email, password }, { withCredentials: true });
 
       const { role, token } = response.data;
-      Cookies.set('token', token, { sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
+      Cookies.set('token', token);
       setRole(role);
       setIsAuthenticated(true);
       setLoading(true);

@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Notification from '../components/Notification';
+import Review from '../components/Review';
+import { UserContext } from '../context/UserContext';
 import mailIcon from '../images/mail.png';
 import worldIcon from '../images/world.png';
-import starIcon from '../images/star.png';
 import brandsImage from '../images/brands.png';
 import reportIcon from '../images/flag-fill.svg';
 import messageIcon from '../images/chat-square.svg';
@@ -16,38 +16,35 @@ import houseIcon from '../images/house-heart.svg';
 import linkedInIcon from '../images/linkedin.svg';
 import facebookIcon from '../images/facebook.svg';
 import instagramIcon from '../images/instagram.svg';
+import starIcon from '../images/star.png';
 import '../css/UserView.css';
-import Review from '../components/Review';
-import { UserContext } from '../context/UserContext';
 
 const UserView = () => {
-  const { userId } = useParams();
-  const { isAuthenticated, setIsAuthenticated } = useContext(UserContext);
+  const { userId: professionalId } = useParams();
+  const { isAuthenticated, setIsAuthenticated, token } = useContext(UserContext); // Ensure token is available
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationText, setNotificationText] = useState(null);
 
   useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-
     const fetchUserProfile = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const userResponse = await axios.get(`http://88.200.63.148:8211/api/user/profile/${userId}`);
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }, // Include the token in the request headers
+          withCredentials: true,
+        };
+
+        const userResponse = await axios.get(`http://88.200.63.148:8211/api/user/profile/${professionalId}`, config);
         setUser(userResponse.data);
-        const postsResponse = await axios.get(`http://88.200.63.148:8211/api/posts/user/${userId}`);
+        const postsResponse = await axios.get(`http://88.200.63.148:8211/api/posts/user/${professionalId}`);
         setPosts(postsResponse.data);
-        const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/professional/${userId}`);
+        const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/professional/${professionalId}`, config);
         setReviews(reviewsResponse.data);
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -58,25 +55,25 @@ const UserView = () => {
     };
 
     fetchUserProfile();
-  }, [userId, setIsAuthenticated]);
+  }, [professionalId, setIsAuthenticated, token]);
 
   if (loading) {
-    return <Notification text="Loading..." />;
+    return <Notification>Loading...</Notification>;
   }
 
   if (error) {
-    return <Notification text={error} />;
+    return <Notification>{error}</Notification>;
   }
 
   if (!user) {
-    return <Notification text="User not found" />;
+    return <Notification>User not found</Notification>;
   }
 
   const handleReviewAdded = () => {
     setShowReviewModal(false);
-    const token = Cookies.get('token');
-    axios.get(`http://88.200.63.148:8211/api/reviews/professional/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` }
+    axios.get(`http://88.200.63.148:8211/api/reviews/professional/${professionalId}`, {
+      headers: { Authorization: `Bearer ${token}` }, // Ensure token is included
+      withCredentials: true,
     }).then((response) => {
       setReviews(response.data);
     });
@@ -86,12 +83,29 @@ const UserView = () => {
     if (isAuthenticated) {
       setShowReviewModal(true);
     } else {
-      setNotificationText('You must be logged in to leave a review');
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 6000);
+      alert('You must be logged in to add a review.');
     }
+  };
+
+  const calculateAverageRating = (review) => {
+    const total = review.quality_of_work + review.timeliness + review.reliability + review.satisfaction;
+    return (total / 4).toFixed(1);
+  };
+
+  const renderStars = (averageRating) => {
+    const fullStars = Math.floor(averageRating);
+    const halfStar = averageRating % 1 >= 0.5;
+    const stars = [];
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<img key={i} src={starIcon} alt="star" className="star-icon" />);
+    }
+
+    if (halfStar) {
+      stars.push(<img key="half" src={starIcon} alt="half-star" className="star-icon half-star" />);
+    }
+
+    return stars;
   };
 
   return (
@@ -158,7 +172,7 @@ const UserView = () => {
                 <h3>{post.title}</h3>
                 <p>{post.content}</p>
               </div>
-            )) : <Notification text="No posts found" />}
+            )) : <div>No posts found</div>}
           </div>
           <div className="pagination">
             <button>&lt;</button>
@@ -169,13 +183,36 @@ const UserView = () => {
           <div className="reviews">
             <h2>Reviews</h2>
             <div className="review-grid">
-              {reviews.length > 0 ? reviews.map(review => (
-                <div className="review" key={review.review_id}>
-                  <h3>{review.author_name}</h3>
-                  <p>{review.content}</p>
-                  <img src={starIcon} alt="Star" />
-                </div>
-              )) : <Notification text="No reviews found" />}
+              {reviews.length > 0 ? reviews.map(review => {
+                const averageRating = calculateAverageRating(review);
+                return (
+                  <div className="review-card" key={review.review_id}>
+                    <h3>{review.author_name}</h3>
+                    <div className="star-rating">
+                      {renderStars(averageRating)}
+                      <span className="rating-value">({averageRating})</span>
+                    </div>
+                    <div className="bar-chart">
+                      <div className="bar">
+                        <span>Quality of Work</span>
+                        <div className="bar-fill" style={{ width: `${(review.quality_of_work / 5) * 100}%` }}></div>
+                      </div>
+                      <div className="bar">
+                        <span>Timeliness</span>
+                        <div className="bar-fill" style={{ width: `${(review.timeliness / 5) * 100}%` }}></div>
+                      </div>
+                      <div className="bar">
+                        <span>Reliability</span>
+                        <div className="bar-fill" style={{ width: `${(review.reliability / 5) * 100}%` }}></div>
+                      </div>
+                      <div className="bar">
+                        <span>Satisfaction</span>
+                        <div className="bar-fill" style={{ width: `${(review.satisfaction / 5) * 100}%` }}></div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }) : <div>No reviews found</div>}
             </div>
             <div className="pagination">
               <button>&lt;</button>
@@ -191,13 +228,8 @@ const UserView = () => {
         <div className="modal">
           <div className="modal-content">
             <span className="close" onClick={() => setShowReviewModal(false)}>&times;</span>
-            <Review professionalId={userId} onReviewAdded={handleReviewAdded} />
+            <Review professionalId={professionalId} onReviewAdded={handleReviewAdded} />
           </div>
-        </div>
-      )}
-      {showNotification && (
-        <div className="notification-wrapper">
-          <Notification text={notificationText} />
         </div>
       )}
     </div>
