@@ -3,12 +3,12 @@ import Order from '../models/ordersModel.js';
 import paypalConfig from '../config/paypalConfig.js';
 
 export const createPayPalOrder = async (req, res) => {
-    const { amount, currency, user_id_from, user_id_to } = req.body;
-
+    const { amount, currency/*, user_id_from*/, user_id_to } = req.body;
+    const userId = req.query.user_id;
     const orderData = {
         status: 'PENDING',
         timestamp: new Date(),
-        user_id_from,
+        //user_id_from: userId || user_id_from,
         user_id_to,
         amount,
         currency

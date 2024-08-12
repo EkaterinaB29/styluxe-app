@@ -107,6 +107,17 @@ const User = {
             });
         });
     },
+    findByRole: (role) => {
+        return new Promise((resolve, reject) => {
+          const query = 'SELECT user_id, first_name, last_name, email, location FROM User WHERE role = ?';
+          db.query(query, [role], (error, results) => {
+            if (error) {
+              return reject(error);
+            }
+            resolve(results);
+          });
+        });
+      },
 };
 
 export default User;

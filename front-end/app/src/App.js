@@ -19,7 +19,6 @@ const App = () => {
   return (
     <UserProvider>
       <Router>
-        
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
@@ -32,11 +31,14 @@ const App = () => {
           <Route path="/posts/create-post" element={<CreatePostPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/professionals" element={<Professionals />} /> 
-          <Route path="/paypal-payment/:serviceId" element={<PayPalPaymentPage />} />       
+          <Route path="/paypal-payment/:serviceId" element={<PayPalPaymentPage />} /> 
         </Routes>
       </Router>
     </UserProvider>
   );
 };
+
+
+
 
 export default App;

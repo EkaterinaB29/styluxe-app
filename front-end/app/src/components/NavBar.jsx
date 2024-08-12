@@ -53,7 +53,7 @@ const NavBar = () => {
         </Link>
         <Link to="/posts">Blog</Link>
         <Link to="/services">Services</Link>
-        <Link to="/contact">Contact</Link>
+        <Link to="/professionals">Map</Link>
         {isAuthenticated && <Link to="/posts/create-post">Create Post</Link>}
         {!isAuthenticated && <Link to="/login">Login</Link>}
         {!isAuthenticated && <Link to="/register">Register</Link>}

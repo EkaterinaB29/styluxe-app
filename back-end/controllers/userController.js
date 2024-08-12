@@ -215,11 +215,11 @@ const updateClientProfile = asyncHandler(async (req, res) => {
 // Get all professionals (public route)
 const getAllProfessionals = asyncHandler(async (req, res) => {
     try {
-        const results = await User.findByRole('Professional');
-        res.json(results);
+        const professionals = await User.findByRole('Professional');
+        res.json(professionals);
     } catch (err) {
         console.error('Error in getAllProfessionals:', err);
-        res.status(500).send(err);
+        res.status(500).send('Server error');
     }
 });
 

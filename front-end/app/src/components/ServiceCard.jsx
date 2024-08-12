@@ -1,16 +1,11 @@
+// ServiceCard.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/ServiceCard.css'; // Make sure to link to your CSS file for the ServiceCard component
+import '../css/ServiceCard.css';
 
-const ServiceCard = ({ serviceId, title, price, features }) => {
-  const navigate = useNavigate();
-
-  const handleGetStartedClick = () => {
-    navigate(`/paypal-payment/${serviceId}`);
-  };
-
+const ServiceCard = ({ serviceId, title, price, features, onGetStartedClick }) => {
   return (
-    <div className="pricing-item" onClick={handleGetStartedClick}>
+    <div className="pricing-item" onClick={() => onGetStartedClick(serviceId)}>
       <h3>{title}</h3>
       <p className="price">{price}</p>
       <ul>

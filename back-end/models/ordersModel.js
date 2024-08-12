@@ -2,12 +2,12 @@ import db from '../config/db.js';
 
 const Order = {
     create: async (orderData) => {
-        const sql = `INSERT INTO Orders (timestamp, status, user_id_from, user_id_to, amount, currency) VALUES (?, ?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO Orders (timestamp, status, user_id_to, amount, currency) VALUES (?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 orderData.timestamp,
                 orderData.status,
-                orderData.user_id_from,
+                /*orderData.user_id_from,*/
                 orderData.user_id_to,
                 orderData.amount,
                 orderData.currency

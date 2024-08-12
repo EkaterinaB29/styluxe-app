@@ -1,20 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import NavBar from '../components/NavBar.jsx';
+import Footer from '../components/Footer.jsx';
+import ServiceCard from '../components/ServiceCard';
+import axios from 'axios';
+import { UserContext } from '../context/UserContext'; // Import UserContext
 import '../css/ServicesPage.css';
 import banner from '../images/hands.jpg'; 
-import Footer from '../components/Footer.jsx';
 import icon1 from '../images/icon1.png'; 
 import icon2 from '../images/icon2.png'; 
 import icon3 from '../images/icon3.png'; 
 import icon4 from '../images/icon4.png'; 
-import ServiceCard from '../components/ServiceCard';
 
 const ServicesPage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext); // Access the logged-in user from context
+  const [professionals, setProfessionals] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [selectedProfessional, setSelectedProfessional] = useState('');
 
-  const handleMeetProfessionalsClick = () => {
-    navigate('/meet-professionals'); // Replace with your actual route
+  useEffect(() => {
+    // Fetch the list of professionals
+    axios.get('http://88.200.63.148:8211/api/user/professionals')
+      .then((response) => setProfessionals(response.data))
+      .catch((error) => console.error('Error fetching professionals:', error));
+  }, []);
+
+  const handleGetStartedClick = (service) => {
+    setSelectedService(service);
+  };
+
+  const handleProfessionalSelect = (e) => {
+    setSelectedProfessional(e.target.value);
+  };
+
+  const handleContinueToPayment = () => {
+    if (selectedProfessional && selectedService && user) { // Ensure user is defined
+      navigate(`/paypal-payment/${selectedService.serviceId}`, {
+        state: {
+          service: selectedService,
+          professionalId: selectedProfessional,
+          userId: user.id, // Pass the user.id here
+        },
+      });
+    } else {
+      alert("Please select a professional and ensure you are logged in before continuing to payment.");
+    }
   };
 
   return (
@@ -31,35 +62,6 @@ const ServicesPage = () => {
         <div className="container">
           <h2>Services</h2>
           <div className="service-items">
-            <div className="service-item">
-              <img src={icon1} alt="Project Plan" />
-              <h3>Project Plan</h3>
-              <p>We provide detailed project plans to ensure your interior design project is executed smoothly and efficiently.</p>
-            </div>
-            <div className="service-item">
-              <img src={icon2} alt="Interior Work" />
-              <h3>Interior Work</h3>
-              <p>Our interior work services cover everything from flooring to ceiling, creating a cohesive and stunning look for your space.</p>
-            </div>
-            <div className="service-item">
-              <img src={icon3} alt="Retail Design" />
-              <h3>Retail Design</h3>
-              <p>We specialize in creating retail spaces that are both functional and visually appealing, enhancing the shopping experience for your customers.</p>
-            </div>
-            <div className="service-item">
-              <img src={icon4} alt="Interior & Decoration Work" />
-              <h3>Interior & Decoration Work</h3>
-              <p>From selecting color schemes to sourcing unique decor pieces, we bring your vision to life with our interior and decoration services.</p>
-            </div>
-          </div>
-          <button className="meet-professionals" onClick={handleMeetProfessionalsClick}>Meet Our Professionals</button>
-        </div>
-      </section>
-
-      <section className="pricing">
-        <div className="container">
-          <h2>Pricing & Plan</h2>
-          <div className="pricing-items">
             <ServiceCard
               serviceId={1}
               title="Design advices"
@@ -71,6 +73,7 @@ const ServicesPage = () => {
                 'Furniture reorganization',
                 'Up to 5 hours meetings'
               ]}
+              onGetStartedClick={() => handleGetStartedClick({ serviceId: 1, name: 'Design advices', price: 29 })}
             />
             <ServiceCard
               serviceId={2}
@@ -83,6 +86,7 @@ const ServicesPage = () => {
                 'Kitchen design',
                 'Garages organization'
               ]}
+              onGetStartedClick={() => handleGetStartedClick({ serviceId: 2, name: 'Complete interior', price: 39 })}
             />
             <ServiceCard
               serviceId={3}
@@ -95,13 +99,35 @@ const ServicesPage = () => {
                 'Tables and chairs',
                 'Kitchens'
               ]}
+              onGetStartedClick={() => handleGetStartedClick({ serviceId: 3, name: 'Furniture design', price: 59 })}
             />
           </div>
         </div>
       </section>
-      <Footer/>
+
+      {/* Professional selection section */}
+      {selectedService && (
+        <section className="professional-selection">
+          <div className="container">
+            <h3>Select a Professional</h3>
+            <select value={selectedProfessional} onChange={handleProfessionalSelect}>
+              <option value="">--Select Professional--</option>
+              {professionals.map((professional) => (
+                <option key={professional.user_id} value={professional.user_id}>
+                  {professional.first_name} {professional.last_name} - {professional.email}
+                </option>
+              ))}
+            </select>
+            <button onClick={handleContinueToPayment} className="continue-button">
+              Continue to Payment
+            </button>
+          </div>
+        </section>
+      )}
+      
+      <Footer />
     </div>
   );
-}
+};
 
 export default ServicesPage;

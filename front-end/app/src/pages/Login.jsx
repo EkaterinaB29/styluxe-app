@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [pwShown, setPwShown] = useState(false);
-  const { setUser, setRole, setIsAuthenticated, setLoading } = useContext(UserContext);
+  const { setUser, setRole, setIsAuthenticated, setLoading, setToken } = useContext(UserContext);
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -24,7 +24,12 @@ const Login = () => {
       const response = await axios.post('http://88.200.63.148:8211/api/user/login', { email, password }, { withCredentials: true });
 
       const { role, token } = response.data;
-      Cookies.set('token', token);
+      
+      // Store the token in a cookie
+      Cookies.set('token', token, { expires: 1 }); // Token expires in 1 day
+
+      // Update the context with the token
+      setToken(token);
       setRole(role);
       setIsAuthenticated(true);
       setLoading(true);
@@ -32,7 +37,7 @@ const Login = () => {
       const fetchProfile = async () => {
         try {
           const config = {
-            headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+            headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
           };
 
