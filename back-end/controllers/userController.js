@@ -112,7 +112,7 @@ const loginUser = asyncHandler(async (req, res) => {
             sameSite: 'Lax',
         });
 
-        res.json({ message: 'Login successful', token, role: user.role });
+        res.json({ message: 'Login successful', token, role: user.role, userId: user.user_id });
     } catch (err) {
         console.error('Error in loginUser:', err);
         res.status(500).send(err);
