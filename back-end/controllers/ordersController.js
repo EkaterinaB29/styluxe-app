@@ -4,7 +4,7 @@ import { base, generateAccessToken } from '../config/paypalConfig.js';
 
 // Create PayPal order
 export const createPayPalOrder = async (req, res) => {
-    const { intent, amount , currency  } = req.body;
+    const { intent, amount , currency, user_id_from, user_id_to  } = req.body;
 
     try {
         const accessToken = await generateAccessToken();
@@ -28,17 +28,23 @@ export const createPayPalOrder = async (req, res) => {
             body: JSON.stringify(orderData)
         });
 
+        
         const jsonResponse = await response.json();
 
+
+
         if (response.ok) {
-            // Save the order to the database (optional)
+            
             const createdOrder = await Order.create({
+                timestamp: new Date(),
                 status: 'PENDING',
                 paypal_order_id: jsonResponse.id,
                 amount,
-                currency
+                currency,
+                user_id_from,
+                user_id_to
             });
-
+            console.log('Order Saved:', createdOrder); // Debugging
             res.status(201).json(jsonResponse);
         } else {
             res.status(500).json(jsonResponse);

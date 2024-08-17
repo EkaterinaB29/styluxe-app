@@ -44,16 +44,21 @@ const Comment = {
             });
         });
     },
-    findByPostId: async (postId) => {
-        const sql = `SELECT * FROM Comment WHERE post_id = ?`;
+    findByPostId: (postId) => {
         return new Promise((resolve, reject) => {
-            db.query(sql, [postId], (err, results) => {
+            const query = `
+                SELECT c.*, u.first_name, u.last_name 
+                FROM Comment c
+                JOIN User u ON c.user_id = u.user_id
+                WHERE c.post_id = ?`;
+            db.query(query, [postId], (err, results) => {
                 if (err) {
                     return reject(err);
                 }
                 resolve(results);
             });
         });
+    
     },
     like: async (commentId) => {
         const sql = `UPDATE Comment SET likes = likes + 1 WHERE comment_id = ?`;

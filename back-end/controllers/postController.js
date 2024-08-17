@@ -48,17 +48,19 @@ const getPostWithComments = asyncHandler(async (req, res) => {
 
     res.status(200).json({ post, comments: commentTree });
 });
+
 const addPost = asyncHandler(async (req, res) => {
-    const { content, tags } = req.body;
+    const { title, content, tags } = req.body; 
     const user_id = req.user.id;
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!content) {
-        res.status(400).send('Content is required');
+    if (!title || !content) { 
+        res.status(400).send('Title and content are required');
         return;
     }
 
     const postData = {
+        title,           
         content,
         user_id,
         publish_time: new Date(),
@@ -72,9 +74,15 @@ const addPost = asyncHandler(async (req, res) => {
 
 const updatePost = asyncHandler(async (req, res) => {
     const postId = req.params.postId;
-    const { content, tags } = req.body;
+    const { content, tags } = req.body; 
+
+    if (!content) { 
+        res.status(400).send('Title and content are required');
+        return;
+    }
 
     const postData = {
+                
         content,
         publish_time: new Date(),
         tags
@@ -83,6 +91,8 @@ const updatePost = asyncHandler(async (req, res) => {
     await Post.update(postId, postData);
     res.status(200).send('Post updated successfully');
 });
+
+
 
 const deletePost = asyncHandler(async (req, res) => {
     const postId = req.params.postId;
