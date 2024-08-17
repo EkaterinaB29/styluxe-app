@@ -35,6 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
 // Logging middleware to capture request details
 app.use((req, res, next) => {
     console.log(`Incoming request: ${req.method} ${req.url}`);

@@ -2,7 +2,7 @@ import db from '../config/db.js';
 
 const Post = {
     create: async (postData) => {
-        const sql = `INSERT INTO Post (content, user_id, publish_time, image_url, tags) VALUES (?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO Post (title, content, user_id, publish_time, image_url, tags) VALUES (?,?, ?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             db.query(sql, [
                 postData.title, 
@@ -87,6 +87,20 @@ const Post = {
                     result[0].tags = JSON.parse(result[0].tags); // Parse tags from JSON string
                 }
                 resolve(result[0]);
+            });
+        });
+    },
+    findByUserId: async (userId) => {
+        const sql = `SELECT * FROM Post WHERE user_id = ?`;
+        return new Promise((resolve, reject) => {
+            db.query(sql, [userId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (results.length > 0) {
+                    results[0].tags = JSON.parse(results[0].tags); // Parse tags from JSON string
+                }
+                resolve(results);
             });
         });
     },
