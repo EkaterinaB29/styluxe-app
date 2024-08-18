@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import '../css/Login.css';
 
 const Register = () => {
@@ -62,7 +61,7 @@ const Register = () => {
             }
 
             const { token } = response.data;
-            Cookies.set('token', token);
+            localStorage.setItem('token', token);
 
             navigate('/login');
         } catch (error) {
@@ -76,67 +75,69 @@ const Register = () => {
 
     return (
         <div className="overlay">
-            <div className="tabs">
-                <button className={activeTab === 'client' ? 'active' : ''} onClick={() => setActiveTab('client')}>Client</button>
-                <button className={activeTab === 'professional' ? 'active' : ''} onClick={() => setActiveTab('professional')}>Professional</button>
-            </div>
+            
             <form onSubmit={handleSubmit}>
-                <div className="con">
-                    <header className="head-form">
-                        <h2>Register</h2>
-                        <p>Register here using your details</p>
-                    </header>
+    <div className="tab-container">
+        <div className={`tab ${activeTab === 'client' ? 'active' : ''}`} onClick={() => setActiveTab('client')}>Client</div>
+        <div className={`tab ${activeTab === 'professional' ? 'active' : ''}`} onClick={() => setActiveTab('professional')}>Professional</div>
+    </div>
+    <div className="con">
+        <header className="head-form">
+            <h2>Register</h2>
+            <p>Register here using your details</p>
+        </header>
+        <br />
+        <div className="field-set">
+            {errorMessage && <p className="error">{errorMessage}</p>}
+            <span className="input-item">
+                <i className="fa fa-user-circle"></i>
+            </span>
+            <input className="form-input" type="text" name="first_name" placeholder="First Name" value={formData.first_name} onChange={handleChange} required />
+            <br />
+            <span className="input-item">
+                <i className="fa fa-user-circle"></i>
+            </span>
+            <input className="form-input" type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
+            <br />
+            <span className="input-item">
+                <i className="fa fa-map-marker"></i>
+            </span>
+            <input className="form-input" type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
+            <br />
+            <span className="input-item">
+                <i className="fa fa-calendar"></i>
+            </span>
+            <input className="form-input" type="date" name="birthday" placeholder="Birthday" value={formData.birthday} onChange={handleChange} required />
+            <br />
+            <span className="input-item">
+                <i className="fa fa-envelope"></i>
+            </span>
+            <input className="form-input" type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+            <br />
+            <span className="input-item">
+                <i className="fa fa-key"></i>
+            </span>
+            <input className="form-input" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+            <br />
+            {activeTab === 'professional' && (
+                <>
+                    <span className="input-item">
+                        <i className="fa fa-university"></i>
+                    </span>
+                    <input className="form-input" type="text" name="education" placeholder="Education History" value={formData.education} onChange={handleChange} required />
                     <br />
-                    <div className="field-set">
-                        {errorMessage && <p className="error">{errorMessage}</p>}
-                        <span className="input-item">
-                            <i className="fa fa-user-circle"></i>
-                        </span>
-                        <input className="form-input" type="text" name="first_name" placeholder="First Name" value={formData.first_name} onChange={handleChange} required />
-                        <br />
-                        <span className="input-item">
-                            <i className="fa fa-user-circle"></i>
-                        </span>
-                        <input className="form-input" type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
-                        <br />
-                        <span className="input-item">
-                            <i className="fa fa-map-marker"></i>
-                        </span>
-                        <input className="form-input" type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
-                        <br />
-                        <span className="input-item">
-                            <i className="fa fa-calendar"></i>
-                        </span>
-                        <input className="form-input" type="date" name="birthday" placeholder="Birthday" value={formData.birthday} onChange={handleChange} required />
-                        <br />
-                        <span className="input-item">
-                            <i className="fa fa-envelope"></i>
-                        </span>
-                        <input className="form-input" type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-                        <br />
-                        <span className="input-item">
-                            <i className="fa fa-key"></i>
-                        </span>
-                        <input className="form-input" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-                        <br />
-                        {activeTab === 'professional' && (
-                            <>
-                                <span className="input-item">
-                                    <i className="fa fa-university"></i>
-                                </span>
-                                <input className="form-input" type="text" name="education" placeholder="Education History" value={formData.education} onChange={handleChange} required />
-                                <br />
-                                <span className="input-item">
-                                    <i className="fa fa-upload"></i>
-                                </span>
-                                <input className="form-input" type="file" name="portfolio" onChange={handleFileChange} required />
-                                <br />
-                            </>
-                        )}
-                        <button className="log-in">Register</button>
-                    </div>
-                </div>
-            </form>
+                    <span className="input-item">
+                        <i className="fa fa-upload"></i>
+                    </span>
+                    <input className="form-input" type="file" name="portfolio" onChange={handleFileChange} required />
+                    <br />
+                </>
+            )}
+            <button className="log-in">Register</button>
+        </div>
+    </div>
+</form>
+
         </div>
     );
 };

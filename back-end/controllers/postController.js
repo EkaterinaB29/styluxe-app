@@ -49,7 +49,7 @@ const getPostWithComments = asyncHandler(async (req, res) => {
     res.status(200).json({ post, comments: commentTree });
 });
 
-const addPost = asyncHandler(async (req, res) => {
+const createPost = asyncHandler(async (req, res) => {
     const { title, content, tags } = req.body; 
     const user_id = req.user.id;
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
@@ -157,4 +157,4 @@ const searchPosts = asyncHandler(async (req, res) => {
     }
 });
 
-export { addPost, updatePost, deletePost, getPostWithComments, getAllPosts, getPostsByUser, likePost, searchPosts, upload };
+export { createPost, updatePost, deletePost, getPostWithComments, getAllPosts, getPostsByUser, likePost, searchPosts, upload };

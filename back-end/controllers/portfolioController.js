@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Portfolio from '../models/portfolioModel.js';
 
 // Add Portfolio
-const addPortfolio = asyncHandler(async (req, res) => {
+const createPortfolio = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { education_history } = req.body;
     const portfolioFiles = req.file;
@@ -76,5 +76,16 @@ const deletePortfolio = asyncHandler(async (req, res) => {
             res.status(500).send('Failed to delete portfolio');
         });
 });
+// Get portfolio by ID
+const getPortfolio = asyncHandler(async (req, res) => {
+    const portfolioId = req.params.portfolioId;
 
-export { addPortfolio, updatePortfolio, deletePortfolio };
+    const portfolio = await Portfolio.findById(portfolioId);
+    if (!portfolio) {
+        res.status(404).send('Portfolio not found');
+    } else {
+        res.status(200).json(portfolio);
+    }
+});
+
+export { createPortfolio, updatePortfolio, deletePortfolio, getPortfolio };

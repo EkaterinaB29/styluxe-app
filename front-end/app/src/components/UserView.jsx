@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Notification from '../components/Notification';
 import Review from '../components/Review';
 import { UserContext } from '../context/UserContext';
+// Import your icons and CSS
 import mailIcon from '../images/mail.png';
 import worldIcon from '../images/world.png';
 import brandsImage from '../images/brands.png';
@@ -17,17 +18,21 @@ import linkedInIcon from '../images/linkedin.svg';
 import facebookIcon from '../images/facebook.svg';
 import instagramIcon from '../images/instagram.svg';
 import starIcon from '../images/star.png';
+import defaultImage from '../images/profile.png';
 import '../css/UserView.css';
 
 const UserView = () => {
   const { userId: professionalId } = useParams();
-  const { isAuthenticated, setIsAuthenticated, token } = useContext(UserContext); // Ensure token is available
+  const { isAuthenticated, token } = useContext(UserContext); 
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(5); // Number of posts per page
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -36,16 +41,21 @@ const UserView = () => {
 
       try {
         const config = {
-          headers: { Authorization: `Bearer ${token}` }, // Include the token in the request headers
+          headers: { Authorization: `Bearer ${token}` }, 
           withCredentials: true,
         };
 
         const userResponse = await axios.get(`http://88.200.63.148:8211/api/user/profile/${professionalId}`, config);
+        console.log(userResponse.data);
         setUser(userResponse.data);
+
         const postsResponse = await axios.get(`http://88.200.63.148:8211/api/posts/user/${professionalId}`);
         setPosts(postsResponse.data);
-        const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/professional/${professionalId}`, config);
-        setReviews(reviewsResponse.data);
+
+        if (userResponse.data.role === 'Professional') {
+          const reviewsResponse = await axios.get(`http://88.200.63.148:8211/api/reviews/professional/${professionalId}`, config);
+          setReviews(reviewsResponse.data);
+        }
       } catch (error) {
         console.error('Error fetching profile:', error);
         setError('Failed to fetch profile');
@@ -55,7 +65,7 @@ const UserView = () => {
     };
 
     fetchUserProfile();
-  }, [professionalId, setIsAuthenticated, token]);
+  }, [professionalId, token]);
 
   if (loading) {
     return <Notification>Loading...</Notification>;
@@ -72,7 +82,7 @@ const UserView = () => {
   const handleReviewAdded = () => {
     setShowReviewModal(false);
     axios.get(`http://88.200.63.148:8211/api/reviews/professional/${professionalId}`, {
-      headers: { Authorization: `Bearer ${token}` }, // Ensure token is included
+      headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     }).then((response) => {
       setReviews(response.data);
@@ -108,15 +118,31 @@ const UserView = () => {
     return stars;
   };
 
+  const profileImageUrl = user.profile_picture ? `http://88.200.63.148:8211${user.profile_picture}` : null;
+  const portfolioUrl = user.role === 'Professional' ? `http://88.200.63.148:8211${user.portfolio[0].file_path}` : null;
+
+  // Calculate the posts to display on the current page
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <NavBar />
       <div className="user-view">
         <div className="header">
-          <img src={user.profile_picture || 'default-profile.png'} alt={`${user.first_name} ${user.last_name}`} />
+          {profileImageUrl ? (
+            <img src={profileImageUrl} alt={`${user.first_name} ${user.last_name}`} />
+          ) : (
+            <img src={defaultImage} alt="Default" /> // Fallback image
+          )}
           <div className="details">
             <h1>{user.first_name} {user.last_name}</h1>
-            <h3>Architect</h3>
+            {user.role === 'Professional' ? (<h3>PROFESSIONAL</h3>) :
+            (<h3>CLIENT</h3>)}
+            
             <div className="contact-info">
               <div className="contact-item">
                 <img src={mailIcon} alt="Mail" />
@@ -160,25 +186,37 @@ const UserView = () => {
             Get Started <span>→</span>
           </Link>
         </div>
-        <div className="bio">
-          <h2>Bio</h2>
-          <p>{user.education_history}</p>
+
+        {user.role === 'Professional' && (
+          <div>
+          <div className="bio">
+          <h2>Education:</h2>
+          <p>{user.portfolio.education_history}</p>
         </div>
+          <div className="portfolio">
+            <h2>Portfolio</h2>
+            <a href={portfolioUrl} target="_blank" rel="noopener noreferrer">Download Portfolio</a>
+          </div>
+          </div>
+        )}
+
         <div className="posts">
           <h2>Posts by {user.first_name}</h2>
           <div className="post-grid">
-            {posts.length > 0 ? posts.map(post => (
-              <div className="post" key={post.post_id}>
+            {currentPosts.length > 0 ? currentPosts.map(post => (
+              <div className="post" key={post.post_id} onClick={() => navigate(`/posts/${post.post_id}`)}>
+                {post.image_url && <img src={`http://88.200.63.148:8211${post.image_url}`} alt={post.title} />}
                 <h3>{post.title}</h3>
-                <p>{post.content}</p>
               </div>
             )) : <div>No posts found</div>}
           </div>
           <div className="pagination">
-            <button>&lt;</button>
-            <button>&gt;</button>
+            {Array.from({ length: Math.ceil(posts.length / postsPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)}>{index + 1}</button>
+            ))}
           </div>
         </div>
+
         {user.role === 'Professional' && (
           <div className="reviews">
             <h2>Reviews</h2>

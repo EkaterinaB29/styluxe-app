@@ -6,7 +6,7 @@
   padding: 10px 20px;
   font-family: Arial, sans-serif;
   width: 100%;
-  height: 60px; /* Adjust the navbar height */
+  height: 60px; 
 }
 
 .navbar a {
@@ -138,4 +138,9 @@
 .no-results {
   padding: 8px 16px;
   color: red;
+}
+.likes-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }

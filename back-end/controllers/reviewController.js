@@ -3,7 +3,7 @@ import Review from '../models/reviewModel.js';
 import Portfolio from '../models/portfolioModel.js';
 
 // Add a review
-const addReview = asyncHandler(async (req, res) => {
+const createReview = asyncHandler(async (req, res) => {
     const professional_id = req.params.professionalId;
     const user_id = req.user.id; 
     console.log('Useer:'+user_id);
@@ -87,16 +87,6 @@ const getReviewsByUser = asyncHandler(async (req, res) => {
     res.status(200).json(reviews);
 });
 
-// Get portfolio by ID
-const getPortfolio = asyncHandler(async (req, res) => {
-    const portfolioId = req.params.portfolioId;
 
-    const portfolio = await Portfolio.findById(portfolioId);
-    if (!portfolio) {
-        res.status(404).send('Portfolio not found');
-    } else {
-        res.status(200).json(portfolio);
-    }
-});
 
-export { addReview, updateReview, deleteReview, getReviewsByPortfolio, getReviewsByProfessional, getReviewsByUser, getPortfolio };
+export { createReview, updateReview, deleteReview, getReviewsByPortfolio, getReviewsByProfessional, getReviewsByUser };

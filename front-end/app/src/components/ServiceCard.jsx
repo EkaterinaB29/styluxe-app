@@ -1,6 +1,4 @@
-// ServiceCard.jsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../css/ServiceCard.css';
 
 const ServiceCard = ({ serviceId, title, price, features, onGetStartedClick }) => {

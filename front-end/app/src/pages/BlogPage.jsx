@@ -43,7 +43,7 @@ const BlogPage = () => {
             <div className="latest-post">
                 <h2>Latest post</h2>
                 {latestPost && (
-                    <Post post={latestPost} updatePosts={updatePosts} />
+                    <Post post={latestPost} updatePosts={updatePosts} className="latest-post-item" />
                 )}
             </div>
             <div className="posts-grid">

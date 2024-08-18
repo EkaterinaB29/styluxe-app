@@ -24,7 +24,7 @@ const Sidebar = ({ latestPosts }) => {
 
         // If there is exactly one result, navigate to that post
         if (posts.length === 1) {
-          navigate(`/posts/${posts[0].post_id}`);
+          navigateToPost(posts[0].post_id);
         }
       } catch (error) {
         console.error('Error fetching search results:', error);
@@ -47,11 +47,18 @@ const Sidebar = ({ latestPosts }) => {
 
       // If there is exactly one result, navigate to that post
       if (posts.length === 1) {
-        navigate(`/posts/${posts[0].post_id}`);
+        navigateToPost(posts[0].post_id);
       }
     } catch (error) {
       console.error('Error fetching posts by tag:', error);
     }
+  };
+
+  const navigateToPost = (postId) => {
+    navigate(`/posts/${postId}`);
+    // Clear the search query and results to close the dropdown
+    setSearchQuery('');
+    setSearchResults([]);
   };
 
   return (
@@ -69,7 +76,7 @@ const Sidebar = ({ latestPosts }) => {
               <div 
                 key={post.post_id} 
                 className="search-result" 
-                onClick={() => navigate(`/posts/${post.post_id}`)}
+                onClick={() => navigateToPost(post.post_id)}
               >
                 <h4>{post.title}</h4>
                 <p>{new Date(post.publish_time).toLocaleDateString()}</p>

@@ -3,7 +3,7 @@ import Comment from '../models/commentModel.js';
 
 // Add a comment
 
-const addComment = asyncHandler(async (req, res) => {
+const createComment = asyncHandler(async (req, res) => {
     const { content } = req.body;
     const postId = req.params.postId;
     const user_id = req.user.id;
@@ -77,4 +77,4 @@ const replyOnComment = asyncHandler(async (req, res) => {
     res.status(201).send('Reply added successfully');
 });
 
-export { addComment, updateComment, deleteComment, likeComment, replyOnComment };
+export { createComment, updateComment, deleteComment, likeComment, replyOnComment };

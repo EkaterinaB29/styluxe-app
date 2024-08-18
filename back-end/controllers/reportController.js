@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Report from '../models/reportModel.js';
 
-const addReport = asyncHandler(async (req, res) => {
+const createReport = asyncHandler(async (req, res) => {
     const { content, reported_id } = req.body;
     const reporter_id = req.user.id;
 
@@ -43,4 +43,4 @@ const getReportsByReported = asyncHandler(async (req, res) => {
     res.status(200).json(reports);
 });
 
-export { addReport, deleteReport, getReportsByReporter, getReportsByReported };
+export { createReport, deleteReport, getReportsByReporter, getReportsByReported };

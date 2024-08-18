@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { UserProvider } from './context/UserContext';
 import HomePage from './pages/HomePage';
-import SinglePostPage from './pages/SinglePostPage';
+import SinglePostPage from './pages/SinglePostPage.jsx';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import BlogPage from './pages/BlogPage';

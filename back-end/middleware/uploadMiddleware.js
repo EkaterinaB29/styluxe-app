@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 10 }  // Limiting file size to 10MB
+    limits: { fileSize: 1024 * 1024 * 10 }  
 });
 
 const uploadClient = upload.none(); // No files expected for clients during registration

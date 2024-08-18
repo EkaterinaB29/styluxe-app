@@ -1,6 +1,6 @@
 import express from 'express';
 import { 
-    addMessage, 
+    createMessage, 
     deleteMessage, 
     getMessageById, 
     getMessagesByUser, 
@@ -14,7 +14,7 @@ const { authenticateToken } = authMiddleware;
 
 const router = express.Router();
 
-router.post('/', authenticateToken, addMessage);
+router.post('/', authenticateToken, createMessage);
 router.delete('/:id', authenticateToken, deleteMessage);
 router.get('/:id', authenticateToken, getMessageById);
 router.get('/user/:userId', authenticateToken, getMessagesByUser);

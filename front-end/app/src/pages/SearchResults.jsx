@@ -6,16 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import '../css/ProfessionalsPage.css';
-import customIconUrl from '../images/geo-alt-fill.svg';  // Ensure you have this image in the correct path
+import customIconUrl from '../images/geo-alt-fill.svg';  
 
 const Professionals = () => {
   const [professionals, setProfessionals] = useState([]);
   const [filteredProfessionals, setFilteredProfessionals] = useState([]);
   const [location, setLocation] = useState('');
-  const navigate = useNavigate();  // Hook for navigation
+  const navigate = useNavigate();  
 
   useEffect(() => {
-    // Fetch professionals from the backend
+   
     axios.get('http://88.200.63.148:8211/api/user/professionals')
       .then(response => {
         console.log('Fetched professionals:', response.data);
@@ -35,7 +35,7 @@ const Professionals = () => {
       return null;
     }
     try {
-      const apiKey = 'ad8c32724cd0405486dddd1ba152e770'; // Place your OpenCage API key here
+      const apiKey = 'ad8c32724cd0405486dddd1ba152e770';
       console.log(`Requesting geocode for location: ${location}`);
       const geoResponse = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(location)}&key=${apiKey}`);
       console.log('Geocode API response:', geoResponse.data);

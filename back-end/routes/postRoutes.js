@@ -1,6 +1,6 @@
 import express from 'express';
 import { 
-    addPost, 
+    createPost, 
     updatePost, 
     deletePost, 
     getPostWithComments, 
@@ -11,7 +11,7 @@ import {
     upload 
 } from '../controllers/postController.js';
 import { 
-    addComment,
+    createComment,
     updateComment, 
     deleteComment, 
     likeComment, 
@@ -30,11 +30,11 @@ router.get('/user/:userId', getPostsByUser);
 router.put('/:postId/like', authenticateToken, likePost);
 router.get('/:postId', getPostWithComments);
 router.get('/', getAllPosts);
-router.post('/', upload.single('image'), authenticateToken, addPost);
+router.post('/', upload.single('image'), authenticateToken, createPost);
 router.put('/:postId', authenticateToken, updatePost);
 router.delete('/:postId', authenticateToken, deletePost);
 
-router.post('/:postId/comments', authenticateToken, addComment);
+router.post('/:postId/comments', authenticateToken, createComment);
 router.put('/:postId/comments/:commentId', authenticateToken, updateComment);
 router.delete('/:postId/comments/:commentId', authenticateToken, deleteComment);
 router.post('/:postId/comments/:commentId/like', authenticateToken, likeComment);

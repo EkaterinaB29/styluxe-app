@@ -1,29 +1,27 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #FAF3F3;
+  font-family: "Arial", sans-serif;
+  background-color: #faf3f3;
 }
 
 .profile-container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 2rem auto;
   padding: 20px;
-  background: #ffffff;
+  background: #e8bcbc;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
 }
 
 .profile-header {
   text-align: center;
   margin-bottom: 20px;
-  position: relative;
 }
 
 .profile-header img {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  border: 4px solid #B56576;
+  border: 4px solid #b56576;
   object-fit: cover;
 }
 
@@ -52,17 +50,18 @@ body {
   display: block;
   margin-top: 15px;
   font-weight: bold;
-  color: #B56576;
+  color: #b56576;
 }
 
 .edit-form input[type="text"],
 .edit-form input[type="email"],
-.edit-form input[type="file"] {
+.edit-form input[type="file"],
+.edit-form input[type="password"] {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
   margin-bottom: 20px;
-  border: 2px solid #EED6D3;
+  border: 2px solid #eed6d3;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -70,12 +69,19 @@ body {
 
 .edit-form input[type="text"]:focus,
 .edit-form input[type="email"]:focus,
-.edit-form input[type="file"]:focus {
-  border-color: #B56576;
+.edit-form input[type="file"]:focus,
+.edit-form input[type="password"]:focus {
+  border-color: #b56576;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 button {
-  background-color: #B56576;
+  background-color: #b56576;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -83,10 +89,15 @@ button {
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s;
+  width: 48%;
 }
 
 button:hover {
-  background-color: #A15068;
+  background-color: #a15068;
+}
+
+.change-password-button {
+  margin-right: 10px;
 }
 
 .edit-button {
@@ -94,7 +105,7 @@ button:hover {
   margin: 0 auto;
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #B56576;
+  background-color: #b56576;
   border: none;
   border-radius: 8px;
   color: white;
@@ -104,7 +115,58 @@ button:hover {
 }
 
 .edit-button:hover {
-  background-color: #A15068;
+  background-color: #a15068;
+}
+
+.change-password-section {
+  margin-top: 20px;
+}
+
+.change-password-section h3 {
+  margin-bottom: 10px;
+  color: #b56576;
+}
+
+.change-password-section input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 2px solid #eed6d3;
+  transition: border-color 0.3s;
+}
+
+.change-password-section input:focus {
+  border-color: #b56576;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+.password-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.show-password {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.show-password input {
+  margin: 0;
+}
+
+.show-password label {
+  color: #b56576;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* Responsive styling */
@@ -127,12 +189,21 @@ button:hover {
 
   .edit-form input[type="text"],
   .edit-form input[type="email"],
-  .edit-form input[type="file"] {
+  .edit-form input[type="file"],
+  .edit-form input[type="password"] {
     padding: 8px;
     margin-bottom: 15px;
   }
 
-  button,
+  .button-container {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
   .edit-button {
     padding: 10px 15px;
     font-size: 0.9rem;

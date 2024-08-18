@@ -1,6 +1,8 @@
 .create-post-page {
   font-family: 'Arial', sans-serif;
   color: #67595E;
+  position: relative; /* Ensure that absolute positioning within this container works */
+  min-height: 100vh; /* Ensure the page takes at least the full height of the viewport */
 }
 
 .banner img {
@@ -115,10 +117,17 @@ button[type="submit"]:hover {
 }
 
 .success-message, .error-message {
-  margin-top: 20px;
-  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; 
+  max-width: 400px;
+  padding: 20px;
   border-radius: 5px;
   font-weight: bold;
+  text-align: center;
+  z-index: 1000; 
 }
 
 .success-message {
@@ -146,4 +155,69 @@ button[type="submit"]:hover {
 
 .form-image img:hover {
   transform: translateY(-5px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .content {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+
+  .quote {
+    padding: 20px;
+    font-size: 1.2em;
+    margin: 30px auto;
+  }
+
+  .quote-symbol {
+    font-size: 2em;
+  }
+
+  .author {
+    font-size: 1em;
+  }
+
+  .form-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  form {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .form-image img {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 1em;
+  }
+
+  textarea, input[type="text"], input[type="file"] {
+    padding: 10px;
+    font-size: 1em;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1em;
+  }
+
+  .success-message, .error-message {
+    padding: 10px;
+    font-size: 1em;
+    max-width: 90%; /* Adjust for smaller screens */
+  }
 }

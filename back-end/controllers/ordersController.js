@@ -3,7 +3,7 @@ import Order from '../models/ordersModel.js';
 import { base, generateAccessToken } from '../config/paypalConfig.js';
 
 // Create PayPal order
-export const createPayPalOrder = async (req, res) => {
+const createPayPalOrder = async (req, res) => {
     const { intent, amount , currency, user_id_from, user_id_to  } = req.body;
 
     try {
@@ -56,7 +56,7 @@ export const createPayPalOrder = async (req, res) => {
 };
 
 // Capture PayPal order
-export const capturePayPalOrder = async (req, res) => {
+const capturePayPalOrder = async (req, res) => {
     const { order_id, intent } = req.body;
 
     try {
@@ -86,7 +86,7 @@ export const capturePayPalOrder = async (req, res) => {
 };
 
 // Get client token
-export const getClientToken = async (req, res) => {
+const getClientToken = async (req, res) => {
     try {
         const accessToken = await generateAccessToken();
 
@@ -109,3 +109,4 @@ export const getClientToken = async (req, res) => {
         res.status(500).json({ error: 'Failed to generate client token' });
     }
 };
+export { createPayPalOrder, capturePayPalOrder, getClientToken };

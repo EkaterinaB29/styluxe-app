@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { UserContext } from '../context/UserContext';
 import '../css/Login.css';
 
@@ -23,12 +22,15 @@ const Login = () => {
     try {
       const response = await axios.post('http://88.200.63.148:8211/api/user/login', { email, password }, { withCredentials: true });
 
-      const { role, token } = response.data;
+      const { role, token, userId } = response.data;
       
-      // Store the token in a cookie
-      Cookies.set('token', token, { expires: 1 }); // Token expires in 1 day
+      // Store the token 
+      localStorage.setItem('token', token); // Token expires in 1 day
 
-      // Update the context with the token
+      // Store the user ID in localStorage
+      localStorage.setItem('logged_in_user_id', userId);
+
+      // Update the context with the token and user details
       setToken(token);
       setRole(role);
       setIsAuthenticated(true);

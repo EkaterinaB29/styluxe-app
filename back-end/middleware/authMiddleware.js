@@ -18,7 +18,7 @@ const authenticateToken = (req, res, next) => {
 
 const verifyRole = (roles) => {
     return (req, res, next) => {
-        const userRole = req.user.role; // Assuming req.user contains the authenticated user's information
+        const userRole = req.user.role; 
         if (roles.includes(userRole)) {
             next();
         } else {

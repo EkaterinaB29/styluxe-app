@@ -8,7 +8,7 @@ import Sidebar from '../components/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
 import Comment from '../components/Comment.jsx';
 import '../css/SinglePostPage.css';
-import Cookies from 'js-cookie';
+
 
 const SinglePostPage = () => {
   const { postId } = useParams();
@@ -18,7 +18,7 @@ const SinglePostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const token = Cookies.get('token'); // Get token from cookies
+        const token = localStorage.getItem('token'); // Get token 
         const response = await axios.get(`http://88.200.63.148:8211/api/posts/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -32,7 +32,7 @@ const SinglePostPage = () => {
 
     const fetchLatestPosts = async () => {
       try {
-        const token = Cookies.get('token'); // Get token from cookies
+        const token = localStorage.getItem('token'); // Get token 
         const response = await axios.get('http://88.200.63.148:8211/api/posts', {
           headers: {
             Authorization: `Bearer ${token}`

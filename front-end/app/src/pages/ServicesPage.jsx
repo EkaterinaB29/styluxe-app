@@ -7,10 +7,7 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext'; // Import UserContext
 import '../css/ServicesPage.css';
 import banner from '../images/hands.jpg'; 
-import icon1 from '../images/icon1.png'; 
-import icon2 from '../images/icon2.png'; 
-import icon3 from '../images/icon3.png'; 
-import icon4 from '../images/icon4.png'; 
+ 
 
 const ServicesPage = () => {
   const navigate = useNavigate();
@@ -40,7 +37,7 @@ const ServicesPage = () => {
         state: {
           service: selectedService,
           professionalId: selectedProfessional,
-          userId: user.id, // Pass the user.id here
+          userId: user.id, 
         },
       });
     } else {
