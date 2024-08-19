@@ -136,7 +136,12 @@ const Login = () => {
             </button>
           </div>
           <div className="other">
-            <button className="btn submits frgt-pass">Forgot Password</button>
+            <button
+              className="btn submits frgt-pass"
+              onClick={() => navigate("/")}
+            >
+              Home
+            </button>
             <button
               className="btn submits sign-up"
               onClick={() => navigate("/register")}

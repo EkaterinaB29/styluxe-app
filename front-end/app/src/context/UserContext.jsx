@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
       setIsAuthenticated(false);
     }
-  }, [token]); // Adding token as a dependency to useEffect
+  }, [token]);
 
   return (
     <UserContext.Provider

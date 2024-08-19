@@ -1,197 +1,178 @@
-
-@import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
-
+@import url("https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur");
 
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-image: linear-gradient(-225deg, #A49393 0%, #EED6D3 100%);
-    background-image: linear-gradient(to top, #67595E 0%, #E8B4B8 100%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    font-family: 'Cormorant Garamond', 'Montserrat';
-    opacity: .95;
+  background-image: linear-gradient(-225deg, #a49393 0%, #eed6d3 100%);
+  background-image: linear-gradient(to top, #67595e 0%, #e8b4b8 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: "Cormorant Garamond", "Montserrat";
+  opacity: 0.95;
 }
-
 
 form {
-    width: 450px;
-    min-height: 500px;
-    margin-left: 30%; 
-    padding: 2%;
-    border-radius: 5px;
-    box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
-    background-image: linear-gradient(-225deg, #E8B4B8 50%, #EED6D3 50%);
-    position: relative;
-    z-index: 2;
+  width: 450px;
+  min-height: 500px;
+  margin-left: 30%;
+  padding: 2%;
+  border-radius: 5px;
+  box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
+  background-image: linear-gradient(-225deg, #e8b4b8 50%, #eed6d3 50%);
+  position: relative;
+  z-index: 2;
 }
 
-
-
 .tab-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .tab {
-    flex: 1;
-    padding: 10px 0;
-    text-align: center;
-    cursor: pointer;
-    background-color: #E8B4B8;
-    border-radius: 5px 5px 0 0;
-    color: white;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    margin: 0 5px;
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  background-color: #e8b4b8;
+  border-radius: 5px 5px 0 0;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin: 0 5px;
 }
 
 .tab.active {
-    background-color: #A49393;
+  background-color: #a49393;
 }
 
 .tab:not(.active):hover {
-    background-color: #A49393;
+  background-color: #a49393;
 }
 
-
 form .con {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 0 auto;
 }
 
 header {
-    margin: 2% auto 10% auto;
-    text-align: center;
+  margin: 2% auto 10% auto;
+  text-align: center;
 }
-
 
 header h2 {
-    font-size: 250%;
-    font-family: 'Cormorant Garamond';
-    color: #E8B4B8;
+  font-size: 250%;
+  font-family: "Cormorant Garamond";
+  color: #e8b4b8;
 }
 
-
 header p {
-    letter-spacing: 0.05em;
+  letter-spacing: 0.05em;
 }
 
 .input-item {
-    background: #fff;
-    color: #E8B4B8;
-    padding: 14.5px 0px 15px 9px;
-    border-radius: 5px 0px 0px 5px;
+  background: #fff;
+  color: #e8b4b8;
+  padding: 14.5px 0px 15px 9px;
+  border-radius: 5px 0px 0px 5px;
 }
-
 
 #eye {
-    background: #fff;
-    color: #E8B4B8;
-    margin: 5.9px 0 0 0;
-    margin-left: -20px;
-    padding: 15px 9px 19px 0px;
-    border-radius: 0px 5px 5px 0px;
-    float: right;
-    position: relative;
-    right: 1%;
-    top: -.2%;
-    z-index: 5;
-    cursor: pointer;
+  background: #fff;
+  color: #e8b4b8;
+  margin: 5.9px 0 0 0;
+  margin-left: -20px;
+  padding: 15px 9px 19px 0px;
+  border-radius: 0px 5px 5px 0px;
+  float: right;
+  position: relative;
+  right: 1%;
+  top: -0.2%;
+  z-index: 5;
+  cursor: pointer;
 }
 
-
 input[class="form-input"] {
-    width: 240px;
-    height: 50px;
-    margin-top: 2%;
-    padding: 15px;
-    font-size: 16px;
-    font-family: 'Cormorant Garamond';
-    color: #5E6472;
-    outline: none;
-    border: none;
-    border-radius: 0px 5px 5px 0px;
-    transition: 0.2s linear;
+  width: 240px;
+  height: 50px;
+  margin-top: 2%;
+  padding: 15px;
+  font-size: 16px;
+  font-family: "Cormorant Garamond";
+  color: #5e6472;
+  outline: none;
+  border: none;
+  border-radius: 0px 5px 5px 0px;
+  transition: 0.2s linear;
 }
 
 input[id="txt-input"] {
-    width: 250px;
+  width: 250px;
 }
-
 
 input:focus {
-    transform: translateX(-2px);
-    border-radius: 5px;
+  transform: translateX(-2px);
+  border-radius: 5px;
 }
-
 
 button {
-    display: inline-block;
-    color: #252537;
-    width: 280px;
-    height: 50px;
-    padding: 0 20px;
-    background: #fff;
-    border-radius: 5px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s linear;
-    margin: 7% auto;
-    letter-spacing: 0.05em;
+  display: inline-block;
+  color: #252537;
+  width: 280px;
+  height: 50px;
+  padding: 0 20px;
+  background: #fff;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s linear;
+  margin: 7% auto;
+  letter-spacing: 0.05em;
 }
-
 
 .submits {
-    width: 48%;
-    display: inline-block;
-    float: left;
-    margin-left: 2%;
+  width: 48%;
+  display: inline-block;
+  float: left;
+  margin-left: 2%;
 }
-
 
 .frgt-pass {
-    background: transparent;
+  background: #a49393;
 }
-
 
 .sign-up {
-    background: #A49393;
+  background: #a49393;
 }
-
 
 button:hover {
-    transform: translateY(3px);
-    box-shadow: none;
+  transform: translateY(3px);
+  box-shadow: none;
 }
-
 
 button:hover {
-    animation: ani9 0.4s ease-in-out infinite alternate;
+  animation: ani9 0.4s ease-in-out infinite alternate;
 }
-
 
 .error-message {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
 }
 
-
 @keyframes ani9 {
-    0% {
-        transform: translateY(3px);
-    }
-    100% {
-        transform: translateY(5px);
-    }
+  0% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(5px);
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import "../css/NavBar.css";
@@ -20,15 +20,6 @@ const NavBar = () => {
     setToken,
   } = useContext(UserContext);
   const navigate = useNavigate();
-
-  // Check for token expiration on component mount
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      // No token found, redirect to login
-      //handleLogout();
-    }
-  }, []);
 
   const handleLogout = () => {
     // Clear the token from both storages
@@ -81,20 +72,20 @@ const NavBar = () => {
         </div>
         <div className="navbar-links">
           <Link to="/">Home</Link>
-          <Link
-            to={
-              isAuthenticated
-                ? user.role === "Professional"
-                  ? "/profile/professional"
-                  : "/profile/client"
-                : "/profile"
-            }
-          >
-            Profile
-          </Link>
           <Link to="/posts">Blog</Link>
           <Link to="/services">Services</Link>
           <Link to="/professionals">Map</Link>
+          {isAuthenticated && (
+            <Link
+              to={
+                user.role === "Professional"
+                  ? "/profile/professional"
+                  : "/profile/client"
+              }
+            >
+              My Profile
+            </Link>
+          )}
           {isAuthenticated && <Link to="/posts/create-post">Create Post</Link>}
           {!isAuthenticated && <Link to="/login">Login</Link>}
           {!isAuthenticated && <Link to="/register">Register</Link>}

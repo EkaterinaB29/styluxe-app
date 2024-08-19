@@ -3,7 +3,7 @@
   justify-content: center;
   gap: 20px;
   padding: 20px 0;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  flex-wrap: wrap;
 }
 
 .single-post-content {
@@ -14,7 +14,7 @@
   max-width: 800px;
   width: 100%;
   margin-right: 20px;
-  flex: 1 1 auto; /* Allow flexibility in width */
+  flex: 1 1 auto;
 }
 
 .single-post-content h1 {
@@ -38,7 +38,7 @@
 }
 
 .sidebar {
-  flex: 1 1 300px; /* Ensure the sidebar is flexible */
+  flex: 1 1 300px;
   max-width: 300px;
 }
 

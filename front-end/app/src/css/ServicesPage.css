@@ -1,7 +1,5 @@
-/* Add these styles to your CSS file */
-
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f7f8fc;
@@ -45,7 +43,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  color: #E8B4B8;
+  color: #e8b4b8;
 }
 
 .banner {
@@ -61,14 +59,16 @@ nav ul li a:hover {
   margin: 0;
 }
 
-.services, .pricing {
+.services,
+.pricing {
   background-color: #fff;
   padding: 3rem 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
 }
 
-.services h2, .pricing h2 {
+.services h2,
+.pricing h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2.5rem;
@@ -106,13 +106,13 @@ nav ul li a:hover {
 }
 
 .service-item h3 {
-  color: #67595E;
+  color: #67595e;
   font-size: 1.8rem;
   font-weight: bold;
 }
 
 .service-item p {
-  color: #A49393;
+  color: #a49393;
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -123,7 +123,7 @@ nav ul li a:hover {
   height: 80px;
 
   padding-bottom: 1rem;
-  background-color: #E8B4B8;
+  background-color: #e8b4b8;
   color: #fff;
   text-align: center;
   font-size: 1.2rem;
@@ -135,7 +135,7 @@ nav ul li a:hover {
 }
 
 .meet-professionals:hover {
-  background-color: #67595E;
+  background-color: #67595e;
 }
 
 .pricing-items {
@@ -158,20 +158,20 @@ nav ul li a:hover {
 }
 
 .pricing-item:hover {
-  border: 2px solid #E8B4B8;
+  border: 2px solid #e8b4b8;
   transform: translateY(-10px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .pricing-item h3 {
-  color: #67595E;
+  color: #67595e;
   font-size: 1.8rem;
   font-weight: bold;
 }
 
 .pricing-item .price {
   font-size: 2.5rem;
-  color: #E8B4B8;
+  color: #e8b4b8;
   margin: 1rem 0;
   font-weight: bold;
 }
@@ -180,7 +180,7 @@ nav ul li a:hover {
   list-style: none;
   padding: 0;
   font-size: 1.2rem;
-  color: #A49393;
+  color: #a49393;
 }
 
 .pricing-item ul li {
@@ -192,7 +192,7 @@ nav ul li a:hover {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #E8B4B8;
+  background-color: #e8b4b8;
   color: #fff;
   border-radius: 25px;
   border: none;
@@ -202,19 +202,19 @@ nav ul li a:hover {
 }
 
 .pricing-item:hover .get-started {
-  background-color: #67595E;
+  background-color: #67595e;
 }
 
 .pricing-item.popular {
-  border: 2px solid #E8B4B8;
+  border: 2px solid #e8b4b8;
 }
 
 .pricing-item.popular .get-started {
-  background-color: #67595E;
+  background-color: #67595e;
 }
 
 .pricing-item.popular:hover .get-started {
-  background-color: #E8B4B8;
+  background-color: #e8b4b8;
 }
 
 .professional-selection {
