@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 export const UserContext = createContext();
 
@@ -15,7 +14,7 @@ export const UserProvider = ({ children }) => {
     if (token) {
       const fetchUserProfile = async () => {
         setLoading(true);
-        console.log("tokenxx", token);
+        //console.log("tokenxx", token);
         const config = {
           headers: {
             Authorization: `Bearer ${token}`, // Set the authorization header with the token
