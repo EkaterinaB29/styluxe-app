@@ -7,7 +7,7 @@
 }
 
 .single-post-content {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -45,7 +45,7 @@
 .sidebar .search-bar,
 .sidebar .latest-news,
 .sidebar .categories {
-  background-color: #EED6D3;
+  background-color: #eed6d3;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -63,7 +63,7 @@
 .sidebar .latest-news h2,
 .sidebar .categories h2 {
   font-size: 20px;
-  color: #67595E;
+  color: #67595e;
   margin-bottom: 10px;
 }
 
@@ -90,10 +90,9 @@
 .single-post-content .likes {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  width: 20px;
-  height: 20px;
-
+  margin-bottom: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .single-post-content .heart-icon {
@@ -102,8 +101,6 @@
   margin-right: 0px;
   cursor: pointer;
   transition: transform 0.3s;
-  width: 20px;
-  height: 20px;
 }
 
 .heart-icon.liked {

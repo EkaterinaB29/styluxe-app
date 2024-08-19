@@ -1,33 +1,41 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import '../css/NavBar.css';
-import searchIcon from '../images/search.svg';
-import axios from 'axios';
-import Notification from '../components/Notification';
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import "../css/NavBar.css";
+import searchIcon from "../images/search.svg";
+import axios from "axios";
+import Notification from "../components/Notification";
 
 const NavBar = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchType, setSearchType] = useState('user');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchType, setSearchType] = useState("user");
   const [searchResults, setSearchResults] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
-  const { user, isAuthenticated, setIsAuthenticated, setUser, setRole, setToken } = useContext(UserContext);
+  const {
+    user,
+    isAuthenticated,
+    setIsAuthenticated,
+    setUser,
+    setRole,
+    setToken,
+  } = useContext(UserContext);
   const navigate = useNavigate();
 
   // Check for token expiration on component mount
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       // No token found, redirect to login
-      handleLogout();
+      //handleLogout();
     }
   }, []);
 
   const handleLogout = () => {
-    // Clear localStorage
-    localStorage.removeItem('token'); // Remove token
-    localStorage.removeItem('loggedInUser'); // Remove user data
-    
+    // Clear the token from both storages
+    localStorage.removeItem("token");
+    localStorage.removeItem("logged_in_user_id");
+    sessionStorage.removeItem("token");
+
     // Clear context state
     setIsAuthenticated(false);
     setUser(null);
@@ -35,36 +43,34 @@ const NavBar = () => {
     setToken(null);
 
     // Redirect to login page
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (searchQuery.trim() === '') return;
+    if (searchQuery.trim() === "") return;
 
     try {
-      const response = await axios.get(`http://88.200.63.148:8211/api/${searchType}/search?query=${searchQuery}`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `http://88.200.63.148:8211/api/${searchType}/search?query=${searchQuery}`,
+        {
+          withCredentials: true,
+        }
+      );
       setSearchResults(response.data);
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error("Error searching:", error);
     }
   };
 
   const handleResultClick = (result) => {
-    if (!isAuthenticated) {
-      setShowNotification(true);
-      return;
-    }
-
-    if (searchType === 'user') {
+    if (searchType === "user") {
       navigate(`/profile/${result.user_id}`);
-    } else if (searchType === 'posts') {
+    } else if (searchType === "posts") {
       navigate(`/posts/${result.post_id}`);
     }
-    setSearchQuery('');  // Clear search query
-    setSearchResults([]);  // Clear search results
+    setSearchQuery(""); // Clear search query
+    setSearchResults([]); // Clear search results
   };
 
   return (
@@ -75,7 +81,15 @@ const NavBar = () => {
         </div>
         <div className="navbar-links">
           <Link to="/">Home</Link>
-          <Link to={isAuthenticated ? (user.role === 'Professional' ? '/profile/professional' : '/profile/client') : '/profile'}>
+          <Link
+            to={
+              isAuthenticated
+                ? user.role === "Professional"
+                  ? "/profile/professional"
+                  : "/profile/client"
+                : "/profile"
+            }
+          >
             Profile
           </Link>
           <Link to="/posts">Blog</Link>
@@ -89,12 +103,14 @@ const NavBar = () => {
           {isAuthenticated && (
             <>
               <span className="user-greeting">Hi, {user.first_name}</span>
-              <button className="logout-button" onClick={handleLogout}>Logout</button>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
             </>
           )}
           <div className="search-container">
             <div className="search-bar">
-              <select 
+              <select
                 value={searchType}
                 onChange={(e) => setSearchType(e.target.value)}
                 className="search-select"
@@ -102,25 +118,31 @@ const NavBar = () => {
                 <option value="user">Users</option>
                 <option value="posts">Posts</option>
               </select>
-              <input 
+              <input
                 type="text"
                 placeholder="Search anything..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="search-input"
               />
-              <button type="submit" className="search-button" onClick={handleSearch}>
+              <button
+                type="submit"
+                className="search-button"
+                onClick={handleSearch}
+              >
                 <img src={searchIcon} alt="Search" />
               </button>
             </div>
             {searchResults.length > 0 && (
               <div className="search-results">
                 {searchResults.map((result, index) => (
-                  <div 
-                    key={`${result.user_id || result.post_id}-${index}`} 
+                  <div
+                    key={`${result.user_id || result.post_id}-${index}`}
                     onClick={() => handleResultClick(result)}
                   >
-                    {searchType === 'user' ? `${result.first_name} ${result.last_name} (${result.location})` : result.title || result.content}
+                    {searchType === "user"
+                      ? `${result.first_name} ${result.last_name} (${result.location})`
+                      : result.title || result.content}
                   </div>
                 ))}
               </div>
@@ -130,9 +152,7 @@ const NavBar = () => {
       </nav>
 
       {showNotification && (
-        <Notification>
-          Please log in to use this feature.
-        </Notification>
+        <Notification>Please log in to use this feature.</Notification>
       )}
     </>
   );

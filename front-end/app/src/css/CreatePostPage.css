@@ -1,8 +1,8 @@
 .create-post-page {
-  font-family: 'Arial', sans-serif;
-  color: #67595E;
-  position: relative; /* Ensure that absolute positioning within this container works */
-  min-height: 100vh; /* Ensure the page takes at least the full height of the viewport */
+  font-family: "Arial", sans-serif;
+  color: #67595e;
+  position: relative;
+  min-height: 100vh;
 }
 
 .banner img {
@@ -24,11 +24,11 @@ h1 {
 }
 
 .quote {
-  background-color: #E8B4B8;
+  background-color: #e8b4b8;
   color: white;
   padding: 30px;
   border-radius: 10px;
-  margin: 40px auto;
+
   font-size: 1.4em;
   position: relative;
   font-weight: bold;
@@ -43,7 +43,7 @@ h1 {
 
 .quote-symbol {
   font-size: 2.5em;
-  color: #EED6D3;
+  color: #eed6d3;
 }
 
 .author {
@@ -56,19 +56,17 @@ h1 {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   background: #f8f8f8;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
-  flex: 1;
+  width: 50%; /* Adjusted width to center the form better */
+  min-height: 550px; /* Increased height to make the form taller */
   transition: transform 0.3s;
 }
 
@@ -76,32 +74,39 @@ form:hover {
   transform: translateY(-5px);
 }
 
+.form-image {
+  width: 45%; /* Increased image width for better balance */
+}
+
 label {
   margin: 10px 0 5px 0;
   font-size: 1.2em;
-  text-align: left;
   width: 100%;
-  color: #67595E;
+  color: #67595e;
   font-weight: bold;
 }
 
-textarea, input[type="text"], input[type="file"] {
+textarea,
+input[type="text"],
+input[type="file"] {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
-  border: 1px solid #A49393;
+  border: 1px solid #a49393;
   border-radius: 5px;
   font-size: 1.1em;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-textarea:focus, input[type="text"]:focus, input[type="file"]:focus {
-  border-color: #67595E;
+textarea:focus,
+input[type="text"]:focus,
+input[type="file"]:focus {
+  border-color: #67595e;
   box-shadow: 0 0 5px rgba(103, 89, 94, 0.5);
 }
 
 button[type="submit"] {
-  background-color: #67595E;
+  background-color: #67595e;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -112,42 +117,43 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #A49393;
+  background-color: #a49393;
   transform: scale(1.05);
 }
 
-.success-message, .error-message {
+.success-message,
+.error-message {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%; 
+  width: 80%;
   max-width: 400px;
   padding: 20px;
   border-radius: 5px;
   font-weight: bold;
   text-align: center;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .success-message {
-  background-color: #D4EDDA;
+  background-color: #d4edda;
   color: #155724;
 }
 
 .error-message {
-  background-color: #F8D7DA;
-  color: #721C24;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .error-message a {
-  color: #721C24;
+  color: #721c24;
   font-weight: bold;
   text-decoration: underline;
 }
 
 .form-image img {
-  max-width: 500px;
+  max-width: 100%;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
@@ -204,7 +210,9 @@ button[type="submit"]:hover {
     font-size: 1em;
   }
 
-  textarea, input[type="text"], input[type="file"] {
+  textarea,
+  input[type="text"],
+  input[type="file"] {
     padding: 10px;
     font-size: 1em;
   }
@@ -215,7 +223,8 @@ button[type="submit"]:hover {
     font-size: 1em;
   }
 
-  .success-message, .error-message {
+  .success-message,
+  .error-message {
     padding: 10px;
     font-size: 1em;
     max-width: 90%; /* Adjust for smaller screens */

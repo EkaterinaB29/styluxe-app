@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import Notification from '../components/Notification';
-import ProfessionalProfile from './ProfessionalProfile';
-import ClientProfile from './ClientProfile';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Notification from "../components/Notification";
+import ProfessionalProfile from "./ProfessionalProfile";
+import ClientProfile from "./ClientProfile";
 
 function UserProfile() {
   const { userId } = useParams();
@@ -16,11 +16,14 @@ function UserProfile() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`http://88.200.63.148:8211/api/user/profile/${userId}`,{withCredentials: true});
+        const response = await axios.get(
+          `http://88.200.63.148:8211/api/user/profile/${userId}`,
+          { withCredentials: true }
+        );
         setUser(response.data);
       } catch (error) {
-        console.error('Error fetching profile:', error);
-        setError('Failed to fetch profile');
+        console.error("Error fetching profile:", error);
+        setError("Failed to fetch profile");
       } finally {
         setLoading(false);
       }
@@ -43,7 +46,11 @@ function UserProfile() {
 
   return (
     <div>
-      {user.role === 'Professional' ? <ProfessionalProfile user={user} /> : <ClientProfile user={user} />}
+      {user.role === "Professional" ? (
+        <ProfessionalProfile user={user} />
+      ) : (
+        <ClientProfile user={user} />
+      )}
     </div>
   );
 }

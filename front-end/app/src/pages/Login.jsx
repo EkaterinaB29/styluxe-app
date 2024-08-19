@@ -1,15 +1,16 @@
-import React, { useState, useContext } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import '../css/Login.css';
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import "../css/Login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [pwShown, setPwShown] = useState(false);
-  const { setUser, setRole, setIsAuthenticated, setLoading, setToken } = useContext(UserContext);
+  const { setUser, setRole, setIsAuthenticated, setLoading, setToken } =
+    useContext(UserContext);
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -18,17 +19,23 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
-      const response = await axios.post('http://88.200.63.148:8211/api/user/login', { email, password }, { withCredentials: true });
+      const response = await axios.post(
+        "http://88.200.63.148:8211/api/user/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
       const { role, token, userId } = response.data;
-      
-      // Store the token 
-      localStorage.setItem('token', token); // Token expires in 1 day
+      console.log(response.data);
+      // Store the token
+      localStorage.setItem("token", token); // Token expires in 1 day
+      //sessionStorage.setItem("token", token);
+      console.log("Token stored in local storage");
 
       // Store the user ID in localStorage
-      localStorage.setItem('logged_in_user_id', userId);
+      localStorage.setItem("logged_in_user_id", userId);
 
       // Update the context with the token and user details
       setToken(token);
@@ -43,15 +50,26 @@ const Login = () => {
             withCredentials: true,
           };
 
-          const profileResponse = role === 'Professional' ?
-            await axios.get('http://88.200.63.148:8211/api/user/profile/professional', config) :
-            await axios.get('http://88.200.63.148:8211/api/user/profile/client', config);
+          const profileResponse =
+            role === "Professional"
+              ? await axios.get(
+                  "http://88.200.63.148:8211/api/user/profile/professional",
+                  config
+                )
+              : await axios.get(
+                  "http://88.200.63.148:8211/api/user/profile/client",
+                  config
+                );
 
           setUser(profileResponse.data);
-          navigate(role === 'Professional' ? '/profile/professional' : '/profile/client');
+          navigate(
+            role === "Professional"
+              ? "/profile/professional"
+              : "/profile/client"
+          );
         } catch (profileError) {
-          console.error('Error fetching profile:', profileError);
-          setError('Failed to fetch profile');
+          console.error("Error fetching profile:", profileError);
+          setError("Failed to fetch profile");
         } finally {
           setLoading(false);
         }
@@ -59,8 +77,11 @@ const Login = () => {
 
       fetchProfile();
     } catch (err) {
-      setError('Invalid login credentials');
-      console.error('Error during login:', err.response ? err.response.data : err.message);
+      setError("Invalid login credentials");
+      console.error(
+        "Error during login:",
+        err.response ? err.response.data : err.message
+      );
     }
   };
 
@@ -101,15 +122,25 @@ const Login = () => {
               required
             />
             <span onClick={togglePasswordVisibility}>
-              <i className={`fa fa-eye${pwShown ? "" : "-slash"}`} aria-hidden="true" id="eye"></i>
+              <i
+                className={`fa fa-eye${pwShown ? "" : "-slash"}`}
+                aria-hidden="true"
+                id="eye"
+              ></i>
             </span>
             <br />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <button className="log-in" type="submit"> Log In </button>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            <button className="log-in" type="submit">
+              {" "}
+              Log In{" "}
+            </button>
           </div>
           <div className="other">
             <button className="btn submits frgt-pass">Forgot Password</button>
-            <button className="btn submits sign-up" onClick={() => navigate('/register')}>
+            <button
+              className="btn submits sign-up"
+              onClick={() => navigate("/register")}
+            >
               Sign Up <i className="fa fa-user-plus" aria-hidden="true"></i>
             </button>
           </div>
