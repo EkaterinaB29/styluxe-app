@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7d00f25f.chunk.css",
+    "main.js": "/static/js/main.f1f80649.chunk.js",
+    "main.js.map": "/static/js/main.f1f80649.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.b6784990.js",
+    "runtime-main.js.map": "/static/js/runtime-main.b6784990.js.map",
+    "static/css/2.03d4f8d2.chunk.css": "/static/css/2.03d4f8d2.chunk.css",
+    "static/js/2.87b0cf28.chunk.js": "/static/js/2.87b0cf28.chunk.js",
+    "static/js/2.87b0cf28.chunk.js.map": "/static/js/2.87b0cf28.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.03d4f8d2.chunk.css.map": "/static/css/2.03d4f8d2.chunk.css.map",
+    "static/css/main.7d00f25f.chunk.css.map": "/static/css/main.7d00f25f.chunk.css.map",
+    "static/js/2.87b0cf28.chunk.js.LICENSE.txt": "/static/js/2.87b0cf28.chunk.js.LICENSE.txt",
+    "static/media/bedroom.a3cb442f.png": "/static/media/bedroom.a3cb442f.png",
+    "static/media/brands.5147365b.png": "/static/media/brands.5147365b.png",
+    "static/media/chat-square.a1c1dbbd.svg": "/static/media/chat-square.a1c1dbbd.svg",
+    "static/media/clipboard-plus-fill.e59dd199.svg": "/static/media/clipboard-plus-fill.e59dd199.svg",
+    "static/media/facebook.0236eded.svg": "/static/media/facebook.0236eded.svg",
+    "static/media/flag-fill.7f91ade8.svg": "/static/media/flag-fill.7f91ade8.svg",
+    "static/media/geo-alt-fill.d729a1fc.svg": "/static/media/geo-alt-fill.d729a1fc.svg",
+    "static/media/hands.5e47df7b.jpg": "/static/media/hands.5e47df7b.jpg",
+    "static/media/heart.3c790abe.svg": "/static/media/heart.3c790abe.svg",
+    "static/media/house-heart.236657a4.svg": "/static/media/house-heart.236657a4.svg",
+    "static/media/HomePage.css": "/static/media/house.081bdeb6.jpg",
+    "static/media/image_2024-07-21_23-08-45.41303eb3.png": "/static/media/image_2024-07-21_23-08-45.41303eb3.png",
+    "static/media/instagram.1d5ceddc.svg": "/static/media/instagram.1d5ceddc.svg",
+    "static/media/linkedin.d692494f.svg": "/static/media/linkedin.d692494f.svg",
+    "static/media/pexels-pixabay-462235.52b0be5b.jpg": "/static/media/pexels-pixabay-462235.52b0be5b.jpg",
+    "static/media/profile.97c7133f.png": "/static/media/profile.97c7133f.png",
+    "static/media/search.582e6fda.svg": "/static/media/search.582e6fda.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b6784990.js",
+    "static/css/2.03d4f8d2.chunk.css",
+    "static/js/2.87b0cf28.chunk.js",
+    "static/css/main.7d00f25f.chunk.css",
+    "static/js/main.f1f80649.chunk.js"
+  ]
+}
