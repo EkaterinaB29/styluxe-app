@@ -9,7 +9,7 @@ const Review = ({ professionalId, onReviewAdded }) => {
   const [reliability, setReliability] = useState(1);
   const [satisfaction, setSatisfaction] = useState(1);
   const [error, setError] = useState(null);
-  const { isAuthenticated, token } = useContext(UserContext);
+  const { isAuthenticated } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +18,9 @@ const Review = ({ professionalId, onReviewAdded }) => {
       setError("You must be logged in to submit a review.");
       return;
     }
+
+    // Fetch token from localStorage
+    const token = localStorage.getItem("token");
 
     const reviewData = {
       quality_of_work: qualityOfWork,
@@ -28,7 +31,6 @@ const Review = ({ professionalId, onReviewAdded }) => {
     };
 
     try {
-      localStorage.getItem("token");
       await axios.post(
         `http://88.200.63.148:8211/api/reviews/${professionalId}`,
         reviewData,
